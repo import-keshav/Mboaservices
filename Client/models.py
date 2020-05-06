@@ -4,9 +4,10 @@ from User import models as user_Models
 # from User import Models as user_Models
 
 class Client(models.Model):
-    user = models.ForeignKey(user_Models.User, on_delete=models.CASCADE, related_name="clients", null=True, blank=True)
+    user = models.ForeignKey(user_Models.User, on_delete=models.CASCADE, related_name="client_client_user", null=True, blank=True)
     address = models.TextField(null=True, blank=True)
-    location_coordinates = models.CharField(max_length=30)
+    location_coordinates = models.CharField(max_length=30, null=True, blank=True)
+    category = models.CharField(max_length=50, null=True, blank=True)
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
     last_updated = models.DateTimeField(auto_now=True, editable=False)
@@ -17,7 +18,7 @@ class Client(models.Model):
 
 
 class ClientCart(models.Model):
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name="carts", null=True, blank=True)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name="client_client_cart_client", null=True, blank=True)
     num_of_items = models.IntegerField(null=True, blank=True)
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
@@ -29,7 +30,7 @@ class ClientCart(models.Model):
 
 
 class ClientNotification(models.Model):
-    client = models.ForeignKey(user_Models.User, on_delete=models.CASCADE, related_name="clientnotificationss", null=True, blank=True)
+    client = models.ForeignKey(user_Models.User, on_delete=models.CASCADE, related_name="client_client_notification_client", null=True, blank=True)
     notification_text = models.TextField(null=True, blank=True)
     date_time = models.DateTimeField(null=True, blank=True)
 
