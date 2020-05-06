@@ -1,3 +1,9 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import (
+	Dish,
+	DishImage
+)
+
+admin.site.register(Dish)
+admin.site.register(DishImage)

@@ -1,3 +1,11 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import (
+	RestaurantRating,
+	ClientReview,
+	RestaurantReviewsInfo
+)
+
+admin.site.register(RestaurantRating)
+admin.site.register(ClientReview)
+admin.site.register(RestaurantReviewsInfo)
