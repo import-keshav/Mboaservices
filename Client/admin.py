@@ -4,6 +4,16 @@ from .models import (
 	Client, ClientCart, ClientNotification
 )
 
-admin.site.register(Client)
-admin.site.register(ClientCart)
-admin.site.register(ClientNotification)
+@admin.register(Client)
+class ClientAdmin(admin.ModelAdmin):
+	list_display = ('user', 'location_coordinates', 'address')
+
+
+@admin.register(ClientCart)
+class ClientCartAdmin(admin.ModelAdmin):
+	list_display = ('client', 'restaurant', 'dish', 'num_of_items')
+
+
+@admin.register(ClientNotification)
+class ClientNotificationAdmin(admin.ModelAdmin):
+	list_display = ('client', 'date', 'time', 'notification_text')

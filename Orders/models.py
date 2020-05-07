@@ -12,7 +12,8 @@ payment_choices = (
 order_status = (
 	("preparing", "preparing"),
 	("packaging", "packaging"),
-	("on_way", "on_way")
+	("on_way", "on_way"),
+    ("delivered", "delivered")
 )
 
 
@@ -27,12 +28,15 @@ class Order(models.Model):
     total_amount = models.FloatField(null=True, blank=True, validators=[MinValueValidator(0)])
     # transaction_id
     status = models.TextField(choices=order_status, null=True, blank=True)
+    promocode_used = models.ForeignKey(restaurant_models.RestaurantPromocode, on_delete=models.CASCADE, related_name="orders_order_promocode_used", null=True, blank=True)
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
     last_updated = models.DateTimeField(auto_now=True, editable=False)
     class Meta:
         verbose_name = 'Order'
         verbose_name_plural = 'Order'
+    def __str__(self):
+        return self.restaurant.name
 
 
 class OrderDish(models.Model):
@@ -43,5 +47,7 @@ class OrderDish(models.Model):
     created = models.DateTimeField(auto_now_add=True, editable=False)
     last_updated = models.DateTimeField(auto_now=True, editable=False)
     class Meta:
-        verbose_name = 'OrderDish'
-        verbose_name_plural = 'OrderDishes'
+        verbose_name = 'Order Dish'
+        verbose_name_plural = 'Order Dishes'
+    def __str__(self):
+        return self.dish.name

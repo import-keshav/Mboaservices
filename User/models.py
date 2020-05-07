@@ -6,7 +6,7 @@ class User(models.Model):
     email = models.EmailField(null=True, blank=True)
     mobile = models.CharField(max_length=15, null=True, blank=True)
     password = models.TextField(null=True, blank=True)
-    avatar = models.FileField(upload_to="", null=True, blank=True)
+    avatar = models.FileField(upload_to="media/", null=True, blank=True)
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
     last_updated = models.DateTimeField(auto_now=True, editable=False)
@@ -14,3 +14,5 @@ class User(models.Model):
     class Meta:
         verbose_name = 'User'
         verbose_name_plural = 'Users'
+    def __str__(self):
+        return self.name

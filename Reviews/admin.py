@@ -6,6 +6,15 @@ from .models import (
 	RestaurantReviewsInfo
 )
 
-admin.site.register(RestaurantRating)
-admin.site.register(ClientReview)
-admin.site.register(RestaurantReviewsInfo)
+@admin.register(RestaurantRating)
+class RestaurantRatingAdmin(admin.ModelAdmin):
+	list_display = ('restaurant', 'rating')
+
+
+@admin.register(ClientReview)
+class ClientReviewAdmin(admin.ModelAdmin):
+	list_display = ('client', 'restaurant', 'points', 'comment')
+
+@admin.register(RestaurantReviewsInfo)
+class RestaurantReviewsInfoAdmin(admin.ModelAdmin):
+	list_display = ('restaurant', 'number_of_reviews', 'points')
