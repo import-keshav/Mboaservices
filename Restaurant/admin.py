@@ -26,10 +26,10 @@ class RestaurantImageAdmin(admin.ModelAdmin):
 
 @admin.register(RestaurantPromocode)
 class RestaurantPromocodeAdmin(admin.ModelAdmin):
-	list_display = ('promocode', 'restaurant', 'discount_percentage')
+	list_display = ('promocode', 'restaurant', 'discount_percentage', 'valid_date')
 
 
 @admin.register(RestaurantDriver)
 class RestaurantDriverAdmin(admin.ModelAdmin):
-	list_display = ('name', 'mobile')
+	list_display = ('name', 'mobile', 'restaurant','image')
 
