@@ -59,6 +59,10 @@ class RegisterView(APIView):
                         return Response({
                             "message": "(location_coordinates, address) any of params missing"
                         }, status=status.HTTP_400_BAD_REQUEST)
+                elif data['which_user'] == 'restaurant_owner':
+                    return Response(
+                        {'message': 'Register Succesfully'},
+                    status=status.HTTP_200_OK)
             else:
                 return Response({
                     "message": "User with this credentials already exist!"
