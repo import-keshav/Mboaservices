@@ -47,14 +47,14 @@ class RegisterView(APIView):
                 new_user.save()
                 if data['which_user'] == 'client':
                     try:
-                        user = models.User.objects.filter(email=data['email']).first()
+                        user = models.User.objects.filter(mobile=data['mobile']).first()
                         new_player = client_models.Client(
                             user=user,
                             location_coordinates=data['location_coordinates'],
                             address=data['address'])
                         new_player.save()
                     except:
-                        user = models.User.objects.filter(email=data['email']).first()
+                        user = models.User.objects.filter(mobile=data['mobile']).first()
                         user.delete()
                         return Response({
                             "message": "(location_coordinates, address) any of params missing"
@@ -80,13 +80,17 @@ class LoginView(APIView):
     def post(self, request):
         try:
             data = self.request.data
-            user = models.User.objects.filter(email=data['email']).first()
-            if verify_password(user.password, data['password']):
-                return Response(
-                    {'message': 'Login Succesfully'}, status=status.HTTP_200_OK)
+            user = models.User.objects.filter(mobile=data['mobile']).first()
+            if user:
+                if verify_password(user.password, data['password']):
+                    return Response(
+                        {'message': 'Login Succesfully'}, status=status.HTTP_200_OK)
+                else:
+                    return Response(
+                        {'message': 'Invalid password'}, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response(
-                    {'message': 'Invalid password or email'}, status=status.HTTP_400_BAD_REQUEST)
+                        {'message': 'User not exist with this mobile number'}, status=status.HTTP_400_BAD_REQUEST)
         except:
             return Response(
-                    {'message': '(email, password) any of params missing'}, status=status.HTTP_400_BAD_REQUEST)
+                    {'message': '(mobile, password) any of params missing'}, status=status.HTTP_400_BAD_REQUEST)
