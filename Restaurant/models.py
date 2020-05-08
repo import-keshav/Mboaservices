@@ -50,6 +50,7 @@ class RestaurantPromocode(models.Model):
     promocode = models.CharField(max_length=10, null=True, blank=True)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="restaurant_restaurant_promocode_restaurant", null=True, blank=True)
     discount_percentage = models.FloatField(null=True, blank=True, validators=[MinValueValidator(0)])
+    valid_date = models.DateField(null=True, blank=True)
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
     last_updated = models.DateTimeField(auto_now=True, editable=False)
@@ -63,6 +64,8 @@ class RestaurantPromocode(models.Model):
 class RestaurantDriver(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
     mobile = models.CharField(max_length=15, null=True, blank=True)
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="restaurant_restaurant_driver_restaurant", null=True, blank=True)
+    image = models.FileField(null=True, blank=True, upload_to="media/")
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
     last_updated = models.DateTimeField(auto_now=True, editable=False)
