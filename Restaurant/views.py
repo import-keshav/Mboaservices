@@ -61,7 +61,7 @@ class CreateGetRestaurantImage(generics.ListCreateAPIView):
     serializer_class = restaurant_serializers.RestaurantImageSerializer
 
     def get_queryset(self):
-        restaurant = restaurant_models.Restaurant.objects.filter(pk=self.kwargs['pk'])
+        restaurant = restaurant_models.Restaurant.objects.filter(pk=self.kwargs['pk']).first()
         return restaurant_models.RestaurantImage.objects.filter(restaurant=restaurant)
 
 
@@ -75,7 +75,7 @@ class CreateGetRestaurantPromocode(generics.ListCreateAPIView):
     renderer_classes = [JSONRenderer]
 
     def get_queryset(self):
-        restaurant = restaurant_models.Restaurant.objects.filter(pk=self.kwargs['pk'])
+        restaurant = restaurant_models.Restaurant.objects.filter(pk=self.kwargs['pk']).first()
         return restaurant_models.RestaurantPromocode.objects.filter(restaurant=restaurant)
 
     def get_serializer_class(self):
@@ -100,7 +100,7 @@ class CreateGetRestaurantDriver(generics.ListCreateAPIView):
     renderer_classes = [JSONRenderer]
 
     def get_queryset(self):
-        restaurant = restaurant_models.Restaurant.objects.filter(pk=self.kwargs['pk'])
+        restaurant = restaurant_models.Restaurant.objects.filter(pk=self.kwargs['pk']).first()
         return restaurant_models.RestaurantDriver.objects.filter(restaurant=restaurant)
 
     def get_serializer_class(self):
