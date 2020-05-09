@@ -45,3 +45,9 @@ class ListCreateDishImage(generics.ListCreateAPIView):
     def get_queryset(self):
         dish = dish_models.Dish.objects.filter(pk=self.kwargs['pk']).first()
         return dish_models.DishImage.objects.filter(dish=dish)
+
+
+class DeleteDishImage(generics.DestroyAPIView):
+    renderer_classes = [JSONRenderer]
+    serializer_class = dish_serializers.DishSerializer
+    queryset = dish_models.DishImage.objects.all()

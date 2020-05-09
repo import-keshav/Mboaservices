@@ -11,5 +11,6 @@ urlpatterns = [
 
 	path('create-dish-image', views.ListCreateDishImage.as_view()),
 	path('get-dish-images/<int:pk>', views.ListCreateDishImage.as_view()),
+	path('delete-dish-image/<int:pk>', views.DeleteDishImage.as_view()),
 
 ]
