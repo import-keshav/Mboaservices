@@ -23,3 +23,7 @@ urlpatterns = [
     path('user/', include('User.urls')),
     path('restaurant/', include('Restaurant.urls')),
 ]
+
+
+admin.site.site_header = 'Mboaservices Admin Panel'
+admin.site.site_title = 'Mboaservices'

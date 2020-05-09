@@ -7,4 +7,5 @@ from .models import (
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-	list_display = ('name', 'email', 'mobile', 'avatar')
+	list_display = ('name', 'email', 'mobile', 'avatar', 'id')
+	search_fields = ('name', 'email', 'mobile', 'id')
