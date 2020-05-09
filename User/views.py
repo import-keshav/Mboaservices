@@ -48,11 +48,11 @@ class RegisterView(APIView):
                 if data['which_user'] == 'client':
                     try:
                         user = models.User.objects.filter(mobile=data['mobile']).first()
-                        new_player = client_models.Client(
+                        new_user = client_models.Client(
                             user=user,
                             location_coordinates=data['location_coordinates'],
                             address=data['address'])
-                        new_player.save()
+                        new_user.save()
                     except:
                         user = models.User.objects.filter(mobile=data['mobile']).first()
                         user.delete()
@@ -73,7 +73,7 @@ class RegisterView(APIView):
             }, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(
-            {'message': 'Register Succesfully'}, status=status.HTTP_200_OK)
+            {'message': 'Register Succesfully', 'user_id': new_user.pk}, status=status.HTTP_200_OK)
 
 
 class LoginView(APIView):
