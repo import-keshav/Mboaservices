@@ -7,6 +7,7 @@ urlpatterns = [
 	path('get-restaurant/<int:pk>', views.CreateGetRestaurant.as_view()),
 	path('update-restaurant/<int:pk>', views.UpdateRestaurant.as_view()),
 	path('delete-restaurant/<int:pk>', views.DeleteRestaurant.as_view()),
+	path('open-close-restaurant', views.OpenCloseRestaurant.as_view()),
 
 	path('create-restaurant-employee', views.CreateGetRestaurantEmployee.as_view()),
 	path('get-restaurant-employee/<int:pk>', views.CreateGetRestaurantEmployee.as_view()),

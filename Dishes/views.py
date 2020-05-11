@@ -51,3 +51,15 @@ class DeleteDishImage(generics.DestroyAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = dish_serializers.DishSerializer
     queryset = dish_models.DishImage.objects.all()
+
+
+class IsAvailableOrNotDish(APIView):
+    def post(self, request):
+        if not 'dish' in self.request.data:
+            return Response({"message": "Not Included dish if in data"}, status=status.HTTP_400_BAD_REQUEST)
+        if not 'is_available' in self.request.data:
+            return Response({"message": "not included is_available in data"}, status=status.HTTP_400_BAD_REQUEST)
+        dish = dish_models.Dish.objects.filter(pk=self.request.data['dish']).first()
+        dish.is_available = self.request.data['is_available']
+        dish.save()
+        return Response({"message": "Operation Done succesfully"}, status=status.HTTP_200_OK)

@@ -119,3 +119,16 @@ class DeleteRestaurantDriver(generics.DestroyAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = restaurant_serializers.RestaurantDriverPostSerializer
     queryset = restaurant_models.RestaurantDriver.objects.all()
+
+
+
+class OpenCloseRestaurant(APIView):
+    def post(self, request):
+        if not 'restaurant' in self.request.data:
+            return Response({"message": "Not Included restaurant in data"}, status=status.HTTP_400_BAD_REQUEST)
+        if not 'is_open' in self.request.data:
+            return Response({"message": "not included is_open in data"}, status=status.HTTP_400_BAD_REQUEST)
+        restaurant = restaurant_models.Restaurant.objects.filter(pk=self.request.data['restaurant']).first()
+        restaurant.is_open = self.request.data['is_open']
+        restaurant.save()
+        return Response({"message": "Operation Done succesfully"}, status=status.HTTP_200_OK)

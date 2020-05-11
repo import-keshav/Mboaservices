@@ -5,6 +5,7 @@ from User import models as user_models
 
 
 class Restaurant(models.Model):
+    unique_id = models.CharField(max_length=10, null=True, blank=True, unique=True)
     name = models.CharField(max_length=200, null=True, blank=True)
     owner = models.ForeignKey(user_models.User, on_delete=models.CASCADE, related_name="restaurant_restaurant_client", null=True, blank=True)
     location_coordinates = models.CharField(max_length=30)

@@ -8,6 +8,7 @@ from rest_framework import generics, status, filters
 
 from . import models
 from Client import models as client_models
+from Restaurant import models as restraurant_models
 
 
 def hash_password(password):
@@ -94,3 +95,35 @@ class LoginView(APIView):
         except:
             return Response(
                     {'message': '(mobile, password) any of params missing'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ChangePassword(APIView):
+    def post(self, request):
+        try:
+            user = models.User.objects.filter(mobile=self.request.data['mobile']).first()
+            if not user:
+                return Response({"message": "No user exists with this mobile number"})
+            if verify_password(user.password, self.request.data['old_password']):
+                user.password = hash_password(self.request.data['new_password'])
+                user.save()
+                return Response({"message": "Password changed Succesfully"})
+            return Response({"message": "Invalid Old Password"})
+        except:
+            return Response({"message": "(mobile, old_password or new_password) is missing"})
+
+
+class RestraurantLogin(APIView):
+    def post(self, request):
+        try:
+            restraurant = restraurant_models.Restraurant.objects.filter(
+                unique_id=self.request.data['restraurant_unique_id']).first()
+            owner = models.User.objects.filter(mobile=data['mobile']).first()
+            if not restraurant:
+                return Response({"message": "Invalid Restraurant unique Id"})
+            if not owner:
+                return Response({"message": "Invalid Owner Id"})
+            if verify_password(self.request.password['password'], owner.password):
+                return Response({'message': 'Login Succesfully'}, status=status.HTTP_200_OK)
+            return Response({'message': 'Invalid password'}, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response({"message": "(restraurant_unique_id, mobile) is missing"})

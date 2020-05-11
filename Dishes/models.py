@@ -9,6 +9,7 @@ class Dish(models.Model):
     price = models.FloatField(null=True, blank=True, validators=[MinValueValidator(0)])
     is_available = models.BooleanField(default=False, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
+    adds_on = models.TextField(null=True,blank=True)
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
     last_updated = models.DateTimeField(auto_now=True, editable=False)
