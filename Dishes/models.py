@@ -23,7 +23,7 @@ class Dish(models.Model):
 
 class DishImage(models.Model):
     dish = models.ForeignKey(Dish, on_delete=models.CASCADE, related_name="dishes_dish_image_dish", null=True, blank=True)
-    image = models.FileField(null=True, blank=True, upload_to="media/")
+    image = models.FileField(null=True, blank=True, upload_to="")
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
     last_updated = models.DateTimeField(auto_now=True, editable=False)
