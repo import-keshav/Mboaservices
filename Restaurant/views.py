@@ -22,7 +22,7 @@ class CreateGetRestaurant(generics.ListCreateAPIView):
 
 class UpdateRestaurant(generics.UpdateAPIView):
     renderer_classes = [JSONRenderer]
-    serializer_class = restaurant_serializers.RestaurantPostSerializer
+    serializer_class = restaurant_serializers.RestaurantUpdateSerializer
     queryset = restaurant_models.Restaurant.objects.all()
 
 
@@ -86,7 +86,7 @@ class CreateGetRestaurantPromocode(generics.ListCreateAPIView):
 
 class UpdateRestaurantPromocode(generics.UpdateAPIView):
     renderer_classes = [JSONRenderer]
-    serializer_class = restaurant_serializers.RestaurantPromocodePostSerializer
+    serializer_class = restaurant_serializers.RestaurantPromocodeUpdateSerializer
     queryset = restaurant_models.RestaurantPromocode.objects.all()
 
 
@@ -111,7 +111,7 @@ class CreateGetRestaurantDriver(generics.ListCreateAPIView):
 
 class UpdateRestaurantDriver(generics.UpdateAPIView):
     renderer_classes = [JSONRenderer]
-    serializer_class = restaurant_serializers.RestaurantDriverPostSerializer
+    serializer_class = restaurant_serializers.RestaurantDriverUpdateSerializer
     queryset = restaurant_models.RestaurantDriver.objects.all()
 
 
@@ -120,6 +120,13 @@ class DeleteRestaurantDriver(generics.DestroyAPIView):
     serializer_class = restaurant_serializers.RestaurantDriverPostSerializer
     queryset = restaurant_models.RestaurantDriver.objects.all()
 
+
+class GetRestaurantSpecifiDriver(generics.ListAPIView):
+    renderer_classes = [JSONRenderer]
+    serializer_class = restaurant_serializers.RestaurantDriverGetSerializer
+
+    def get_queryset(self):
+        return restaurant_models.RestaurantDriver.objects.filter(pk=self.kwargs['pk'])
 
 
 class OpenCloseRestaurant(APIView):

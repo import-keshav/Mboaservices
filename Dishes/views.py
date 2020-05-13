@@ -19,7 +19,7 @@ class CreateGetDish(generics.ListCreateAPIView):
 
 class UpdateDish(generics.UpdateAPIView):
     renderer_classes = [JSONRenderer]
-    serializer_class = dish_serializers.DishSerializer
+    serializer_class = dish_serializers.DishUpdateSerializer
     queryset = dish_models.Dish.objects.all()
 
 

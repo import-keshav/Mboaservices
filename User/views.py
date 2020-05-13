@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from rest_framework import generics, status, filters
 
 from . import models
+from . import serializers as user_serializer
 from Client import models as client_models
 from Restaurant import models as restraurant_models
 
@@ -110,6 +111,12 @@ class ChangePassword(APIView):
             return Response({"message": "Invalid Old Password"})
         except:
             return Response({"message": "(mobile, old_password or new_password) is missing"})
+
+
+class UserUpdateProfile(generics.UpdateAPIView):
+    renderer_classes = [JSONRenderer]
+    queryset = models.User.objects.all()
+    serializer_class = user_serializer.UserSerializer
 
 
 class RestraurantLogin(APIView):

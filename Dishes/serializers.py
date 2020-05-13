@@ -18,6 +18,12 @@ class DishSerializer(serializers.ModelSerializer):
         return data
 
 
+class DishUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Dish
+        fields = '__all__'
+
+
 class DishImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.DishImage

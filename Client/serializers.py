@@ -27,6 +27,12 @@ class ClientGetSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ClientUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Client
+        fields = '__all__'
+
+
 class ClientNotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ClientNotification

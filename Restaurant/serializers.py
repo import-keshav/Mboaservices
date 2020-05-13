@@ -18,6 +18,11 @@ class RestaurantPostSerializer(serializers.ModelSerializer):
         return data
 
 
+class RestaurantUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Restaurant
+        fields = '__all__'
+
 
 class RestaurantGetSerializer(serializers.ModelSerializer):
     owner = user_serializer.UserSerializer()
@@ -64,6 +69,12 @@ class RestaurantImageSerializer(serializers.ModelSerializer):
         return data
 
 
+class RestaurantPromocodeUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.RestaurantPromocode
+        fields = '__all__'
+
+
 class RestaurantPromocodePostSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.RestaurantPromocode
@@ -80,6 +91,12 @@ class RestaurantPromocodePostSerializer(serializers.ModelSerializer):
 class RestaurantPromocodeGetSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.RestaurantPromocode
+        fields = '__all__'
+
+
+class RestaurantDriverUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.RestaurantDriver
         fields = '__all__'
 
 

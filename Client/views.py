@@ -18,7 +18,7 @@ class GetClient(generics.ListAPIView):
 class UpdateClient(generics.UpdateAPIView):
     renderer_classes = [JSONRenderer]
     queryset = client_models.Client.objects.all()
-    serializer_class = client_serializers.ClientPostSerializer
+    serializer_class = client_serializers.ClientUpdateSerializer
 
 
 class CreateGetClientNotification(generics.ListCreateAPIView):
