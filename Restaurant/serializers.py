@@ -29,7 +29,7 @@ class RestaurantGetSerializer(serializers.ModelSerializer):
     category = serializers.SerializerMethodField()
 
     def get_category(self, obj):
-        return [cat.name for cat in obj.category.all()]
+        return [{cat.name: cat.pk} for cat in obj.category.all()]
 
     class Meta:
         model = models.Restaurant

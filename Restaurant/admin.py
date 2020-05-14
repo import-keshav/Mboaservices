@@ -41,8 +41,11 @@ class RestaurantImageAdmin(admin.ModelAdmin):
 
 @admin.register(RestaurantPromocode)
 class RestaurantPromocodeAdmin(admin.ModelAdmin):
-	list_display = ('promocode', 'restaurant', 'discount_percentage', 'valid_date', 'id')
+	list_display = ('promocode', 'restaurant', 'discount_percentage', 'valid_date', 'get_category', 'id')
 	search_fields = ('id', 'restaurant__id', 'restaurant__name', 'promocode', 'valid_date')
+	def get_category(self, obj):
+		return [cat.name for cat in obj.category.all()]
+	get_category.short_description = 'Categories'
 
 
 @admin.register(RestaurantDriver)

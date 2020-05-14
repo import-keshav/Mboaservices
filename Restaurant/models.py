@@ -65,6 +65,7 @@ class RestaurantPromocode(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="restaurant_restaurant_promocode_restaurant", null=True, blank=True)
     discount_percentage = models.FloatField(null=True, blank=True, validators=[MinValueValidator(0)])
     valid_date = models.DateField(null=True, blank=True)
+    category = models.ManyToManyField(RestraurantDishesCategory)
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
     last_updated = models.DateTimeField(auto_now=True, editable=False)
