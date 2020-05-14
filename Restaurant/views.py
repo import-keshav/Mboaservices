@@ -1,7 +1,8 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
 from rest_framework.views import APIView
-from rest_framework import generics, status
+from rest_framework import generics, status, filters
 
 from . import serializers as restaurant_serializers
 from . import models as restaurant_models
@@ -18,6 +19,15 @@ class CreateGetRestaurant(generics.ListCreateAPIView):
         if self.request.method == 'GET':
             return restaurant_serializers.RestaurantGetSerializer
         return restaurant_serializers.RestaurantPostSerializer
+
+
+class GetRestaurantOnFilter(generics.ListCreateAPIView):
+    renderer_classes = [JSONRenderer]
+    queryset = restaurant_models.Restaurant.objects.all()
+    serializer_class = restaurant_serializers.RestaurantGetSerializer
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    filterset_fields = ['category__name']
+    search_fields = ['category__name']
 
 
 class UpdateRestaurant(generics.UpdateAPIView):

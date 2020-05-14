@@ -31,11 +31,19 @@ class DeleteDish(generics.DestroyAPIView):
 
 class ListRestaurantDishes(generics.ListAPIView):
     renderer_classes = [JSONRenderer]
-    serializer_class = dish_serializers.DishSerializer
-
-    def get_queryset(self):
-        restaurant = restaurant_models.Restaurant.objects.filter(pk=self.kwargs['pk']).first()
-        return dish_models.Dish.objects.filter(restaurant=restaurant)
+    def list(self, request, pk):
+        restaurant = restaurant_models.Restaurant.objects.filter(pk=pk).first()
+        dishes = dish_models.Dish.objects.filter(restaurant=restaurant)
+        data = {}
+        for dish in dishes:
+            categories = dish.categories.all()
+            for category in categories:
+                dish_serializer_obj = dish_serializers.DishSerializer(dish)
+                if category.name in data:
+                    data[category.name].append(dish_serializer_obj.data)
+                else:
+                    data[category.name] = [dish_serializer_obj.data]
+        return Response(data, status=status.HTTP_200_OK)
 
 
 class ListCreateDishImage(generics.ListCreateAPIView):
