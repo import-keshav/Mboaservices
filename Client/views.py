@@ -28,3 +28,28 @@ class CreateGetClientNotification(generics.ListCreateAPIView):
     def get_queryset(self):
         client = client_models.Client.objects.filter(pk=self.kwargs['pk']).first()
         return client_models.ClientNotification.objects.filter(client=client)
+
+
+class CreateGetClientCart(generics.ListCreateAPIView):
+    renderer_classes = [JSONRenderer]
+
+    def get_queryset(self):
+        client = client_models.Client.objects.filter(pk=self.kwargs['pk']).first()
+        return client_models.ClientCart.objects.filter(client=client)
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return client_serializers.ClientCartGetSerializer
+        return client_serializers.ClientCartPostSerializer
+
+
+class UpdateClientCart(generics.UpdateAPIView):
+    renderer_classes = [JSONRenderer]
+    serializer_class = client_serializers.ClientCartUpdateSerializer
+    queryset = client_models.ClientCart.objects.all()
+
+
+class DeleteClientCart(generics.DestroyAPIView):
+    renderer_classes = [JSONRenderer]
+    serializer_class = client_serializers.ClientCartUpdateSerializer
+    queryset = client_models.ClientCart.objects.all()

@@ -6,7 +6,7 @@ from . import models
 
 from User import models as user_models
 from User import serializers as user_serializer
-
+from Dishes import serializers as dish_serializer
 
 class ClientPostSerializer(serializers.ModelSerializer):
     class Meta:
@@ -41,3 +41,30 @@ class ClientNotificationSerializer(serializers.ModelSerializer):
         if not 'client' in data:
             raise forms.ValidationError('Include Client in data')
         return data
+
+
+class ClientCartPostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.ClientCart
+        fields = '__all__'
+    def validate(self, data):
+        if not 'client' in data:
+            raise forms.ValidationError('Include Client in data')
+        if not 'restaurant' in data:
+            raise forms.ValidationError('Include Restaurant in data')
+        if not 'dish' in data:
+            raise forms.ValidationError('Include Dish in data')
+        return data
+
+
+class ClientCartGetSerializer(serializers.ModelSerializer):
+    dish = dish_serializer.DishSerializer()
+    class Meta:
+        model = models.ClientCart
+        fields = '__all__'
+
+
+class ClientCartUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.ClientCart
+        fields = '__all__'
