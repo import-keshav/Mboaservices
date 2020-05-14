@@ -10,7 +10,7 @@ class Dish(models.Model):
     is_available = models.BooleanField(default=False, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     adds_on = models.TextField(null=True,blank=True)
-    categories = models.TextField(null=True,blank=True)
+    categories = models.ManyToManyField(restaurant_models.RestraurantDishesCategory)
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
     last_updated = models.DateTimeField(auto_now=True, editable=False)

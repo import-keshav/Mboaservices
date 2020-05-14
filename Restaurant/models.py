@@ -4,6 +4,18 @@ from django.core.validators import MinValueValidator
 from User import models as user_models
 
 
+class RestraurantDishesCategory(models.Model):
+    name = models.CharField(max_length=200, null=True, blank=True)
+
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+    last_updated = models.DateTimeField(auto_now=True, editable=False)
+    class Meta:
+        verbose_name = 'Restraurant Dishes Category'
+        verbose_name_plural = 'Restraurant Dishes Categories'
+    def __str__(self):
+        return self.name
+
+
 class Restaurant(models.Model):
     unique_id = models.CharField(max_length=10, null=True, blank=True, unique=True)
     name = models.CharField(max_length=200, null=True, blank=True)
@@ -11,6 +23,7 @@ class Restaurant(models.Model):
     location_coordinates = models.CharField(max_length=30)
     is_open = models.BooleanField(default=False, null=True, blank=True)
     address = models.TextField(null=True, blank=True)
+    category = models.ManyToManyField(RestraurantDishesCategory)
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
     last_updated = models.DateTimeField(auto_now=True, editable=False)

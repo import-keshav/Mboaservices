@@ -5,15 +5,25 @@ from .models import (
 	RestaurantEmployee,
 	RestaurantImage,
 	RestaurantPromocode,
-	RestaurantDriver
+	RestaurantDriver,
+	RestraurantDishesCategory
 )
 
 @admin.register(Restaurant)
 class RestaurantAdmin(admin.ModelAdmin):
-	list_display = ('name', 'owner', 'location_coordinates', 'is_open', 'address', 'id')
+	list_display = ('name', 'owner', 'location_coordinates', 'is_open', 'address', 'id', 'get_category')
 	search_fields = ('name', 'location_coordinates', 'address',
 		'owner__name', 'owner__email', 'owner__mobile', 'id',
-		'restaurant__id')
+		'restaurant__id',)
+	def get_category(self, obj):
+		return [cat.name for cat in obj.category.all()]
+	get_category.short_description = 'Categories'
+
+
+@admin.register(RestraurantDishesCategory)
+class RestraurantDishesCategoryAdmin(admin.ModelAdmin):
+	list_display = ('name',)
+	search_fields = ('name',)
 
 
 @admin.register(RestaurantEmployee)

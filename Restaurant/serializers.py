@@ -26,6 +26,11 @@ class RestaurantUpdateSerializer(serializers.ModelSerializer):
 
 class RestaurantGetSerializer(serializers.ModelSerializer):
     owner = user_serializer.UserSerializer()
+    category = serializers.SerializerMethodField()
+
+    def get_category(self, obj):
+        return [cat.name for cat in obj.category.all()]
+
     class Meta:
         model = models.Restaurant
         fields = '__all__'
