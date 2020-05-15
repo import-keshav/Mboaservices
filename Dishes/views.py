@@ -42,7 +42,7 @@ class ListRestaurantDishes(generics.ListAPIView):
         for dish in dishes:
             categories = dish.categories.all()
             for category in categories:
-                dish_serializer_obj = dish_serializers.DishSerializer(dish)
+                dish_serializer_obj = dish_serializers.DishGetSerializer(dish)
                 if category.name in data:
                     data[category.name].append(dish_serializer_obj.data)
                 else:
