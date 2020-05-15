@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from . import models
 
-class DishSerializer(serializers.ModelSerializer):
+class DishPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Dish
         fields = '__all__'
@@ -16,6 +16,15 @@ class DishSerializer(serializers.ModelSerializer):
         if not 'price' in data:
             raise forms.ValidationError('Include price of dish')
         return data
+
+class DishGetSerializer(serializers.ModelSerializer):
+    categories = serializers.SerializerMethodField()
+
+    def get_categories(self, obj):
+        return [{"name":cat.name, "id": cat.pk} for cat in obj.categories.all()]
+    class Meta:
+        model = models.Dish
+        fields = '__all__'
 
 
 class DishUpdateSerializer(serializers.ModelSerializer):

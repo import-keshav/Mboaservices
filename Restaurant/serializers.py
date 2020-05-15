@@ -29,7 +29,7 @@ class RestaurantGetSerializer(serializers.ModelSerializer):
     category = serializers.SerializerMethodField()
 
     def get_category(self, obj):
-        return [{cat.name: cat.pk} for cat in obj.category.all()]
+        return [{"name":cat.name, "id": cat.pk} for cat in obj.category.all()]
 
     class Meta:
         model = models.Restaurant
@@ -94,6 +94,11 @@ class RestaurantPromocodePostSerializer(serializers.ModelSerializer):
 
 
 class RestaurantPromocodeGetSerializer(serializers.ModelSerializer):
+    category = serializers.SerializerMethodField()
+
+    def get_category(self, obj):
+        return [{"name":cat.name, "id": cat.pk} for cat in obj.category.all()]
+
     class Meta:
         model = models.RestaurantPromocode
         fields = '__all__'

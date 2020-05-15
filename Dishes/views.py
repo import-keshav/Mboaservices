@@ -11,10 +11,14 @@ from Restaurant import models as restaurant_models
 
 class CreateGetDish(generics.ListCreateAPIView):
     renderer_classes = [JSONRenderer]
-    serializer_class = dish_serializers.DishSerializer
 
     def get_queryset(self):
         return dish_models.Dish.objects.filter(pk=self.kwargs['pk'])
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return dish_serializers.DishGetSerializer
+        return dish_serializers.DishPostSerializer
 
 
 class UpdateDish(generics.UpdateAPIView):
@@ -25,7 +29,7 @@ class UpdateDish(generics.UpdateAPIView):
 
 class DeleteDish(generics.DestroyAPIView):
     renderer_classes = [JSONRenderer]
-    serializer_class = dish_serializers.DishSerializer
+    serializer_class = dish_serializers.DishUpdateSerializer
     queryset = dish_models.Dish.objects.all()
 
 
@@ -57,7 +61,7 @@ class ListCreateDishImage(generics.ListCreateAPIView):
 
 class DeleteDishImage(generics.DestroyAPIView):
     renderer_classes = [JSONRenderer]
-    serializer_class = dish_serializers.DishSerializer
+    serializer_class = dish_serializers.DishImageSerializer
     queryset = dish_models.DishImage.objects.all()
 
 

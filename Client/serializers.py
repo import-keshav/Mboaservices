@@ -58,7 +58,7 @@ class ClientCartPostSerializer(serializers.ModelSerializer):
 
 
 class ClientCartGetSerializer(serializers.ModelSerializer):
-    dish = dish_serializer.DishSerializer()
+    dish = dish_serializer.DishGetSerializer()
     class Meta:
         model = models.ClientCart
         fields = '__all__'
