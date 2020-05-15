@@ -19,9 +19,14 @@ class DishPostSerializer(serializers.ModelSerializer):
 
 class DishGetSerializer(serializers.ModelSerializer):
     categories = serializers.SerializerMethodField()
+    images = serializers.SerializerMethodField()
 
     def get_categories(self, obj):
         return [{"name":cat.name, "id": cat.pk} for cat in obj.categories.all()]
+
+    def get_images(self, obj):
+        images = models.DishImage.objects.filter(dish=obj)
+        return [image.image.url for image in images]
     class Meta:
         model = models.Dish
         fields = '__all__'
