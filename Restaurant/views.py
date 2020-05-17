@@ -30,7 +30,7 @@ class GetAllRestaurantPagination(PageNumberPagination):
 class GetAllRestaurant(generics.ListAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = restaurant_serializers.RestaurantGetSerializer
-    queryset = restaurant_models.Restaurant.objects.all()
+    queryset = restaurant_models.Restaurant.objects.filter(is_open=True)
     pagination_class = GetAllRestaurantPagination
 
 
