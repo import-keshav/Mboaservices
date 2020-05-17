@@ -122,15 +122,12 @@ class UserUpdateProfile(generics.UpdateAPIView):
 class RestraurantLogin(APIView):
     def post(self, request):
         try:
-            restraurant = restraurant_models.Restraurant.objects.filter(
+            restraurant = restraurant_models.Restaurant.objects.filter(
                 unique_id=self.request.data['restraurant_unique_id']).first()
-            owner = models.User.objects.filter(mobile=data['mobile']).first()
             if not restraurant:
                 return Response({"message": "Invalid Restraurant unique Id"})
-            if not owner:
-                return Response({"message": "Invalid Owner Id"})
-            if verify_password(self.request.password['password'], owner.password):
+            if verify_password( restraurant.owner.password, self.request.data['password']):
                 return Response({'message': 'Login Succesfully'}, status=status.HTTP_200_OK)
             return Response({'message': 'Invalid password'}, status=status.HTTP_400_BAD_REQUEST)
         except:
-            return Response({"message": "(restraurant_unique_id, mobile) is missing"})
+            return Response({"message": "restraurant_unique_id is missing"})

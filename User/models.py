@@ -1,4 +1,16 @@
+import hashlib, binascii, os
+
+
 from django.db import models
+from django.utils.text import slugify 
+
+def hash_password(password):
+    """Hash a password for storing."""
+    salt = hashlib.sha256(os.urandom(60)).hexdigest().encode('ascii')
+    pwdhash = hashlib.pbkdf2_hmac('sha512', password.encode('utf-8'), 
+                                salt, 100000)
+    pwdhash = binascii.hexlify(pwdhash)
+    return (salt + pwdhash).decode('ascii')
 
 
 class User(models.Model):
@@ -16,3 +28,7 @@ class User(models.Model):
         verbose_name_plural = 'Users'
     def __str__(self):
         return self.name
+
+    def save(self):
+        self.password = hash_password(self.password)
+        super(User, self).save()
