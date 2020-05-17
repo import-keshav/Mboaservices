@@ -2,6 +2,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
 from rest_framework.views import APIView
+from rest_framework.pagination import PageNumberPagination
 from rest_framework import generics, status, filters
 
 from . import serializers as restaurant_serializers
@@ -19,6 +20,18 @@ class CreateGetRestaurant(generics.ListCreateAPIView):
         if self.request.method == 'GET':
             return restaurant_serializers.RestaurantGetSerializer
         return restaurant_serializers.RestaurantPostSerializer
+
+
+class GetAllRestaurantPagination(PageNumberPagination):
+    page_size = 20
+    max_page_size = 20
+
+
+class GetAllRestaurant(generics.ListAPIView):
+    renderer_classes = [JSONRenderer]
+    serializer_class = restaurant_serializers.RestaurantGetSerializer
+    queryset = restaurant_models.Restaurant.objects.all()
+    pagination_class = GetAllRestaurantPagination
 
 
 class GetRestaurantOnFilter(generics.ListCreateAPIView):

@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
 	path('create-restaurant', views.CreateGetRestaurant.as_view()),
+	path('get-restaurant-on-home-page', views.GetAllRestaurant.as_view()),
 	path('get-restaurant/<int:pk>', views.CreateGetRestaurant.as_view()),
 	path('get-restaurant-on-filter', views.GetRestaurantOnFilter.as_view()),
 	path('update-restaurant/<int:pk>', views.UpdateRestaurant.as_view()),
