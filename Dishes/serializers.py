@@ -19,14 +19,10 @@ class DishPostSerializer(serializers.ModelSerializer):
 
 class DishGetSerializer(serializers.ModelSerializer):
     categories = serializers.SerializerMethodField()
-    images = serializers.SerializerMethodField()
 
     def get_categories(self, obj):
         return [{"name":cat.name, "id": cat.pk} for cat in obj.categories.all()]
 
-    def get_images(self, obj):
-        images = models.DishImage.objects.filter(dish=obj)
-        return [image.image.url for image in images]
     class Meta:
         model = models.Dish
         fields = '__all__'
@@ -36,15 +32,3 @@ class DishUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Dish
         fields = '__all__'
-
-
-class DishImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.DishImage
-        fields = '__all__'
-    def validate(self, data):
-        if not 'dish' in data:
-            raise forms.ValidationError('Include dish of image')
-        if not 'image' in data:
-            raise forms.ValidationError('Include image')
-        return data

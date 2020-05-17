@@ -10,8 +10,4 @@ urlpatterns = [
 	path('delete-dish/<int:pk>', views.DeleteDish.as_view()),
 	path('is-available-or-not-dish', views.IsAvailableOrNotDish.as_view()),
 
-	path('create-dish-image', views.ListCreateDishImage.as_view()),
-	path('get-dish-images/<int:pk>', views.ListCreateDishImage.as_view()),
-	path('delete-dish-image/<int:pk>', views.DeleteDishImage.as_view()),
-
 ]

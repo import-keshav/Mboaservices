@@ -11,6 +11,7 @@ class Dish(models.Model):
     description = models.TextField(null=True, blank=True)
     adds_on = models.TextField(null=True,blank=True)
     categories = models.ManyToManyField(restaurant_models.RestraurantDishesCategory)
+    image = models.FileField(null=True, blank=True, upload_to="")
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
     last_updated = models.DateTimeField(auto_now=True, editable=False)
@@ -19,16 +20,3 @@ class Dish(models.Model):
         verbose_name_plural = 'Dishes'
     def __str__(self):
         return self.name
-
-
-class DishImage(models.Model):
-    dish = models.ForeignKey(Dish, on_delete=models.CASCADE, related_name="dishes_dish_image_dish", null=True, blank=True)
-    image = models.FileField(null=True, blank=True, upload_to="")
-
-    created = models.DateTimeField(auto_now_add=True, editable=False)
-    last_updated = models.DateTimeField(auto_now=True, editable=False)
-    class Meta:
-        verbose_name = 'Dish Image'
-        verbose_name_plural = 'Dish Images'
-    def __str__(self):
-        return self.dish.name

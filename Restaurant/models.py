@@ -20,10 +20,10 @@ class Restaurant(models.Model):
     unique_id = models.CharField(max_length=10, null=True, blank=True, unique=True)
     name = models.CharField(max_length=200, null=True, blank=True)
     owner = models.ForeignKey(user_models.User, on_delete=models.CASCADE, related_name="restaurant_restaurant_client", null=True, blank=True)
-    location_coordinates = models.CharField(max_length=30)
+    location_coordinates = models.CharField(max_length=30, null=True, blank=True)
     is_open = models.BooleanField(default=False, null=True, blank=True)
     address = models.TextField(null=True, blank=True)
-    category = models.ManyToManyField(RestraurantDishesCategory)
+    category = models.ManyToManyField(RestraurantDishesCategory, null=True, blank=True)
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
     last_updated = models.DateTimeField(auto_now=True, editable=False)
