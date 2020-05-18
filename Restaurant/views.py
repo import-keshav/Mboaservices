@@ -79,21 +79,6 @@ class DeleteRestaurantEmployee(generics.DestroyAPIView):
         return restaurant_models.RestaurantEmployee.objects.filter(user=user, restaurant=restaurant)
 
 
-class CreateGetRestaurantImage(generics.ListCreateAPIView):
-    renderer_classes = [JSONRenderer]
-    serializer_class = restaurant_serializers.RestaurantImageSerializer
-
-    def get_queryset(self):
-        restaurant = restaurant_models.Restaurant.objects.filter(pk=self.kwargs['pk']).first()
-        return restaurant_models.RestaurantImage.objects.filter(restaurant=restaurant)
-
-
-class DeleteRestaurantImage(generics.DestroyAPIView):
-    renderer_classes = [JSONRenderer]
-    serializer_class = restaurant_serializers.RestaurantImageSerializer
-    queryset = restaurant_models.RestaurantImage.objects.all()
-
-
 class CreateGetRestaurantPromocode(generics.ListCreateAPIView):
     renderer_classes = [JSONRenderer]
 

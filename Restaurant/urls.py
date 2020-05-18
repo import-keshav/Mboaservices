@@ -15,10 +15,6 @@ urlpatterns = [
 	path('get-restaurant-employee/<int:pk>', views.CreateGetRestaurantEmployee.as_view()),
 	path('delete-restaurant-employee', views.DeleteRestaurantEmployee.as_view()),
 
-	path('add-restaurant-image', views.CreateGetRestaurantImage.as_view()),
-	path('get-restaurant-image/<int:pk>', views.CreateGetRestaurantImage.as_view()),
-	path('delete-restaurant-image/<int:pk>', views.DeleteRestaurantImage.as_view()),
-
 	path('create-promocode', views.CreateGetRestaurantPromocode.as_view()),
 	path('get-promocode/<int:pk>', views.CreateGetRestaurantPromocode.as_view()),
 	path('update-promocode/<int:pk>', views.UpdateRestaurantPromocode.as_view()),

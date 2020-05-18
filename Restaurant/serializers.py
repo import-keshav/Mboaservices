@@ -61,19 +61,6 @@ class RestaurantEmployeeGetSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class RestaurantImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.RestaurantImage
-        fields = '__all__'
-
-    def validate(self, data):
-        if not 'restaurant' in data:
-            raise forms.ValidationError('Include restaurant id in data')
-        if not 'image' in data:
-            raise forms.ValidationError('Include image in data')
-        return data
-
-
 class RestaurantPromocodeUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.RestaurantPromocode

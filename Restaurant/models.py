@@ -24,6 +24,7 @@ class Restaurant(models.Model):
     is_open = models.BooleanField(default=False, null=True, blank=True)
     address = models.TextField(null=True, blank=True)
     category = models.ManyToManyField(RestraurantDishesCategory, null=True, blank=True)
+    image = models.FileField(null=True, blank=True, upload_to="")
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
     last_updated = models.DateTimeField(auto_now=True, editable=False)
@@ -45,19 +46,6 @@ class RestaurantEmployee(models.Model):
         verbose_name_plural = 'Restaurant Employees'
     def __str__(self):
         return self.user.name
-
-
-class RestaurantImage(models.Model):
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="restaurant_restaurant_image_restaurant", null=True, blank=True)
-    image = models.FileField(null=True, blank=True, upload_to="")
-
-    created = models.DateTimeField(auto_now_add=True, editable=False)
-    last_updated = models.DateTimeField(auto_now=True, editable=False)
-    class Meta:
-        verbose_name = 'Restaurant Image'
-        verbose_name_plural = 'Restaurant Images'
-    def __str__(self):
-        return self.restaurant.name
 
 
 class RestaurantPromocode(models.Model):
