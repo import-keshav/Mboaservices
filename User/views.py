@@ -125,9 +125,9 @@ class RestraurantLogin(APIView):
             restraurant = restraurant_models.Restaurant.objects.filter(
                 unique_id=self.request.data['restraurant_unique_id']).first()
             if not restraurant:
-                return Response({"message": "Invalid Restraurant unique Id"})
+                return Response({"message": "Invalid Restraurant unique Id",}, status=status.HTTP_400_BAD_REQUEST)
             if verify_password( restraurant.owner.password, self.request.data['password']):
                 return Response({'message': 'Login Succesfully'}, status=status.HTTP_200_OK)
             return Response({'message': 'Invalid password'}, status=status.HTTP_400_BAD_REQUEST)
         except:
-            return Response({"message": "restraurant_unique_id is missing"})
+            return Response({"message": "restraurant_unique_id is missing"}, status=status.HTTP_400_BAD_REQUEST)
