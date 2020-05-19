@@ -4,6 +4,8 @@ from rest_framework import serializers
 
 from . import models
 
+from Restaurant import serializers as restaurant_serializers
+
 class DishPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Dish
@@ -29,6 +31,18 @@ class DishGetSerializer(serializers.ModelSerializer):
 
 
 class DishUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Dish
+        fields = '__all__'
+
+
+class DishSearchFilterSerializer(serializers.ModelSerializer):
+    categories = serializers.SerializerMethodField()
+    restaurant = restaurant_serializers.RestaurantGetSerializer()
+
+    def get_categories(self, obj):
+        return [{"name":cat.name, "id": cat.pk} for cat in obj.categories.all()]
+
     class Meta:
         model = models.Dish
         fields = '__all__'

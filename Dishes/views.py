@@ -1,7 +1,8 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
 from rest_framework.views import APIView
-from rest_framework import generics, status
+from rest_framework import generics, status, filters
 
 from . import serializers as dish_serializers
 from . import models as dish_models
@@ -60,3 +61,12 @@ class IsAvailableOrNotDish(APIView):
         dish.is_available = self.request.data['is_available']
         dish.save()
         return Response({"message": "Operation Done succesfully"}, status=status.HTTP_200_OK)
+
+
+class GetDishOnFilter(generics.ListAPIView):
+    renderer_classes = [JSONRenderer]
+    queryset = dish_models.Dish.objects.all()
+    serializer_class = dish_serializers.DishSearchFilterSerializer
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    filterset_fields = ['categories__name']
+    search_fields = ['categories__name']
