@@ -68,5 +68,5 @@ class GetDishOnFilter(generics.ListAPIView):
     queryset = dish_models.Dish.objects.all()
     serializer_class = dish_serializers.DishSearchFilterSerializer
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
-    filterset_fields = ['categories__name']
-    search_fields = ['categories__name']
+    filterset_fields = ['categories__name', 'name']
+    search_fields = ['categories__name', 'name']

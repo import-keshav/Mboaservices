@@ -39,8 +39,8 @@ class GetRestaurantOnFilter(generics.ListCreateAPIView):
     queryset = restaurant_models.Restaurant.objects.all()
     serializer_class = restaurant_serializers.RestaurantGetSerializer
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
-    filterset_fields = ['category__name']
-    search_fields = ['category__name']
+    filterset_fields = ['category__name', 'name']
+    search_fields = ['category__name', 'name']
 
 
 class UpdateRestaurant(generics.UpdateAPIView):
