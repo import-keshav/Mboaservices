@@ -69,3 +69,15 @@ class DeleteClientCart(generics.DestroyAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = client_serializers.ClientCartUpdateSerializer
     queryset = client_models.ClientCart.objects.all()
+
+
+class CheckDishRestraurantInCart(APIView):
+    def post(self, request):
+        client = client_models.Client.objects.filter(pk=self.request.data['client']).first()
+        restaurant = restaurant_models.Restaurant.objects.filter(pk=self.request.data['restaurant']).first()
+        existence_restrau_dishes = client_models.ClientCart.objects.filter(client=client, restaurant=restaurant)
+        current_client_cart = client_models.ClientCart.objects.filter(client=client)
+
+        if current_client_cart  and existence_restrau_dishes:
+            return Response({'is_restaurant_same': True}, status=status.HTTP_200_OK)
+        return Response({'is_restaurant_same': False}, status=status.HTTP_200_OK)

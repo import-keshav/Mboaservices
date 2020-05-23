@@ -13,5 +13,6 @@ urlpatterns = [
 	path('add-item-in-client-cart', views.CreateGetClientCart.as_view()),
 	path('update-item-in-client-cart/<int:pk>', views.UpdateClientCart.as_view()),
 	path('delete-item-in-client-cart/<int:pk>', views.DeleteClientCart.as_view()),
+	path('verify-restraurant-with-client-cart', views.CheckDishRestraurantInCart.as_view()),
 
 ]

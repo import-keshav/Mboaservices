@@ -7,6 +7,7 @@ from . import models
 from User import models as user_models
 from User import serializers as user_serializer
 from Dishes import serializers as dish_serializer
+from Restaurant import serializers as restaurant_serializer
 
 class ClientPostSerializer(serializers.ModelSerializer):
     class Meta:
@@ -59,6 +60,7 @@ class ClientCartPostSerializer(serializers.ModelSerializer):
 
 class ClientCartGetSerializer(serializers.ModelSerializer):
     dish = dish_serializer.DishGetSerializer()
+    restaurant = restaurant_serializer.RestaurantGetSerializer()
     class Meta:
         model = models.ClientCart
         fields = '__all__'
