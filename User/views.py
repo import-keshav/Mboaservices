@@ -1,5 +1,7 @@
 import hashlib, binascii, os
+from authy.api import AuthyApiClient
 
+from django.conf import settings
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
@@ -11,6 +13,8 @@ from . import serializers as user_serializer
 from Client import models as client_models
 from Restaurant import models as restraurant_models
 from Restaurant import serializers as restraurant_serializer
+
+authy_api = AuthyApiClient(settings.ACCOUNT_SECURITY_API_KEY)
 
 def hash_password(password):
     """Hash a password for storing."""
@@ -132,3 +136,18 @@ class RestraurantLogin(APIView):
             return Response({'message': 'Invalid password'}, status=status.HTTP_400_BAD_REQUEST)
         except:
             return Response({"message": "restraurant_unique_id is missing"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class MobileNumberVerification(APIView):
+    def post(self, request):
+        mobile_number = self.request.data['mobile_number']
+        user = models.User.objects.filter(mobile=mobile_number).first()
+        if user:
+            return Response(
+                {"message": "Mobile Number already Register"}, status=status.HTTP_200_OK)
+        authy_api.phones.verification_start(
+            mobile_number,
+            self.request.data['country_code'],
+            via="sms"
+        )
+        return Response({"message": 'token_validation'})
