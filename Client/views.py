@@ -55,7 +55,7 @@ class CreateGetClientCart(generics.ListCreateAPIView):
         new_item = client_serializers.ClientCartPostSerializer(data=self.request.data)
         if new_item.is_valid():
             new_item.save()
-            return Response({"message": "Item added Succesfully"}, status=status.HTTP_200_OK)
+            return Response(new_item.data, status=status.HTTP_200_OK)
         return Response(new_item.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
