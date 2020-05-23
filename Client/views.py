@@ -7,6 +7,7 @@ from . import serializers as client_serializers
 from . import models as client_models
 
 from User import models as user_models
+from Restaurant import models as restaurant_models
 
 
 class GetClient(generics.ListAPIView):
@@ -41,6 +42,21 @@ class CreateGetClientCart(generics.ListCreateAPIView):
         if self.request.method == 'GET':
             return client_serializers.ClientCartGetSerializer
         return client_serializers.ClientCartPostSerializer
+
+    def create(self, request):
+        client = client_models.Client.objects.filter(pk=self.request.data['client']).first()
+        current_cart = client_models.ClientCart.objects.filter(client=client)
+        new_restraurant = restaurant_models.Restaurant.objects.filter(pk=self.request.data['restaurant']).first()
+
+        for item in current_cart:
+            if item.restaurant != new_restraurant:
+                client_models.ClientCart.objects.filter(client=client).delete()
+
+        new_item = client_serializers.ClientCartPostSerializer(data=self.request.data)
+        if new_item.is_valid():
+            new_item.save()
+            return Response({"message": "Item added Succesfully"}, status=status.HTTP_200_OK)
+        return Response(new_item.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UpdateClientCart(generics.UpdateAPIView):
