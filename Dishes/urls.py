@@ -11,4 +11,7 @@ urlpatterns = [
 	path('delete-dish/<int:pk>', views.DeleteDish.as_view()),
 	path('is-available-or-not-dish', views.IsAvailableOrNotDish.as_view()),
 
+	path('get-dish-add-on/<int:pk>', views.AddGetDishAddOn.as_view()),
+	path('add-dish-add-on', views.AddGetDishAddOn.as_view()),
+
 ]

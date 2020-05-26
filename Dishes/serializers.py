@@ -19,11 +19,36 @@ class DishPostSerializer(serializers.ModelSerializer):
             raise forms.ValidationError('Include price of dish')
         return data
 
+
+class DishAddOnsGetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.DishAddOns
+        fields = '__all__'
+
+
+class DishAddOnsPostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.DishAddOns
+        fields = '__all__'
+    def validate(self, data):
+        if not 'name' in data:
+            raise forms.ValidationError('Include name of dish addon')
+        if not 'dish' in data:
+            raise forms.ValidationError('Include dish of dish add on')
+        if not 'price' in data:
+            raise forms.ValidationError('Include price of dish add on')
+        return data
+
+
 class DishGetSerializer(serializers.ModelSerializer):
     categories = serializers.SerializerMethodField()
+    add_ons = serializers.SerializerMethodField()
 
     def get_categories(self, obj):
         return [{"name":cat.name, "id": cat.pk} for cat in obj.categories.all()]
+
+    def get_add_ons(self, obj):
+        return [DishAddOnsGetSerializer(addon).data for addon in models.DishAddOns.objects.filter(dish=obj)]
 
     class Meta:
         model = models.Dish

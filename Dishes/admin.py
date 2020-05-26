@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 from .models import (
-	Dish
+	Dish,
+	DishAddOns
 )
 
 @admin.register(Dish)
@@ -11,3 +12,10 @@ class DishAdmin(admin.ModelAdmin):
 	def get_category(self, obj):
 		return [cat.name for cat in obj.categories.all()]
 	get_category.short_description = 'Categories'
+
+
+@admin.register(DishAddOns)
+class DishAddOnsAdmin(admin.ModelAdmin):
+	list_display = ('name', 'dish', 'is_free', 'price', 'id')
+	search_fields = ('name', 'dish__name')
+	raw_id_fields = ('dish',)

@@ -20,3 +20,18 @@ class Dish(models.Model):
         verbose_name_plural = 'Dishes'
     def __str__(self):
         return self.name
+
+
+class DishAddOns(models.Model):
+    dish = models.ForeignKey(Dish, on_delete=models.CASCADE, related_name="dishes_dishaddons_dish", null=True, blank=True)
+    name = models.CharField(max_length=100, null=True, blank=True)
+    is_free = models.BooleanField(default=False, null=True, blank=True)
+    price = models.FloatField(null=True, blank=True, validators=[MinValueValidator(0)])
+
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+    last_updated = models.DateTimeField(auto_now=True, editable=False)
+    class Meta:
+        verbose_name = 'Dish Add On'
+        verbose_name_plural = 'Dish Add Ons'
+    def __str__(self):
+        return self.name

@@ -70,3 +70,16 @@ class GetDishOnFilter(generics.ListAPIView):
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     filterset_fields = ['categories__name', 'name']
     search_fields = ['categories__name', 'name']
+
+
+class AddGetDishAddOn(generics.ListCreateAPIView):
+    renderer_classes = [JSONRenderer]
+
+    def get_queryset(self):
+        dish = dish_models.Dish.objects.filter(pk=self.kwargs['pk']).first()
+        return dish_models.DishAddOns.objects.filter(dish=dish)
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return dish_serializers.DishAddOnsGetSerializer
+        return dish_serializers.DishAddOnsPostSerializer
