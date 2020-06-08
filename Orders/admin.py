@@ -7,12 +7,10 @@ from .models import (
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-	list_display = (
-		'restaurant', 'client', 'date', 'time', 'payment_method',
-		'is_delivered', 'is_accepted', 'total_amount', 'status', 'id')
+	list_display = [field.name for field in Order._meta.fields]
 	search_fields = ('restaurant__name', 'restaurant__location_coordinates'
 		'client__user__name', 'client__user__email', 'client__user__mobile',
-		'date', 'time', 'status', 'restaurant__id', 'client__id', 'id')
+		'created', 'status', 'restaurant__id', 'client__id', 'id')
 
 
 @admin.register(OrderDish)

@@ -20,8 +20,6 @@ order_status = (
 class Order(models.Model):
     restaurant = models.ForeignKey(restaurant_models.Restaurant, on_delete=models.CASCADE, related_name="orders_order_restaurant", null=True, blank=True)
     client = models.ForeignKey(client_models.Client, on_delete=models.CASCADE, related_name="orders_order_client", null=True, blank=True)
-    date = models.DateField(null=True, blank=True)
-    time = models.TimeField(null=True, blank=True)
     payment_method = models.TextField(choices=payment_choices, null=True, blank=True)
     is_delivered = models.BooleanField(default=False, null=True, blank=True)
     is_accepted = models.BooleanField(default=False, null=True, blank=True)

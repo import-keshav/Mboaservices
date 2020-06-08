@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    'channels',
     'Client',
     'Dishes',
     'Invigilator',
@@ -68,7 +69,10 @@ REST_FRAMEWORK = {
     ],
 }
 
+
 ROOT_URLCONF = 'Mboaservices.urls'
+ASGI_APPLICATION = "Mboaservices.routing.application"
+
 
 TEMPLATES = [
     {
