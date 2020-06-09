@@ -27,6 +27,8 @@ class Order(models.Model):
     # transaction_id
     status = models.TextField(choices=order_status, null=True, blank=True)
     promocode_used = models.ForeignKey(restaurant_models.RestaurantPromocode, on_delete=models.CASCADE, related_name="orders_order_promocode_used", null=True, blank=True)
+    client_coordinates = models.TextField(null=True, blank=True)
+    client_address_details = models.TextField(null=True, blank=True)
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
     last_updated = models.DateTimeField(auto_now=True, editable=False)

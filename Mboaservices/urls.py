@@ -26,6 +26,7 @@ urlpatterns = [
     path('dish/', include('Dishes.urls')),
     path('orders/', include('Orders.urls')),
     path('restaurant/', include('Restaurant.urls')),
+    path('reviews/', include('Reviews.urls')),
     path('user/', include('User.urls')),
 ]
 

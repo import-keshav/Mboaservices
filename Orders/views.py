@@ -1,7 +1,6 @@
 import pika
 
 from django import forms
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
 from rest_framework.views import APIView
