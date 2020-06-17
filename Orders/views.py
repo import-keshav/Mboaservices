@@ -53,17 +53,24 @@ class CreateOrder(APIView):
     def add_order_in_restaurant_queue(self, restaurant, order):
         restaurant = restaurant_models.Restaurant.objects.filter(pk=restaurant).first()
         order = orders_models.Order.objects.filter(pk=order).first()
-        connection = pika.BlockingConnection(
-            pika.ConnectionParameters(host='localhost')
-        )
-        channel = connection.channel()
+
+        channel, connection = self._connect()
         channel.queue_declare(queue=restaurant.unique_id + '_recieve_order')
+        channel.exchange_declare(exchange='recieve_order',
+                         exchange_type='fanout')
         channel.basic_publish(
-            exchange='',
+            exchange='recieve_order',
             routing_key=restaurant.unique_id + '_recieve_order',
             body=str(order.id)
         )
         connection.close()
+
+    def _connect(self):
+        connection = pika.BlockingConnection(
+            pika.ConnectionParameters(host='localhost')
+        )
+        channel = connection.channel()
+        return channel, connection
 
 
 class UpdateOrder(generics.UpdateAPIView):
@@ -90,10 +97,12 @@ class UpdateOrderStatus(APIView):
         )
         channel = connection.channel()
         channel.queue_declare(queue=order.restaurant.unique_id + '_order_staus')
+        channel.exchange_declare(exchange='order_status',
+                         exchange_type='fanout')
         channel.basic_publish(
-            exchange='',
+            exchange='order_status',
             routing_key=order.restaurant.unique_id + '_order_staus',
-            body=str({'order': order.pk, 'status': status})
+            body=str({"order": order.pk, "status": status})
         )
         connection.close()
         order.status = status

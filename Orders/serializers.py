@@ -5,6 +5,12 @@ from rest_framework import serializers
 from . import models
 
 
+class GetOrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Order
+        fields = '__all__'
+
+
 class CreateOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Order
@@ -13,8 +19,8 @@ class CreateOrderSerializer(serializers.ModelSerializer):
         valid_keys = ['restaurant', 'client', 'payment_method', 'total_amount']
         if not data:
             raise forms.ValidationError('Include ' + ' ,'.join(valid_keys) + ' in data')
-        for key in data:
-            if key not in valid_keys:
+        for key in valid_keys:
+            if key not in data:
                 raise forms.ValidationError('Include ' + key + ' in data')
         return data
 
