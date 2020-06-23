@@ -1,16 +1,16 @@
 import asyncio
 import json
 import pika
+import time
 from channels.consumer import AsyncConsumer
 from channels.exceptions import StopConsumer
 from channels.db import database_sync_to_async
+from asgiref.sync import async_to_sync
 from threading import Thread
 
 from . import models
 from . import serializers
 from Restaurant import models as restaurant_models
-
-from asgiref.sync import async_to_sync
 
 
 class IncomingRestaurantOrders(AsyncConsumer):
@@ -58,6 +58,7 @@ class IncomingRestaurantOrders(AsyncConsumer):
                     "type": "websocket.send",
                     "text": order_data
                 })
+            time.sleep(120)
 
     async def websocket_disconnect(self, event):
         self.is_opened = False
@@ -89,6 +90,7 @@ class GetOrderStatus(AsyncConsumer):
                         "type": "websocket.send",
                         "text": incoming_order_data,
                     })
+            time.sleep(120)
 
     def _connect(self, restaurant_unique_id):
         connection = pika.BlockingConnection(
