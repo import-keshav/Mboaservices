@@ -1,5 +1,3 @@
-import pika
-
 from django import forms
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
@@ -24,8 +22,10 @@ class CreateOrder(APIView):
         if order_serializer.is_valid():
             self.validate_dishes(self.request.data['dishes'], self.request.data['order']['restaurant'])
             order_serializer.save()
-            self.add_order_in_restaurant_queue(self.request.data['order']['restaurant'], order_serializer.data['id'])
             self.create_order(self.request.data['dishes'], order_serializer.data['id'])
+            order_ = orders_models.Order.objects.filter(pk=order_serializer.data['id']).first()
+            incoming_order_obj = orders_models.IncomingOrder(order=order_, restaurant=order_.restaurant)
+            incoming_order_obj.save()
             return Response({'message': 'Orders Created Successfully', 'id': order_serializer.data['id']})
         return Response(order_serializer.errors)
 
@@ -47,67 +47,13 @@ class CreateOrder(APIView):
             dish['order'] = order
             order_dish_serializer = orders_serializers.CreateOrderDisheSerializer(data=dish)
             if order_dish_serializer.is_valid():
-                order_dish_serializer.save()                
-
-
-    def add_order_in_restaurant_queue(self, restaurant, order):
-        restaurant = restaurant_models.Restaurant.objects.filter(pk=restaurant).first()
-        order = orders_models.Order.objects.filter(pk=order).first()
-
-        channel, connection = self._connect()
-        channel.queue_declare(queue=restaurant.unique_id + '_recieve_order')
-        channel.exchange_declare(exchange='recieve_order',
-                         exchange_type='fanout')
-        channel.basic_publish(
-            exchange='recieve_order',
-            routing_key=restaurant.unique_id + '_recieve_order',
-            body=str(order.id)
-        )
-        connection.close()
-
-    def _connect(self):
-        connection = pika.BlockingConnection(
-            pika.ConnectionParameters(host='localhost')
-        )
-        channel = connection.channel()
-        return channel, connection
+                order_dish_serializer.save()
 
 
 class UpdateOrder(generics.UpdateAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = orders_serializers.UpdateOrderSerializer
     queryset = orders_models.Order.objects.all()
-
-
-class UpdateOrderStatus(APIView):
-    def post(self, request):
-        valid_keys = ['status', 'order']
-        for key in valid_keys:
-            if not key in self.request.data:
-                raise forms.ValidationError(key + " is missing")
-
-        status = self.request.data['status']
-        order = orders_models.Order.objects.filter(pk=self.request.data['order']).first()
-        self.update_order_status(status, order)
-        return Response({'message': 'Order Updates Successfully'})
-
-    def update_order_status(self, status, order):
-        connection = pika.BlockingConnection(
-            pika.ConnectionParameters(host='localhost')
-        )
-        channel = connection.channel()
-        channel.queue_declare(queue=order.restaurant.unique_id + '_order_staus')
-        channel.exchange_declare(exchange='order_status',
-                         exchange_type='fanout')
-        channel.basic_publish(
-            exchange='order_status',
-            routing_key=order.restaurant.unique_id + '_order_staus',
-            body=str({"order": order.pk, "status": status})
-        )
-        connection.close()
-        order.status = status
-        order.save()
-
 
 
 class GetClientPastOrders(generics.ListAPIView):
@@ -126,3 +72,34 @@ class GetRestaurantPastOrders(generics.ListAPIView):
     def get_queryset(self):
         restaurant = restaurant_models.Restaurant.objects.filter(pk=self.kwargs['pk']).first()
         return orders_models.Order.objects.filter(restaurant=restaurant)
+
+
+class AcceptOrder(APIView):
+    def post(self, request):
+        if 'order' not in self.request.data:
+            return Response({'message': 'Include Order in Data'}, status=status.HTTP_400_BAD_REQUEST)
+
+        order = orders_models.Order.objects.filter(pk=self.request.data['order']).first()
+        if not order:
+            return Response({'message': 'Invalid Order ID'}, status=status.HTTP_400_BAD_REQUEST)
+        order.is_accepted = True
+        order.status = "Accepted"
+        order.save()
+        ongoing_order = orders_models.OngoingOrder(order=order, restaurant=order.restaurant)
+        incoming_order = orders_models.IncomingOrder.objects.filter(order=order).first()
+        incoming_order.delete()
+        ongoing_order.save()
+        return Response({'message': 'Order Accepted Successfully'}, status=status.HTTP_200_OK)
+
+
+class RejectOrder(APIView):
+    def post(self, request):
+        renderer_classes = [JSONRenderer]
+        if 'order' not in self.request.data:
+            return Response({'message': 'Include Order in Data'}, status=status.HTTP_400_BAD_REQUEST)
+
+        order = orders_models.Order.objects.filter(pk=self.request.data['order']).first()
+        if not order:
+            return Response({'message': 'Invalid Order ID'}, status=status.HTTP_400_BAD_REQUEST)
+        order.delete()
+        return Response({'message': 'Order Rejected Successfully'}, status=status.HTTP_200_OK)

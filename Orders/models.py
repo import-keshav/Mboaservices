@@ -11,6 +11,7 @@ payment_choices = (
 )
 
 order_status = (
+    ("Accepted", "Accepted"),
 	("preparing", "preparing"),
 	("packaging", "packaging"),
 	("on_way", "on_way"),
@@ -52,3 +53,21 @@ class OrderDish(models.Model):
         verbose_name_plural = 'Order Dishes'
     def __str__(self):
         return self.dish.name
+
+
+class IncomingOrder(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="orders_incoming_order_order", null=True, blank=True)
+    restaurant = models.ForeignKey(restaurant_models.Restaurant, on_delete=models.CASCADE, related_name="orders_incoming_order_restaurant", null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Incoming Order'
+        verbose_name_plural = 'Incoming Orders'
+
+
+class OngoingOrder(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="orders_ongoing_order_order", null=True, blank=True)
+    restaurant = models.ForeignKey(restaurant_models.Restaurant, on_delete=models.CASCADE, related_name="orders_ongoing_order_restaurant", null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Ongoing Order'
+        verbose_name_plural = 'Ongoing Orders'

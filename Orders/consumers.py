@@ -1,6 +1,5 @@
 import asyncio
 import json
-import pika
 import time
 from channels.consumer import AsyncConsumer
 from channels.exceptions import StopConsumer
@@ -19,44 +18,32 @@ class IncomingRestaurantOrders(AsyncConsumer):
             "type": "websocket.accept",
         })
         self.is_opened = True
-        restaurant_unique_id = await self.get_restaurant_unique_id(self.scope['url_route']['kwargs']['pk'])
-        channel = self._connect(restaurant_unique_id)
-        t1 = Thread(target=self.send_and_get_messages, args=(channel, restaurant_unique_id))
+        restaurant_id = self.scope['url_route']['kwargs']['pk']
+        t1 = Thread(target=self.send_and_get_messages, args=(restaurant_id,))
         t1.start()
 
-
-    def _connect(self, restaurant_unique_id):
-        connection = pika.BlockingConnection(
-            pika.ConnectionParameters(host='localhost'))
-        channel = connection.channel()
-        channel.queue_declare(queue=restaurant_unique_id + '_recieve_order')
-        channel.exchange_declare(exchange='recieve_order',
-            exchange_type='fanout')
-        channel.queue_bind(exchange='recieve_order',
-            queue=restaurant_unique_id + '_recieve_order')
-        return channel
-
     @database_sync_to_async
-    def create_order_data(self, order_id):
-        order = models.Order.objects.filter(pk=int(order_id)).first()
-        order_dishes = models.OrderDish.objects.filter(order=order)
+    def create_order_data(self, incoming_order):
+        order_dishes = models.OrderDish.objects.filter(order=incoming_order.order)
         dishes = [serializers.GetOrderDishSerializer(dish).data for dish in order_dishes]
         return json.dumps({
-            'order': serializers.GetOrderSerializer(order).data,
+            'order': serializers.GetOrderSerializer(incoming_order.order).data,
             'dishes': dishes,
         })
 
     @database_sync_to_async
-    def get_restaurant_unique_id(self, pk):
-        return restaurant_models.Restaurant.objects.filter(pk=pk)[0].unique_id
+    def get_incoming_orders(self, restaurant_id):
+        restaurant = restaurant_models.Restaurant.objects.filter(pk=restaurant_id).first()
+        return models.IncomingOrder.objects.filter(restaurant=restaurant)
 
-    def send_and_get_messages(self, channel, restaurant_unique_id):
+    def send_and_get_messages(self, restaurant_id):
         while self.is_opened:
-            for (method_frame, _, body) in channel.consume(restaurant_unique_id + '_recieve_order'):
-                order_data = async_to_sync(self.create_order_data)(body.decode('ascii'))
+            incoming_orders = async_to_sync(self.get_incoming_orders)(restaurant_id)
+            for incoming_order in incoming_orders:
+                order_data = async_to_sync(self.create_order_data)(incoming_order)
                 async_to_sync(self.send)({
                     "type": "websocket.send",
-                    "text": order_data
+                    "text": order_data 
                 })
             time.sleep(120)
 
@@ -73,40 +60,22 @@ class GetOrderStatus(AsyncConsumer):
             "type": "websocket.accept",
         })
         order_id = self.scope['url_route']['kwargs']['pk']
-        restaurant_unique_id = await self.get_restaurant_unique_id(order_id)
-        channel = self._connect(restaurant_unique_id)
         self.is_opened = True
-        t1 = Thread(target=self.send_and_get_messages, args=(channel, restaurant_unique_id, order_id))
+        t1 = Thread(target=self.send_and_get_messages, args=(order_id,))
         t1.start()
 
 
-    def send_and_get_messages(self, channel, restaurant_unique_id, order_id):
+    def send_and_get_messages(self, order_id):
         while self.is_opened:
-            for (method_frame, _, body) in channel.consume(restaurant_unique_id + '_order_status'):
-                incoming_order_data = eval(body.decode('ascii'))
-                if int(incoming_order_data["order"]) == int(order_id):
-                    incoming_order_data = json.dumps(incoming_order_data)
-                    async_to_sync(self.send)({
-                        "type": "websocket.send",
-                        "text": incoming_order_data,
-                    })
+            async_to_sync(self.send)({
+                "type": "websocket.send",
+                "text": async_to_sync(self.get_order_status)(order_id),
+            })
             time.sleep(120)
 
-    def _connect(self, restaurant_unique_id):
-        connection = pika.BlockingConnection(
-            pika.ConnectionParameters(host='localhost')
-        )
-        channel = connection.channel()
-        channel.queue_declare(queue=restaurant_unique_id + '_order_status')
-        channel.exchange_declare(exchange='order_status',
-                         exchange_type='fanout')
-        channel.queue_bind(exchange='order_status',
-            queue=restaurant_unique_id + '_order_status')
-        return channel
-
     @database_sync_to_async
-    def get_restaurant_unique_id(self, order_id):
-        return models.Order.objects.filter(pk=int(order_id)).first().restaurant.unique_id
+    def get_order_status(self, order_id):
+        return models.Order.objects.filter(pk=int(order_id)).first().status
 
     async def websocket_disconnect(self, event):
         self.is_opened = False
