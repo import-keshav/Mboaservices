@@ -32,3 +32,14 @@ class User(models.Model):
     def save(self):
         self.password = hash_password(self.password)
         super(User, self).save()
+
+
+class MobileNumberOTP(models.Model):
+    mobile = models.CharField(max_length=15, null=True, blank=True)
+    otp = models.CharField(max_length=5, null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Mobile Number OTP'
+        verbose_name_plural = 'Mobile Number OTPs'
+    def __str__(self):
+        return self.mobile

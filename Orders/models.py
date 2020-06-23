@@ -7,6 +7,7 @@ from Dishes import models as dishes_models
 
 payment_choices = (
 	("Cash On Delivery", "Cash On Delivery"),
+    ("Online Payment", "Online Payment"),
 )
 
 order_status = (

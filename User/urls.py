@@ -9,7 +9,10 @@ urlpatterns = [
 	path('change-password', views.ChangePassword.as_view()),
 	path('restaurant-login', views.RestraurantLogin.as_view()),
 	path('update-user/<int:pk>', views.UserUpdateProfile.as_view()),
-	path('mobile-number-verification', views.MobileNumberVerification.as_view()),
+
+	path('check-mobile-number', views.CheckMobileNumber.as_view()),
+	path('send-otp', views.SendOTP.as_view()),
+	path('verify-otp', views.VerifyOTP.as_view()),
 
     path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),

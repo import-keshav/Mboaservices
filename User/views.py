@@ -1,5 +1,4 @@
-import hashlib, binascii, os
-from authy.api import AuthyApiClient
+import hashlib, binascii, os, random
 
 from django.conf import settings
 from django_filters.rest_framework import DjangoFilterBackend
@@ -14,7 +13,7 @@ from Client import models as client_models
 from Restaurant import models as restraurant_models
 from Restaurant import serializers as restraurant_serializer
 
-authy_api = AuthyApiClient(settings.ACCOUNT_SECURITY_API_KEY)
+# from twilio.rest import Client
 
 def hash_password(password):
     """Hash a password for storing."""
@@ -138,16 +137,75 @@ class RestraurantLogin(APIView):
             return Response({"message": "restraurant_unique_id is missing"}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class MobileNumberVerification(APIView):
+class CheckMobileNumber(APIView):
     def post(self, request):
+        if not 'mobile_number' in self.request.data:
+            return Response({
+                "message": "Mobile Number Missing"
+            }, status=status.HTTP_400_BAD_REQUEST)
         mobile_number = self.request.data['mobile_number']
-        user = models.User.objects.filter(mobile=mobile_number).first()
-        if user:
-            return Response(
-                {"message": "Mobile Number already Register"}, status=status.HTTP_200_OK)
-        authy_api.phones.verification_start(
-            mobile_number,
-            self.request.data['country_code'],
-            via="sms"
+
+        obj = models.User.objects.filter(mobile=mobile_number).first()
+        if obj:
+            return Response({"message": 'User already Exists'})
+        return Response({"message": "User didn't Exists"})
+
+
+class SendOTP(APIView):
+    def post(self, request):
+        if not 'mobile_number' in self.request.data:
+            return Response({
+                "message": "Mobile Number Missing"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        mobile_number = self.request.data['mobile_number']
+        otp = random.randrange(1000,9999)
+        obj = models.MobileNumberOTP.objects.filter(mobile=mobile_number).first()
+        if obj:
+            obj.otp = otp
+        else:
+            obj = models.MobileNumberOTP(mobile=mobile_number, otp=otp)
+        obj.save()
+
+        account_sid = 'ACdb82fcbb9eabb02b0b3133cbab23943a '
+        auth_token = '563eeb8eb2602ddba51516bb1a184f87'
+        client = Client(account_sid, auth_token)
+        message = client.messages.create(
+            body=str(otp),
+            from_='+12067373409',
+            to='+919643906878'
         )
-        return Response({"message": 'token_validation'})
+        return Response({"message": 'OTP Sent Succesfully'})
+
+
+class VerifyOTP(APIView):
+    def post(self, request):
+        for key in ['mobile_number', 'otp']:
+            if not key in self.request.data:
+                return Response(
+                    {"message": "(mobile_number, otp) any of params missing"},
+                    status=status.HTTP_400_BAD_REQUEST)
+        mobile_number = self.request.data['mobile_number']
+        otp = self.request.data['otp']
+
+        obj = models.MobileNumberOTP.objects.filter(mobile=mobile_number).first()
+        if not obj:
+            return Response({
+                "message": "Mobile Number is not Verified"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        if obj.otp == otp:
+            obj.delete()
+            return Response({"message": "Mobile Numbered Verified"}, status=status.HTTP_200_OK)
+        return Response({"message": "Invalid OTP"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+# from authy.api import AuthyApiClient
+# authy_api = AuthyApiClient(settings.ACCOUNT_SECURITY_API_KEY)
+# authy_api.phones.verification_start(
+#     mobile_number,
+#     self.request.data['country_code'],
+#     via="sms"
+# )
