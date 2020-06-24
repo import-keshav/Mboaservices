@@ -8,6 +8,8 @@ urlpatterns = [
 	path('accept-order', views.AcceptOrder.as_view()),
 	path('reject-order', views.RejectOrder.as_view()),
 
+	path('get-ongoing-orders/<int:pk>', views.GetOngoingOrders.as_view()),
+	path('get-specific-order/<int:pk>', views.GetSpecificOrder.as_view()),
 	path('get-client-past-orders/<int:pk>', views.GetClientPastOrders.as_view()),
 	path('get-restaurant-past-orders/<int:pk>', views.GetRestaurantPastOrders.as_view()),
 ]

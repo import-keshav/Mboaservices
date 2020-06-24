@@ -37,15 +37,17 @@ class IncomingRestaurantOrders(AsyncConsumer):
         return models.IncomingOrder.objects.filter(restaurant=restaurant)
 
     def send_and_get_messages(self, restaurant_id):
+        # old_data = models.IncomingOrder.objects.none()
         while self.is_opened:
-            incoming_orders = async_to_sync(self.get_incoming_orders)(restaurant_id)
-            for incoming_order in incoming_orders:
+            new_data = async_to_sync(self.get_incoming_orders)(restaurant_id)
+            # difference = new_data.difference(old_data)
+            for incoming_order in new_data:
                 order_data = async_to_sync(self.create_order_data)(incoming_order)
                 async_to_sync(self.send)({
                     "type": "websocket.send",
                     "text": order_data 
                 })
-            time.sleep(120)
+            time.sleep(5)
 
     async def websocket_disconnect(self, event):
         self.is_opened = False

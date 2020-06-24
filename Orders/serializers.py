@@ -3,7 +3,7 @@ from django import forms
 from rest_framework import serializers
 
 from . import models
-
+from Dishes import serializers as dish_serializer
 
 class GetOrderSerializer(serializers.ModelSerializer):
     class Meta:
@@ -46,6 +46,7 @@ class UpdateOrderSerializer(serializers.ModelSerializer):
 
 
 class GetOrderDishSerializer(serializers.ModelSerializer):
+    dish = dish_serializer.DishGetSerializer()
     class Meta:
         model = models.OrderDish
         fields = '__all__'

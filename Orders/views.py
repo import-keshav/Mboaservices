@@ -103,3 +103,22 @@ class RejectOrder(APIView):
             return Response({'message': 'Invalid Order ID'}, status=status.HTTP_400_BAD_REQUEST)
         order.delete()
         return Response({'message': 'Order Rejected Successfully'}, status=status.HTTP_200_OK)
+
+
+class GetOngoingOrders(generics.ListAPIView):
+    renderer_classes = [JSONRenderer]
+    serializer_class = orders_serializers.GetClientRestaurantPastOrdersSerializer
+
+    def get_queryset(self):
+        restaurant = restaurant_models.Restaurant.objects.filter(pk=self.kwargs['pk']).first()
+        ongoing_orders = orders_models.OngoingOrder.objects.filter(restaurant=restaurant)
+        orders = []
+        for ongoing_order in ongoing_orders:
+            orders.append(ongoing_order.order)
+        return orders
+
+class GetSpecificOrder(generics.ListAPIView):
+    renderer_classes = [JSONRenderer]
+    serializer_class = orders_serializers.GetClientRestaurantPastOrdersSerializer
+    def get_queryset(self):
+        return orders_models.Order.objects.filter(pk=self.kwargs['pk'])
