@@ -55,14 +55,17 @@ class UpdateOrder(generics.UpdateAPIView):
     serializer_class = orders_serializers.UpdateOrderSerializer
     def get_queryset(self):
         if self.request.data['status'] == 'delivered':
-            order = orders_models.Order.objects.filter(pk=self.kwargs['pk']).first()
-            if not order:
-                raise forms.ValidationError("Invalid Order ID")
-            ongoing_order = orders_models.OngoingOrder.objects.filter(order=order).first()
-            if not ongoing_order:
-                raise forms.ValidationError("No Ongoing Order exists with this order id")
-            ongoing_order.delete()
+            self.delete_ongoing_order()
         return orders_models.Order.objects.all()
+
+    def delete_ongoing_order(self):
+        order = orders_models.Order.objects.filter(pk=self.kwargs['pk']).first()
+        if not order:
+            raise forms.ValidationError("Invalid Order ID")
+        ongoing_order = orders_models.OngoingOrder.objects.filter(order=order).first()
+        if not ongoing_order:
+            raise forms.ValidationError("No Ongoing Order exists with this order id")
+        ongoing_order.delete()
 
 
 class GetClientPastOrders(generics.ListAPIView):
