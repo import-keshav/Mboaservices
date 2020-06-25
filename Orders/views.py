@@ -53,7 +53,16 @@ class CreateOrder(APIView):
 class UpdateOrder(generics.UpdateAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = orders_serializers.UpdateOrderSerializer
-    queryset = orders_models.Order.objects.all()
+    def get_queryset(self):
+        if self.request.data['status'] == 'delivered':
+            order = orders_models.Order.objects.filter(pk=self.kwargs['pk']).first()
+            if not order:
+                raise forms.ValidationError("Invalid Order ID")
+            ongoing_order = orders_models.OngoingOrder.objects.filter(order=order).first()
+            if not ongoing_order:
+                raise forms.ValidationError("No Ongoing Order exists with this order id")
+            ongoing_order.delete()
+        return orders_models.Order.objects.all()
 
 
 class GetClientPastOrders(generics.ListAPIView):
