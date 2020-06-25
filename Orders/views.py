@@ -101,7 +101,11 @@ class RejectOrder(APIView):
         order = orders_models.Order.objects.filter(pk=self.request.data['order']).first()
         if not order:
             return Response({'message': 'Invalid Order ID'}, status=status.HTTP_400_BAD_REQUEST)
-        order.delete()
+        order.is_accepted = False
+        order.status = "Rejected"
+        order.save()
+        incoming_order = orders_models.IncomingOrder.objects.filter(order=order).first()
+        incoming_order.delete()
         return Response({'message': 'Order Rejected Successfully'}, status=status.HTTP_200_OK)
 
 

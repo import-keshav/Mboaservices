@@ -12,6 +12,7 @@ payment_choices = (
 
 order_status = (
     ("Accepted", "Accepted"),
+    ("Rejected", "Rejected"),
 	("preparing", "preparing"),
 	("packaging", "packaging"),
 	("on_way", "on_way"),
