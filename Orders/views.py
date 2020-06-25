@@ -87,6 +87,8 @@ class AcceptOrder(APIView):
         order.save()
         ongoing_order = orders_models.OngoingOrder(order=order, restaurant=order.restaurant)
         incoming_order = orders_models.IncomingOrder.objects.filter(order=order).first()
+        if not incoming_order:
+            return Response({'message': "Order didn't exist in Incoming Order"}, status=status.HTTP_400_BAD_REQUEST)
         incoming_order.delete()
         ongoing_order.save()
         return Response({'message': 'Order Accepted Successfully'}, status=status.HTTP_200_OK)
@@ -105,6 +107,8 @@ class RejectOrder(APIView):
         order.status = "Rejected"
         order.save()
         incoming_order = orders_models.IncomingOrder.objects.filter(order=order).first()
+        if not incoming_order:
+            return Response({'message': "Order didn't exist in Incoming Order"}, status=status.HTTP_400_BAD_REQUEST)
         incoming_order.delete()
         return Response({'message': 'Order Rejected Successfully'}, status=status.HTTP_200_OK)
 
