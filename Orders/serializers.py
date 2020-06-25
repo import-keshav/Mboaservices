@@ -4,6 +4,7 @@ from rest_framework import serializers
 
 from . import models
 from Dishes import serializers as dish_serializer
+from Restaurant import serializers as restaurant_serializer
 
 class GetOrderSerializer(serializers.ModelSerializer):
     class Meta:
@@ -54,6 +55,7 @@ class GetOrderDishSerializer(serializers.ModelSerializer):
 
 class GetClientRestaurantPastOrdersSerializer(serializers.ModelSerializer):
     dishes = serializers.SerializerMethodField()
+    restaurant = restaurant_serializer.RestaurantGetSerializer()
     def get_dishes(self, obj):
         return [GetOrderDishSerializer(dish).data for dish in models.OrderDish.objects.filter(order=obj)]
 

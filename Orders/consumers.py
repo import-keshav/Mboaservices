@@ -22,7 +22,6 @@ class IncomingRestaurantOrders(AsyncConsumer):
         t1 = Thread(target=self.send_and_get_messages, args=(restaurant_id,))
         t1.start()
 
-    @database_sync_to_async
     def create_order_data(self, incoming_order):
         order_dishes = models.OrderDish.objects.filter(order=incoming_order.order)
         dishes = [serializers.GetOrderDishSerializer(dish).data for dish in order_dishes]
@@ -31,23 +30,24 @@ class IncomingRestaurantOrders(AsyncConsumer):
             'dishes': dishes,
         })
 
-    @database_sync_to_async
-    def get_incoming_orders(self, restaurant_id):
+    def get_incoming_orders(self, restaurant_id, last_id):
         restaurant = restaurant_models.Restaurant.objects.filter(pk=restaurant_id).first()
-        return models.IncomingOrder.objects.filter(restaurant=restaurant)
+        return models.IncomingOrder.objects.filter(restaurant=restaurant, pk__gte=last_id)
 
     def send_and_get_messages(self, restaurant_id):
-        # old_data = models.IncomingOrder.objects.none()
+        new_data = self.get_incoming_orders(restaurant_id, 0)
+        last_id = new_data[len(new_data)-1].pk
         while self.is_opened:
-            new_data = async_to_sync(self.get_incoming_orders)(restaurant_id)
-            # difference = new_data.difference(old_data)
             for incoming_order in new_data:
-                order_data = async_to_sync(self.create_order_data)(incoming_order)
+                order_data = self.create_order_data(incoming_order)
                 async_to_sync(self.send)({
                     "type": "websocket.send",
                     "text": order_data 
                 })
-            time.sleep(5)
+            new_data = self.get_incoming_orders(restaurant_id, last_id+1)
+            if len(new_data) >0:
+                last_id = new_data[len(new_data)-1].pk 
+            time.sleep(60)
 
     async def websocket_disconnect(self, event):
         self.is_opened = False
@@ -73,7 +73,7 @@ class GetOrderStatus(AsyncConsumer):
                 "type": "websocket.send",
                 "text": async_to_sync(self.get_order_status)(order_id),
             })
-            time.sleep(120)
+            time.sleep(60)
 
     @database_sync_to_async
     def get_order_status(self, order_id):
