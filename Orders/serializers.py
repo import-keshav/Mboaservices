@@ -48,6 +48,7 @@ class UpdateOrderSerializer(serializers.ModelSerializer):
 
 class GetOrderDishSerializer(serializers.ModelSerializer):
     dish = dish_serializer.DishGetSerializer()
+    add_ons = dish_serializer.DishAddOnsGetSerializer()
     class Meta:
         model = models.OrderDish
         fields = '__all__'
