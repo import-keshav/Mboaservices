@@ -26,6 +26,7 @@ class DishAddOns(models.Model):
     dish = models.ForeignKey(Dish, on_delete=models.CASCADE, related_name="dishes_dishaddons_dish", null=True, blank=True)
     name = models.CharField(max_length=100, null=True, blank=True)
     is_free = models.BooleanField(default=False, null=True, blank=True)
+    is_available = models.BooleanField(default=False, null=True, blank=True)
     price = models.FloatField(null=True, blank=True, validators=[MinValueValidator(0)])
 
     created = models.DateTimeField(auto_now_add=True, editable=False)

@@ -22,7 +22,7 @@ class DishAdmin(admin.ModelAdmin):
 
 @admin.register(DishAddOns)
 class DishAddOnsAdmin(admin.ModelAdmin):
-	list_display = ('name', 'dish', 'is_free', 'price', 'id')
+	list_display = ('name', 'dish', 'is_free', 'price', 'is_available', 'id')
 	search_fields = ('name', 'dish__name')
 	raw_id_fields = ('dish',)
 	list_filter = ('name', 'dish', 'is_free')

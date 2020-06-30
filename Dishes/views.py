@@ -83,3 +83,15 @@ class AddGetDishAddOn(generics.ListCreateAPIView):
         if self.request.method == 'GET':
             return dish_serializers.DishAddOnsGetSerializer
         return dish_serializers.DishAddOnsPostSerializer
+
+
+class DeleteDishAddOn(generics.DestroyAPIView):
+    renderer_classes = [JSONRenderer]
+    serializer_class = dish_serializers.DishAddOnsGetSerializer
+    queryset = dish_models.DishAddOns.objects.all()
+
+
+class UpdateDishAddOn(generics.UpdateAPIView):
+    renderer_classes = [JSONRenderer]
+    serializer_class = dish_serializers.DishAddOnsGetSerializer
+    queryset = dish_models.DishAddOns.objects.all()

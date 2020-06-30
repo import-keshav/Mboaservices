@@ -13,5 +13,6 @@ urlpatterns = [
 
 	path('get-dish-add-on/<int:pk>', views.AddGetDishAddOn.as_view()),
 	path('add-dish-add-on', views.AddGetDishAddOn.as_view()),
-
+	path('update-dish-add-on/<int:pk>', views.UpdateDishAddOn.as_view()),
+	path('delete-dish-add-on/<int:pk>', views.DeleteDishAddOn.as_view()),
 ]
