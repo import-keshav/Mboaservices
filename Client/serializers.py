@@ -7,6 +7,7 @@ from . import models
 from User import models as user_models
 from User import serializers as user_serializer
 from Dishes import serializers as dish_serializer
+from Dishes import models as dish_models
 from Restaurant import serializers as restaurant_serializer
 
 class ClientPostSerializer(serializers.ModelSerializer):
@@ -55,12 +56,27 @@ class ClientCartPostSerializer(serializers.ModelSerializer):
             raise forms.ValidationError('Include Restaurant in data')
         if not 'dish' in data:
             raise forms.ValidationError('Include Dish in data')
+        if not 'add_ons' in data:
+            raise forms.ValidationError('Include add_ons in data')
+        self.validate_client_cart_data(data)
         return data
+
+    def validate_client_cart_data(self, data):
+        if data['dish'].restaurant != data['restaurant']:
+            raise forms.ValidationError("Invalid Dish ID, Dish doesn't match with Restaurant")
+        valid_dish_add_ons = dish_models.DishAddOns.objects.filter(dish=data['dish'])
+        # print(valid_dish_add_ons)
+        for add_on in data['add_ons']:
+            if add_on not in valid_dish_add_ons:
+                raise forms.ValidationError("Invalid Dish Add Ons ID, Dish Add Ons doesn't match with Dish")
 
 
 class ClientCartGetSerializer(serializers.ModelSerializer):
     dish = dish_serializer.DishGetSerializer()
+    add_ons = serializers.SerializerMethodField()
     restaurant = restaurant_serializer.RestaurantGetSerializer()
+    def get_add_ons(self, obj):
+        return[dish_serializer.DishAddOnsGetSerializer(add_on).data for add_on in obj.add_ons.all()]
     class Meta:
         model = models.ClientCart
         fields = '__all__'

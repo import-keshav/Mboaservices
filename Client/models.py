@@ -26,6 +26,7 @@ class ClientCart(models.Model):
     restaurant = models.ForeignKey(restaurant_models.Restaurant, on_delete=models.CASCADE, related_name="client_client_cart_client", null=True, blank=True)
     dish = models.ForeignKey(dish_models.Dish, on_delete=models.CASCADE, related_name="client_client_cart_client", null=True, blank=True)
     num_of_items = models.IntegerField(null=True, blank=True)
+    add_ons = models.ManyToManyField(dish_models.DishAddOns, related_name="client_client_cart_dish_add_ons", null=True, blank=True)
 
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
