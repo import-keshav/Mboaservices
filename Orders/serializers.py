@@ -31,7 +31,7 @@ class CreateOrderDisheSerializer(serializers.ModelSerializer):
         model = models.OrderDish
         fields = '__all__'
     def validate(self, data):
-        valid_keys = ['order', 'dish', 'quantity']
+        valid_keys = ['order', 'dish', 'quantity', 'add_ons']
         if not data:
             raise forms.ValidationError('Include ' + ' ,'.join(valid_keys) + ' in data')
         for key in data:

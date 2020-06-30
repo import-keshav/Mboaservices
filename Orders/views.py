@@ -40,6 +40,11 @@ class CreateOrder(APIView):
                 raise forms.ValidationError(order_dish_serializer.errors)
             if not dish_models.Dish.objects.filter(restaurant=restaurant, pk=dish['dish']).first():
                 raise forms.ValidationError("Dish Id not matched with Restaurant Id")
+            add_ons = dish['add_ons']
+            dish = dish_models.Dish.objects.filter(restaurant=restaurant, pk=dish['dish']).first()
+            for add_on in add_ons:
+                if not dish_models.DishAddOns.objects.filter(pk=add_on, dish=dish):
+                    raise forms.ValidationError("Dish Addons Id not matched with Dish Id")
 
 
     def create_order(self, dishes, order):

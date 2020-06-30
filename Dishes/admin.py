@@ -26,5 +26,3 @@ class DishAddOnsAdmin(admin.ModelAdmin):
 	search_fields = ('name', 'dish__name')
 	raw_id_fields = ('dish',)
 	list_filter = ('name', 'dish', 'is_free')
-
-

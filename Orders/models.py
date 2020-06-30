@@ -47,6 +47,7 @@ class OrderDish(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="orders_order_dish_order", null=True, blank=True)
     dish = models.ForeignKey(dishes_models.Dish, on_delete=models.CASCADE, related_name="orders_order_dish_dish", null=True, blank=True)
     quantity = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(0)])
+    add_ons = models.ManyToManyField(dishes_models.DishAddOns, related_name="orders_order_dish_dish_add_ons", null=True, blank=True)
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
     last_updated = models.DateTimeField(auto_now=True, editable=False)
