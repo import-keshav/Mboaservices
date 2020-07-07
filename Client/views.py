@@ -81,3 +81,13 @@ class CheckDishRestraurantInCart(APIView):
         if current_client_cart  and existence_restrau_dishes:
             return Response({'is_restaurant_same': True}, status=status.HTTP_200_OK)
         return Response({'is_restaurant_same': False}, status=status.HTTP_200_OK)
+
+
+class GetPriceOfCartItem(APIView):
+    def get(self, request, pk):
+        cart_item =  client_models.ClientCart.objects.filter(pk=pk).first()
+        price = cart_item.dish.price * cart_item.num_of_items
+        for add_on in cart_item.add_ons.all():
+            if not add_on.is_free:
+                price += add_on.price
+        return Response({'price': price}, status=status.HTTP_200_OK)
