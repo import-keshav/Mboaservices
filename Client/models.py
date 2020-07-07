@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator
 
 from User import models as user_models
 from Dishes import models as dish_models
@@ -27,7 +28,7 @@ class ClientCart(models.Model):
     dish = models.ForeignKey(dish_models.Dish, on_delete=models.CASCADE, related_name="client_client_cart_client", null=True, blank=True)
     num_of_items = models.IntegerField(null=True, blank=True)
     add_ons = models.ManyToManyField(dish_models.DishAddOns, related_name="client_client_cart_dish_add_ons", null=True, blank=True)
-
+    price = models.FloatField(null=True, blank=True, validators=[MinValueValidator(0)])
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
     last_updated = models.DateTimeField(auto_now=True, editable=False)
