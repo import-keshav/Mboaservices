@@ -90,4 +90,6 @@ class GetPriceOfCartItem(APIView):
         for add_on in cart_item.add_ons.all():
             if not add_on.is_free:
                 price += add_on.price
+        cart_item.price = price
+        cart_item.save()
         return Response({'price': price}, status=status.HTTP_200_OK)
