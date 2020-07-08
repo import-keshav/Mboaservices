@@ -89,7 +89,7 @@ class GetPriceOfCartItem(APIView):
         price = cart_item.dish.price * cart_item.num_of_items
         for add_on in cart_item.add_ons.all():
             if not add_on.is_free:
-                price += add_on.price
+                price += (add_on.price * cart_item.num_of_items)
         cart_item.price = price
         cart_item.save()
         return Response({'price': price}, status=status.HTTP_200_OK)
