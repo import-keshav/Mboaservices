@@ -66,7 +66,7 @@ class IsAvailableOrNotDish(APIView):
 class GetDishOnFilter(generics.ListAPIView):
     renderer_classes = [JSONRenderer]
     queryset = dish_models.Dish.objects.all()
-    serializer_class = dish_serializers.DishSearchFilterSerializer
+    serializer_class = dish_serializers.DishGetSerializer
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     filterset_fields = ['categories__name', 'name']
     search_fields = ['categories__name', 'name']

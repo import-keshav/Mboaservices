@@ -43,6 +43,7 @@ class DishAddOnsPostSerializer(serializers.ModelSerializer):
 class DishGetSerializer(serializers.ModelSerializer):
     categories = serializers.SerializerMethodField()
     add_ons = serializers.SerializerMethodField()
+    restaurant = restaurant_serializers.RestaurantGetSerializer()
 
     def get_categories(self, obj):
         return [{"name":cat.name, "id": cat.pk} for cat in obj.categories.all()]
@@ -56,18 +57,6 @@ class DishGetSerializer(serializers.ModelSerializer):
 
 
 class DishUpdateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Dish
-        fields = '__all__'
-
-
-class DishSearchFilterSerializer(serializers.ModelSerializer):
-    categories = serializers.SerializerMethodField()
-    restaurant = restaurant_serializers.RestaurantGetSerializer()
-
-    def get_categories(self, obj):
-        return [{"name":cat.name, "id": cat.pk} for cat in obj.categories.all()]
-
     class Meta:
         model = models.Dish
         fields = '__all__'
