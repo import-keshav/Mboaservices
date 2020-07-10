@@ -9,6 +9,7 @@ from . import serializers as restaurant_serializers
 from . import models as restaurant_models
 
 from User import models as user_models
+from Reviews import models as review_models
 
 class CreateGetRestaurant(generics.ListCreateAPIView):
     renderer_classes = [JSONRenderer]
@@ -30,8 +31,14 @@ class GetAllRestaurantPagination(PageNumberPagination):
 class GetAllRestaurant(generics.ListAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = restaurant_serializers.RestaurantGetSerializer
-    queryset = restaurant_models.Restaurant.objects.filter(is_open=True)
     pagination_class = GetAllRestaurantPagination
+
+    def get_queryset(self):
+        restaurants = review_models.RestaurantRating.objects.all().order_by('-rating')
+        restaurant_queryset = restaurant_models.Restaurant.objects.none()
+        for restaurant in restaurants:
+            restaurant_queryset = restaurant_queryset | restaurant_models.Restaurant.objects.filter(is_open=True, pk=restaurant.restaurant.id)
+        return restaurant_queryset
 
 
 class GetRestaurantOnFilter(generics.ListCreateAPIView):
