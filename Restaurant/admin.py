@@ -10,7 +10,7 @@ from .models import (
 
 @admin.register(Restaurant)
 class RestaurantAdmin(admin.ModelAdmin):
-	list_display = ('name', 'owner', 'location_coordinates', 'is_open', 'address', 'get_category', 'image', 'id')
+	list_display = ('name', 'owner', 'location_coordinates', 'is_open', 'address', 'get_category', 'rating', 'image', 'id')
 	search_fields = ('name', 'location_coordinates', 'address',
 		'owner__name', 'owner__email', 'owner__mobile', 'id',)
 	def get_category(self, obj):

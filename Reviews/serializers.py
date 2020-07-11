@@ -37,4 +37,7 @@ class PostClientReviewSerializer(serializers.ModelSerializer):
         restaurant_review = models.RestaurantReviewsInfo.objects.filter(restaurant=data['restaurant']).first()
         restaurant_review.number_of_reviews +=1
         restaurant_review.points += data['points']
+        restaurant = restaurant_models.Restaurant.objects.filter(pk=data['restaurant'].pk).first()
+        restaurant.rating = restaurant_review.points//restaurant_review.number_of_reviews
+        restaurant.save()
         restaurant_review.save()

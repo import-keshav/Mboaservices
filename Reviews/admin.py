@@ -1,15 +1,9 @@
 from django.contrib import admin
 
 from .models import (
-	RestaurantRating,
 	ClientReview,
 	RestaurantReviewsInfo
 )
-
-@admin.register(RestaurantRating)
-class RestaurantRatingAdmin(admin.ModelAdmin):
-	list_display = ('restaurant', 'rating', 'id')
-	search_fields = ('restaurant__name', 'restaurant__id', 'rating', 'id')
 
 
 @admin.register(ClientReview)

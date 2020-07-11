@@ -5,19 +5,6 @@ from Restaurant import models as restaurant_models
 from Client import models as client_models
 
 
-class RestaurantRating(models.Model):
-    restaurant = models.ForeignKey(restaurant_models.Restaurant, on_delete=models.CASCADE, related_name="restaurant_rating", null=True, blank=True)
-    rating = models.FloatField(null=True, blank=True, validators=[MinValueValidator(0), MaxValueValidator(5)])
-
-    created = models.DateTimeField(auto_now_add=True, editable=False)
-    last_updated = models.DateTimeField(auto_now=True, editable=False)
-    class Meta:
-        verbose_name = 'Restaurant Rating'
-        verbose_name_plural = 'Restaurant Rating'
-    def __str__(self):
-        return self.restaurant.name
-
-
 class ClientReview(models.Model):
     client = models.ForeignKey(client_models.Client, on_delete=models.CASCADE, related_name="reviews_client_review_client", null=True, blank=True)
     restaurant = models.ForeignKey(restaurant_models.Restaurant, on_delete=models.CASCADE, related_name="reviews_client_review_restaurant", null=True, blank=True)

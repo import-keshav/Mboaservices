@@ -27,17 +27,10 @@ class RestaurantUpdateSerializer(serializers.ModelSerializer):
 class RestaurantGetSerializer(serializers.ModelSerializer):
     owner = user_serializer.UserSerializer()
     category = serializers.SerializerMethodField()
-    rating = serializers.SerializerMethodField()
 
     def get_category(self, obj):
         return [{"name":cat.name, "id": cat.pk} for cat in obj.category.all()]
 
-    def get_rating(self, obj):
-        restaurant_review_info = review_models.RestaurantReviewsInfo.objects.filter(restaurant=obj).first()
-        if not restaurant_review_info:
-            return 0
-        else:
-            return restaurant_review_info.points//restaurant_review_info.number_of_reviews
     class Meta:
         model = models.Restaurant
         fields = '__all__'
