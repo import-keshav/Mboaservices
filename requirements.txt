@@ -4,4 +4,3 @@ djangorestframework
 djangorestframework_simplejwt
 markdown
 django-filter
-pika
