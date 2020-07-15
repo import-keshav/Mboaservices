@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator
 
 from Client import models as client_models
+from Invigilator import models as Invigilator_models
 from Restaurant import models as restaurant_models
 from Dishes import models as dishes_models
 

@@ -5,5 +5,5 @@ from . import consumers as orders_consumers
 
 websocket_urlpatterns = [
     path('orders/get-incoming-orders/<int:pk>', orders_consumers.IncomingRestaurantOrders),
-    path('orders/get-order-status/<int:pk>', orders_consumers.GetOrderStatus),
+    path('orders/update-get-order-status/<int:pk>', orders_consumers.UpdateGetOrderStatus),
 ]

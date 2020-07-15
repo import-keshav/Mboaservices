@@ -54,6 +54,12 @@ class CreateOrder(APIView):
             if order_dish_serializer.is_valid():
                 order_dish_serializer.save()
 
+    # def assign_invigilator_to_order(self, order):
+    #     invigilator = self.get_invigilator_for_order()
+    #     order.
+
+    # def get_invigilator_for_order(self):
+    #     pass
 
 class UpdateOrder(generics.UpdateAPIView):
     renderer_classes = [JSONRenderer]
@@ -129,6 +135,18 @@ class RejectOrder(APIView):
         incoming_order.delete()
         return Response({'message': 'Order Rejected Successfully'}, status=status.HTTP_200_OK)
 
+
+class GetIncomingOrders(generics.ListAPIView):
+    renderer_classes = [JSONRenderer]
+    serializer_class = orders_serializers.GetClientRestaurantPastOrdersSerializer
+
+    def get_queryset(self):
+        restaurant = restaurant_models.Restaurant.objects.filter(pk=self.kwargs['pk']).first()
+        incoming_orders = orders_models.IncomingOrder.objects.filter(restaurant=restaurant)
+        orders = []
+        for incoming_order in incoming_orders:
+            orders.append(incoming_order.order)
+        return orders
 
 class GetOngoingOrders(generics.ListAPIView):
     renderer_classes = [JSONRenderer]
