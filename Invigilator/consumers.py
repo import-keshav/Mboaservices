@@ -69,3 +69,26 @@ class ChatConsumer(WebsocketConsumer):
     @database_sync_to_async
     def get_invigilator(self, invigilator_id):
         return invigilator_model.Invigilator.objects.filter(pk=invigilator_id).first()
+
+
+class GetIncomingOrderForInvigilator(WebsocketConsumer):
+    def connect(self):
+        self.room_group_name = "incoming_order_for_invigilator"
+
+        # Join room group
+        async_to_sync(self.channel_layer.group_add)(
+            self.room_group_name,
+            self.channel_name
+        )
+
+        self.accept()
+
+    def disconnect(self, close_code):
+        # Leave room group
+        async_to_sync(self.channel_layer.group_discard)(
+            self.room_group_name,
+            self.channel_name
+        )
+
+    def send_order_to_invigilator_group(self, event):
+        self.send(text_data=json.dumps(event))

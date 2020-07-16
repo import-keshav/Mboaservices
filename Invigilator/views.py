@@ -3,15 +3,21 @@ from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
 from rest_framework.views import APIView
 from rest_framework import generics, status, filters
+from rest_framework.pagination import PageNumberPagination
 
 from . import models as invigilator_models
 from . import serializers as invigilator_serializer
 from Client import models as client_models
 
 
+class GetInvigilatorClientChatPagination(PageNumberPagination):
+    page_size = 20
+    max_page_size = 20
+
 class GetInvigilatorClientChat(generics.ListAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = invigilator_serializer.InvigilatorClientMessageGetSerializer
+    pagination_class = GetInvigilatorClientChatPagination
 
     def get_queryset(self):
         invigilator = invigilator_models.Invigilator.objects.filter(pk=self.kwargs['invigilator']).first()

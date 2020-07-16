@@ -3,10 +3,23 @@ from django import forms
 from rest_framework import serializers
 
 from . import models
+from Invigilator import models as invigilator_models
+from Invigilator import serializers as invigilator_serializer
 from Dishes import serializers as dish_serializer
 from Restaurant import serializers as restaurant_serializer
 
 class GetOrderSerializer(serializers.ModelSerializer):
+    dishes = serializers.SerializerMethodField()
+    restaurant = restaurant_serializer.RestaurantGetSerializer()
+    invigilator = serializers.SerializerMethodField()
+
+    def get_dishes(self, obj):
+        return [GetOrderDishSerializer(dish).data for dish in models.OrderDish.objects.filter(order=obj)]
+
+    def get_invigilator(self, obj):
+        invigilator = invigilator_models.InvigilatorOrderAssignment.objects.filter(order=obj).first()
+        return invigilator_serializer.InvigilatorGetSerializer(invigilator).data
+
     class Meta:
         model = models.Order
         fields = '__all__'
@@ -57,8 +70,14 @@ class GetOrderDishSerializer(serializers.ModelSerializer):
 class GetClientRestaurantPastOrdersSerializer(serializers.ModelSerializer):
     dishes = serializers.SerializerMethodField()
     restaurant = restaurant_serializer.RestaurantGetSerializer()
+    invigilator = serializers.SerializerMethodField()
+
     def get_dishes(self, obj):
         return [GetOrderDishSerializer(dish).data for dish in models.OrderDish.objects.filter(order=obj)]
+
+    def get_invigilator(self, obj):
+        invigilator = invigilator_models.InvigilatorOrderAssignment.objects.filter(order=obj).first()
+        return invigilator_serializer.InvigilatorGetSerializer(invigilator).data
 
     class Meta:
         model = models.Order

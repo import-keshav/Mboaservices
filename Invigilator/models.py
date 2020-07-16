@@ -33,8 +33,6 @@ class InvigilatorOrderAssignment(models.Model):
     class Meta:
         verbose_name = 'Invigilator Order Assignment'
         verbose_name_plural = 'Invigilator Order Assignments'
-    def __str__(self):
-        return self.invigilator
 
 
 class InvigilatorClientMessage(models.Model):
