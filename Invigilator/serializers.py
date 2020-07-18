@@ -13,8 +13,8 @@ class InvigilatorGetSerializer(serializers.ModelSerializer):
 
 
 class InvigilatorClientMessageGetSerializer(serializers.ModelSerializer):
-    # invigilator = InvigilatorGetSerializer()
-    # client = client_serializer.ClientGetSerializer()
+    invigilator = InvigilatorGetSerializer()
+    client = client_serializer.ClientGetSerializer()
     class Meta:
         model = invigilator_models.InvigilatorClientMessage
         fields = '__all__'
