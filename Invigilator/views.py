@@ -22,5 +22,5 @@ class GetInvigilatorClientChat(generics.ListAPIView):
     def get_queryset(self):
         invigilator = invigilator_models.Invigilator.objects.filter(pk=self.kwargs['invigilator']).first()
         client = client_models.Client.objects.filter(pk=self.kwargs['client']).first()
-        return invigilator_models.InvigilatorClientMessage.objects.filter(client=client, invigilator=invigilator)
+        return invigilator_models.InvigilatorClientMessage.objects.filter(client=client, invigilator=invigilator).order_by('-created')
 
