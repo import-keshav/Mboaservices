@@ -91,7 +91,7 @@ class GetClientPastOrders(generics.ListAPIView):
 
     def get_queryset(self):
         client = client_models.Client.objects.filter(pk=self.kwargs['pk']).first()
-        return orders_models.Order.objects.filter(client=client)
+        return orders_models.Order.objects.filter(client=client).order_by('-created')
 
 
 class GetRestaurantPastOrdersPagination(PageNumberPagination):
