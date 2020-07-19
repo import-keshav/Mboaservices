@@ -168,6 +168,22 @@ class RejectOrder(APIView):
         return Response({'message': 'Order Rejected Successfully'}, status=status.HTTP_200_OK)
 
 
+class OrderCompleted(APIView):
+    def post(self, request):
+        renderer_classes = [JSONRenderer]
+        if 'order' not in self.request.data:
+            return Response({'message': 'Include Order in Data'}, status=status.HTTP_400_BAD_REQUEST)
+
+        order = orders_models.Order.objects.filter(pk=self.request.data['order']).first()
+        if not order:
+            return Response({'message': 'Invalid Order ID'}, status=status.HTTP_400_BAD_REQUEST)
+
+        obj = invigilator_models.InvigilatorOrderAssignment(order=order).first()
+        if obj:
+            obj.delete()
+        return Response({'message': 'Order Completed Successfully'}, status=status.HTTP_200_OK)
+
+
 class GetIncomingOrdersPagination(PageNumberPagination):
     page_size = 20
     max_page_size = 20
