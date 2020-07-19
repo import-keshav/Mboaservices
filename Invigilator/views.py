@@ -14,6 +14,7 @@ class GetInvigilatorClientChatPagination(PageNumberPagination):
     page_size = 20
     max_page_size = 20
 
+
 class GetInvigilatorClientChat(generics.ListAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = invigilator_serializer.InvigilatorClientMessageGetSerializer
@@ -23,4 +24,14 @@ class GetInvigilatorClientChat(generics.ListAPIView):
         invigilator = invigilator_models.Invigilator.objects.filter(pk=self.kwargs['invigilator']).first()
         client = client_models.Client.objects.filter(pk=self.kwargs['client']).first()
         return invigilator_models.InvigilatorClientMessage.objects.filter(client=client, invigilator=invigilator).order_by('-created')
+
+
+class GetInvigilatorOrderAssigned(generics.ListAPIView):
+    renderer_classes = [JSONRenderer]
+    serializer_class = invigilator_serializer.GetInvigilatorOrderAssignedSerializer
+    pagination_class = GetInvigilatorClientChatPagination
+
+    def get_queryset(self):
+        invigilator = invigilator_models.Invigilator.objects.filter(pk=self.kwargs['invigilator']).first()
+        return invigilator_models.InvigilatorOrderAssignment.objects.filter(invigilator=invigilator).order_by('-created')
 

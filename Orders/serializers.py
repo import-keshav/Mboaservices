@@ -8,6 +8,18 @@ from Invigilator import serializers as invigilator_serializer
 from Dishes import serializers as dish_serializer
 from Restaurant import serializers as restaurant_serializer
 
+
+class GetOrderOnlySerializer(serializers.ModelSerializer):
+    dishes = serializers.SerializerMethodField()
+    restaurant = restaurant_serializer.RestaurantGetSerializer()
+
+    def get_dishes(self, obj):
+        return [GetOrderDishSerializer(dish).data for dish in models.OrderDish.objects.filter(order=obj)]
+    class Meta:
+        model = models.Order
+        fields = '__all__'
+
+
 class GetOrderSerializer(serializers.ModelSerializer):
     dishes = serializers.SerializerMethodField()
     restaurant = restaurant_serializer.RestaurantGetSerializer()
