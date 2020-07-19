@@ -25,6 +25,7 @@ class ChatConsumer(WebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
+        print("Channel Disconnected Successfully")
 
     # Receive message from WebSocket
     def receive(self, text_data):
@@ -89,6 +90,7 @@ class GetIncomingOrderForInvigilator(WebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
+        print("Channel Disconnected Successfully")
 
     def send_order_to_invigilator_group(self, event):
         self.send(text_data=json.dumps(event))

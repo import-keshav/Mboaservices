@@ -31,6 +31,7 @@ class IncomingRestaurantOrders(WebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
+        print("Channel Disconnected Successfully")
 
     # Receive message from WebSocket
     def receive(self, text_data):
@@ -82,6 +83,7 @@ class UpdateGetOrderStatus(WebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
+        print("Channel Disconnected Successfully")
 
     # Receive message from WebSocket
     def receive(self, text_data):
