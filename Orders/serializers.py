@@ -29,9 +29,9 @@ class GetOrderSerializer(serializers.ModelSerializer):
         return [GetOrderDishSerializer(dish).data for dish in models.OrderDish.objects.filter(order=obj)]
 
     def get_invigilator(self, obj):
-        invigilator = invigilator_models.InvigilatorOrderAssignment.objects.filter(order=obj).first().invigilator
+        invigilator = invigilator_models.InvigilatorOrderAssignment.objects.filter(order=obj).first()
         if invigilator:
-            return invigilator_serializer.InvigilatorGetSerializer(invigilator).data
+            return invigilator_serializer.InvigilatorGetSerializer(invigilator.invigilator).data
         return {}
 
     class Meta:
@@ -90,9 +90,9 @@ class GetClientRestaurantPastOrdersSerializer(serializers.ModelSerializer):
         return [GetOrderDishSerializer(dish).data for dish in models.OrderDish.objects.filter(order=obj)]
 
     def get_invigilator(self, obj):
-        invigilator = invigilator_models.InvigilatorOrderAssignment.objects.filter(order=obj).first().invigilator
+        invigilator = invigilator_models.InvigilatorOrderAssignment.objects.filter(order=obj).first()
         if invigilator:
-            return invigilator_serializer.InvigilatorGetSerializer(invigilator).data
+            return invigilator_serializer.InvigilatorGetSerializer(invigilator.invigilator).data
         return {}
     class Meta:
         model = models.Order
