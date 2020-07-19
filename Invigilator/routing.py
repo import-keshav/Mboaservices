@@ -5,5 +5,5 @@ from . import consumers
 
 websocket_urlpatterns = [
 	path('invigilator/chat/<str:room_name>', consumers.ChatConsumer),
-	path('invigilator/get-incoming-order', consumers.GetIncomingOrderForInvigilator),
+	path('invigilator/get-incoming-order/<int:invigilator_id>', consumers.GetIncomingOrderForInvigilator),
 ]

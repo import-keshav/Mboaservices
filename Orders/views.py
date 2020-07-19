@@ -129,10 +129,10 @@ class AcceptOrder(APIView):
         order.is_accepted = True
         order.status = "Accepted"
         order.save()
-        self.assign_invigilator_to_order(order)
+        invigilator = self.assign_invigilator_to_order(order)
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
-            "incoming_order_for_invigilator", {
+            "incoming_order_for_invigilator_"  + str(invigilator.id), {
             "type": "send_order_to_invigilator_group",
             "order": orders_serializers.GetClientRestaurantPastOrdersSerializer(order).data,
             "invigilator": orders_serializers.GetClientRestaurantPastOrdersSerializer(order).data["invigilator"]
@@ -144,6 +144,7 @@ class AcceptOrder(APIView):
         obj = invigilator_models.InvigilatorOrderAssignment(
         order=order, invigilator=invigilator)
         obj.save()
+        return invigilator
 
     def get_invigilator_for_order(self):
         return invigilator_models.Invigilator.objects.all()[0]
