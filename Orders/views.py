@@ -31,6 +31,14 @@ class CreateOrder(APIView):
             order_ = orders_models.Order.objects.filter(pk=order_serializer.data['id']).first()
             incoming_order_obj = orders_models.IncomingOrder(order=order_, restaurant=order_.restaurant)
             incoming_order_obj.save()
+            channel_layer = get_channel_layer()
+            async_to_sync(channel_layer.group_send)(
+                "restaurant_incoming_order_"  + str(order_.restaurant.id), {
+                "type": "send_incoming_order_to_restaurant",
+                "data": {
+                    "order": orders_serializers.GetClientRestaurantPastOrdersSerializer(order_).data,
+                }
+            })
             return Response({'message': 'Orders Created Successfully', 'id': order_serializer.data['id']})
         return Response(order_serializer.errors)
 

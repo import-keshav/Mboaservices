@@ -47,8 +47,8 @@ class IncomingRestaurantOrders(WebsocketConsumer):
         )
 
     def send_incoming_order_to_restaurant(self, event):
-        order_data = self.create_order_data(event['order_id'])
-        self.send(text_data=json.dumps(order_data))
+        # order_data = self.create_order_data(event['order_id'])
+        self.send(text_data=json.dumps(event["data"]))
 
     def create_order_data(self, order_id):
         order = async_to_sync(self.get_order_from_order_id)(order_id)
