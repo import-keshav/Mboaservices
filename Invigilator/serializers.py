@@ -5,7 +5,6 @@ from rest_framework import serializers
 from . import models as invigilator_models
 from User import serializers as user_serializer
 from Client import serializers as client_serializer
-from Orders import serializers as order_serializer
 
 
 class InvigilatorGetSerializer(serializers.ModelSerializer):
@@ -20,12 +19,4 @@ class InvigilatorClientMessageGetSerializer(serializers.ModelSerializer):
     client = client_serializer.ClientGetSerializer()
     class Meta:
         model = invigilator_models.InvigilatorClientMessage
-        fields = '__all__'
-
-
-class GetInvigilatorOrderAssignedSerializer(serializers.ModelSerializer):
-    invigilator = InvigilatorGetSerializer()
-    order = order_serializer.GetOrderOnlySerializer()
-    class Meta:
-        model = invigilator_models.InvigilatorOrderAssignment
         fields = '__all__'
