@@ -179,7 +179,7 @@ class OrderCompleted(APIView):
         if not order:
             return Response({'message': 'Invalid Order ID'}, status=status.HTTP_400_BAD_REQUEST)
 
-        obj = invigilator_models.InvigilatorOrderAssignment(order=order).first()
+        obj = invigilator_models.InvigilatorOrderAssignment.objects.filter(order=order).first()
         if obj:
             obj.delete()
         return Response({'message': 'Order Completed Successfully'}, status=status.HTTP_200_OK)
