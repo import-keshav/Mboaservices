@@ -7,13 +7,14 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.views import APIView
 from rest_framework import generics, status, filters
 
+from twilio.rest import Client
+
 from . import models
 from . import serializers as user_serializer
 from Client import models as client_models
 from Restaurant import models as restraurant_models
 from Restaurant import serializers as restraurant_serializer
 
-# from twilio.rest import Client
 
 def hash_password(password):
     """Hash a password for storing."""
@@ -167,13 +168,13 @@ class SendOTP(APIView):
             obj = models.MobileNumberOTP(mobile=mobile_number, otp=otp)
         obj.save()
 
-        account_sid = 'ACdb82fcbb9eabb02b0b3133cbab23943a '
-        auth_token = '563eeb8eb2602ddba51516bb1a184f87'
+        account_sid = 'ACdb82fcbb9eabb02b0b3133cbab23943a'
+        auth_token = '3897c742069ec3c7da110a73b1af17ee'
         client = Client(account_sid, auth_token)
         message = client.messages.create(
             body=str(otp),
             from_='+12067373409',
-            to='+919643906878'
+            to=mobile_number
         )
         return Response({"message": 'OTP Sent Succesfully'})
 
