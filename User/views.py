@@ -105,16 +105,17 @@ class LoginView(APIView):
 class ChangePassword(APIView):
     def post(self, request):
         try:
-            user = models.User.objects.filter(mobile=self.request.data['mobile']).first()
-            if not user:
-                return Response({"message": "No user exists with this mobile number"})
-            if verify_password(user.password, self.request.data['old_password']):
-                user.password = hash_password(self.request.data['new_password'])
-                user.save()
+            restaurant = restraurant_models.Restaurant.objects.filter(pk=self.request.data['restaurant_id']).first()
+            if not restaurant:
+                return Response({"message": "No Restaurant exists with this id"})
+            if verify_password(restaurant.owner.password, self.request.data['old_password']):
+                restaurant.owner.password = hash_password(self.request.data['new_password'])
+                restaurant.owner.save()
+                restaurant.save()
                 return Response({"message": "Password changed Succesfully"})
             return Response({"message": "Invalid Old Password"})
         except:
-            return Response({"message": "(mobile, old_password or new_password) is missing"})
+            return Response({"message": "(restaurant_id, old_password or new_password) is missing"})
 
 
 class UserUpdateProfile(generics.UpdateAPIView):
