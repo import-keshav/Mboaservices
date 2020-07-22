@@ -54,10 +54,10 @@ class IncomingRestaurantOrders(WebsocketConsumer):
         order = async_to_sync(self.get_order_from_order_id)(order_id)
         order_dishes = models.OrderDish.objects.filter(order=order)
         dishes = [serializers.GetOrderDishSerializer(dish).data for dish in order_dishes]
-        return json.dumps({
+        return {
             'order': serializers.GetOrderSerializer(order).data,
             'dishes': dishes,
-        })
+        }
 
     @database_sync_to_async
     def get_order_from_order_id(self, order_id):
