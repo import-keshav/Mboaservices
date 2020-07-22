@@ -176,7 +176,7 @@ class SendOTP(APIView):
             from_='+12067373409',
             to=mobile_number
         )
-        return Response({"message": 'OTP Sent Succesfully'})
+        return Response({"message": 'OTP Sent Succesfully', 'otp': str(otp)})
 
 
 class VerifyOTP(APIView):
