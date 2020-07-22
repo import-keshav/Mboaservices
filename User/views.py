@@ -149,8 +149,14 @@ class CheckMobileNumber(APIView):
 
         obj = models.User.objects.filter(mobile=mobile_number).first()
         if obj:
-            return Response({"message": 'User already Exists'})
-        return Response({"message": "User didn't Exists"})
+            return Response({
+                "message": 'User already Exists',
+                'is_valid' : True},
+                status=status.HTTP_200_OK)
+        return Response({
+            "message": "User didn't Exists",
+            'is_valid' : False},
+            status=status.HTTP_400_BAD_REQUEST)
 
 
 class SendOTP(APIView):
@@ -177,7 +183,10 @@ class SendOTP(APIView):
             from_='+12067373409',
             to=mobile_number
         )
-        return Response({"message": 'OTP Sent Succesfully', 'otp': str(otp)})
+        return Response({
+            "message": 'OTP Sent Succesfully',
+            'otp': str(otp)},
+            status=status.HTTP_200_OK)
 
 
 class VerifyOTP(APIView):
