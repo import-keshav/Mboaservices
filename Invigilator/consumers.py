@@ -48,7 +48,10 @@ class ChatConsumer(WebsocketConsumer):
         # Send message to WebSocket
         self.send(text_data=json.dumps({
             'message': event['message'],
-            'from': event['from']
+            'from': event['from'],
+            'order_id': event['order_id'],
+            'client': event['client'],
+            'invigilator': event['invigilator']
         }))
 
     @database_sync_to_async
