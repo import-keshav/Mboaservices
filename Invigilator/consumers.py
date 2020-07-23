@@ -49,7 +49,6 @@ class ClientToInvigilator(WebsocketConsumer):
         self.send(text_data=json.dumps({
             'message': event['message'],
             'from': event['from'],
-            'order_id': event['order_id'],
             'client': event['client'],
             'invigilator': event['invigilator']
         }))
