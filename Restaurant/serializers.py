@@ -28,12 +28,16 @@ class RestaurantUpdateSerializer(serializers.ModelSerializer):
 class RestaurantGetSerializer(serializers.ModelSerializer):
     owner = user_serializer.UserSerializer()
     category = serializers.SerializerMethodField()
-    num_of_orders = serializers.SerializerMethodField()
+    num_of_incoming_orders = serializers.SerializerMethodField()
+    num_of_outgoing_orders = serializers.SerializerMethodField()
+
 
     def get_category(self, obj):
         return [{"name":cat.name, "id": cat.pk} for cat in obj.category.all()]
-    def get_num_of_orders(self, obj):
-        return len(order_models.Order.objects.filter(restaurant=obj))
+    def get_num_of_incoming_orders(self, obj):
+        return len(order_models.IncomingOrder.objects.filter(restaurant=obj))
+    def get_num_of_outgoing_orders(self, obj):
+        return len(order_models.OngoingOrder.objects.filter(restaurant=obj))
 
     class Meta:
         model = models.Restaurant
