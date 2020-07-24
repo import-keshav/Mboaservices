@@ -47,35 +47,26 @@ class RegisterView(APIView):
                     name=data['name'],
                     email=data['email'],
                     mobile=data['mobile'],
-                    avatar=data['avatar'],
                     password=hash_password(data['password'])
                 )
                 new_user.save()
-                if data['which_user'] == 'client':
-                    try:
-                        user = models.User.objects.filter(mobile=data['mobile']).first()
-                        new_user = client_models.Client(
-                            user=user,
-                            location_coordinates=data['location_coordinates'],
-                            address=data['address'])
-                        new_user.save()
-                    except:
-                        user = models.User.objects.filter(mobile=data['mobile']).first()
-                        user.delete()
-                        return Response({
-                            "message": "(location_coordinates, address) any of params missing"
-                        }, status=status.HTTP_400_BAD_REQUEST)
-                elif data['which_user'] == 'restaurant_owner':
-                    return Response(
-                        {'message': 'Register Succesfully'},
-                    status=status.HTTP_200_OK)
+                try:
+                    user = models.User.objects.filter(mobile=data['mobile']).first()
+                    new_user = client_models.Client(user=user)
+                    new_user.save()
+                except:
+                    user = models.User.objects.filter(mobile=data['mobile']).first()
+                    user.delete()
+                    return Response({
+                        "message": "(location_coordinates, address) any of params missing"
+                    }, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response({
                     "message": "User with this credentials already exist!"
                 }, status=status.HTTP_400_BAD_REQUEST)
         except:
             return Response({
-                "message": "(name, email, password, mobile, avatar, which_user, ) any of params missing"
+                "message": "(name, email, password, mobile,) any of params missing"
             }, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(
