@@ -7,6 +7,7 @@ from . import models
 from User import models as user_models
 from User import serializers as user_serializer
 from Reviews import models as review_models
+from Orders import models as order_models
 
 class RestaurantPostSerializer(serializers.ModelSerializer):
     class Meta:
@@ -27,9 +28,12 @@ class RestaurantUpdateSerializer(serializers.ModelSerializer):
 class RestaurantGetSerializer(serializers.ModelSerializer):
     owner = user_serializer.UserSerializer()
     category = serializers.SerializerMethodField()
+    num_of_orders = serializers.SerializerMethodField()
 
     def get_category(self, obj):
         return [{"name":cat.name, "id": cat.pk} for cat in obj.category.all()]
+    def get_num_of_orders(self, obj):
+        return len(order_models.Order.objects.filter(restaurant=obj))
 
     class Meta:
         model = models.Restaurant
