@@ -19,6 +19,7 @@ class User(models.Model):
     mobile = models.CharField(max_length=15, null=True, blank=True)
     password = models.TextField(null=True, blank=True)
     avatar = models.FileField(upload_to="", null=True, blank=True)
+    auth_token = models.TextField(null=True, blank=True)
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
     last_updated = models.DateTimeField(auto_now=True, editable=False)

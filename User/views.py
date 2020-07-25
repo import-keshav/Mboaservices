@@ -1,4 +1,8 @@
-import hashlib, binascii, os, random
+import hashlib
+import binascii
+import os
+import random
+import jwt
 
 from django.conf import settings
 from django_filters.rest_framework import DjangoFilterBackend
@@ -23,6 +27,11 @@ def hash_password(password):
                                 salt, 100000)
     pwdhash = binascii.hexlify(pwdhash)
     return (salt + pwdhash).decode('ascii')
+
+def create_jwt(user_obj):
+    """Function for creating JWT for Authentication Purpose"""
+    return jwt.encode(user_serializer.UserSerializer(user_obj).data, settings.SECRET_KEY, algorithm='HS256').decode('utf-8')
+
 
 def verify_password(stored_password, provided_password):
     """Verify a stored password against one provided by user"""
@@ -166,14 +175,14 @@ class SendOTP(APIView):
             obj = models.MobileNumberOTP(mobile=mobile_number, otp=otp)
         obj.save()
 
-        account_sid = 'ACdb82fcbb9eabb02b0b3133cbab23943a'
-        auth_token = '3897c742069ec3c7da110a73b1af17ee'
-        client = Client(account_sid, auth_token)
-        message = client.messages.create(
-            body=str(otp),
-            from_='+12067373409',
-            to=mobile_number
-        )
+        # account_sid = 'ACdb82fcbb9eabb02b0b3133cbab23943a'
+        # auth_token = '3897c742069ec3c7da110a73b1af17ee'
+        # client = Client(account_sid, auth_token)
+        # message = client.messages.create(
+        #     body=str(otp),
+        #     from_='+12067373409',
+        #     to=mobile_number
+        # )
         return Response({
             "message": 'OTP Sent Succesfully',
             'otp': str(otp)},
@@ -198,7 +207,11 @@ class VerifyOTP(APIView):
 
         if obj.otp == otp:
             obj.delete()
-            return Response({"message": "Mobile Numbered Verified"}, status=status.HTTP_200_OK)
+            user = models.User.objects.filter(mobile=mobile_number).first()
+            jwt_token = create_jwt(user)
+            user.auth_token = jwt_token
+            user.save()
+            return Response({"message": "Mobile Numbered Verified", "token":jwt_token}, status=status.HTTP_200_OK)
         return Response({"message": "Invalid OTP"}, status=status.HTTP_400_BAD_REQUEST)
 
 

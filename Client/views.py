@@ -5,6 +5,7 @@ from rest_framework import generics, status
 
 from . import serializers as client_serializers
 from . import models as client_models
+from . import authentication_and_permissions
 
 from User import models as user_models
 from Restaurant import models as restaurant_models
@@ -14,17 +15,23 @@ class GetClient(generics.ListAPIView):
     renderer_classes = [JSONRenderer]
     queryset = client_models.Client.objects.all()
     serializer_class = client_serializers.ClientGetSerializer
+    authentication_classes = [authentication_and_permissions.LogedInUserAuthentication]
+    permission_classes = [authentication_and_permissions.ClientDataAccessPermission]
 
 
 class UpdateClient(generics.UpdateAPIView):
     renderer_classes = [JSONRenderer]
     queryset = client_models.Client.objects.all()
     serializer_class = client_serializers.ClientUpdateSerializer
+    authentication_classes = [authentication_and_permissions.LogedInUserAuthentication]
+    permission_classes = [authentication_and_permissions.ClientDataAccessPermission]
 
 
 class CreateGetClientNotification(generics.ListCreateAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = client_serializers.ClientNotificationSerializer
+    authentication_classes = [authentication_and_permissions.LogedInUserAuthentication]
+    permission_classes = [authentication_and_permissions.ClientDataAccessPermission]
 
     def get_queryset(self):
         client = client_models.Client.objects.filter(pk=self.kwargs['pk']).first()
@@ -33,6 +40,8 @@ class CreateGetClientNotification(generics.ListCreateAPIView):
 
 class CreateGetClientCart(generics.ListCreateAPIView):
     renderer_classes = [JSONRenderer]
+    authentication_classes = [authentication_and_permissions.LogedInUserAuthentication]
+    permission_classes = [authentication_and_permissions.ClientDataAccessPermission]
 
     def get_queryset(self):
         client = client_models.Client.objects.filter(pk=self.kwargs['pk']).first()
@@ -63,15 +72,22 @@ class UpdateClientCart(generics.UpdateAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = client_serializers.ClientCartUpdateSerializer
     queryset = client_models.ClientCart.objects.all()
+    authentication_classes = [authentication_and_permissions.LogedInUserAuthentication]
+    permission_classes = [authentication_and_permissions.ClientDataAccessPermission]
 
 
 class DeleteClientCart(generics.DestroyAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = client_serializers.ClientCartUpdateSerializer
     queryset = client_models.ClientCart.objects.all()
+    authentication_classes = [authentication_and_permissions.LogedInUserAuthentication]
+    permission_classes = [authentication_and_permissions.ClientDataAccessPermission]
 
 
 class CheckDishRestraurantInCart(APIView):
+    authentication_classes = [authentication_and_permissions.LogedInUserAuthentication]
+    permission_classes = [authentication_and_permissions.ClientDataAccessPermission]
+
     def post(self, request):
         client = client_models.Client.objects.filter(pk=self.request.data['client']).first()
         restaurant = restaurant_models.Restaurant.objects.filter(pk=self.request.data['restaurant']).first()
@@ -84,6 +100,9 @@ class CheckDishRestraurantInCart(APIView):
 
 
 class GetPriceOfCartItem(APIView):
+    authentication_classes = [authentication_and_permissions.LogedInUserAuthentication]
+    permission_classes = [authentication_and_permissions.ClientDataAccessPermission]
+    
     def get(self, request, pk):
         cart_item =  client_models.ClientCart.objects.filter(pk=pk).first()
         price = cart_item.dish.price * cart_item.num_of_items
