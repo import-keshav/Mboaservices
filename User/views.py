@@ -216,6 +216,8 @@ class VerifyOTP(APIView):
                 return Response({
                     "message": "No User exist with this Mobile Number"
                 }, status=status.HTTP_400_BAD_REQUEST)
+            user.auth_token = ""
+            user.save()
             jwt_token = create_jwt(user)
             user.auth_token = jwt_token
             user.save()
