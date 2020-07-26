@@ -94,9 +94,7 @@ class CheckDishRestraurantInCart(APIView):
         return Response({'is_restaurant_same': False}, status=status.HTTP_200_OK)
 
 
-class GetPriceOfCartItem(APIView):
-    permission_classes = [authentication_and_permissions.ClientDataAccessPermission]
-    
+class GetPriceOfCartItem(APIView):    
     def get(self, request, pk):
         cart_item =  client_models.ClientCart.objects.filter(pk=pk).first()
         price = cart_item.dish.price * cart_item.num_of_items
