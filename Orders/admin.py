@@ -15,7 +15,7 @@ class OrderDishTabularInline(admin.TabularInline):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
 	list_display = [field.name for field in Order._meta.fields]
-	search_fields = ('restaurant__name', 'restaurant__location_coordinates'
+	search_fields = ('restaurant__name', 'restaurant__latitude', 'restaurant__longitude',
 		'client__user__name', 'client__user__email', 'client__user__mobile',
 		'created', 'status', 'restaurant__id', 'client__id', 'delivered_time', 'id')
 	inlines = [OrderDishTabularInline,]

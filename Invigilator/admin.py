@@ -11,7 +11,7 @@ from .models import (
 class InvigilatorAdmin(admin.ModelAdmin):
 	list_display = [field.name for field in Invigilator._meta.fields]
 	search_fields = ('user__name', 'user__email', 'user__mobile',
-		'city', 'location_coordinates','id')
+		'city', 'latitude', 'longitude', 'id')
 
 
 @admin.register(InvigilatorOrderAssignment)

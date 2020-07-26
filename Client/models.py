@@ -8,8 +8,9 @@ from Restaurant import models as restaurant_models
 
 class Client(models.Model):
     user = models.ForeignKey(user_models.User, on_delete=models.CASCADE, related_name="client_client_user", null=True, blank=True)
-    location_coordinates = models.CharField(max_length=30, null=True, blank=True)
     address = models.TextField(null=True, blank=True)
+    latitude = models.CharField(max_length=30, null=True, blank=True)
+    longitude = models.CharField(max_length=30, null=True, blank=True)
     # category = models.CharField(max_length=50, null=True, blank=True)
 
     created = models.DateTimeField(auto_now_add=True, editable=False)

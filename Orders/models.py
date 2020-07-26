@@ -31,7 +31,8 @@ class Order(models.Model):
     # transaction_id
     status = models.TextField(choices=order_status, null=True, blank=True)
     promocode_used = models.ForeignKey(restaurant_models.RestaurantPromocode, on_delete=models.CASCADE, related_name="orders_order_promocode_used", null=True, blank=True)
-    client_coordinates = models.TextField(null=True, blank=True)
+    latitude = models.CharField(max_length=30, null=True, blank=True)
+    longitude = models.CharField(max_length=30, null=True, blank=True)
     client_address_details = models.TextField(null=True, blank=True)
     delivered_time = models.DateTimeField(null=True, blank=True)
 

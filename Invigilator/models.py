@@ -12,8 +12,9 @@ choices = (
 
 class Invigilator(models.Model):
     user = models.ForeignKey(user_models.User, on_delete=models.CASCADE, related_name="invigilator_invigilator_user", null=True, blank=True)
-    location_coordinates = models.CharField(max_length=30, null=True, blank=True)
     city =  models.CharField(max_length=100, null=True, blank=True)
+    latitude = models.CharField(max_length=30, null=True, blank=True)
+    longitude = models.CharField(max_length=30, null=True, blank=True)
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
     last_updated = models.DateTimeField(auto_now=True, editable=False)

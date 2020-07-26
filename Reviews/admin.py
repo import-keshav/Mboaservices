@@ -9,7 +9,7 @@ from .models import (
 @admin.register(ClientReview)
 class ClientReviewAdmin(admin.ModelAdmin):
 	list_display = ('client', 'restaurant', 'points', 'comment', 'id')
-	search_fields = ('restaurant__name', 'restaurant__location_coordinates'
+	search_fields = ('restaurant__name', 'restaurant__latitude', 'restaurant__longitude',
 		'client__user__name', 'client__user__email', 'client__user__mobile', 
 		'restaurant__id', 'client__id', 'comment', 'id')
 

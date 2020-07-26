@@ -6,8 +6,8 @@ from .models import (
 
 @admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):
-	list_display = ('user', 'location_coordinates', 'address', 'id')
-	search_fields = ('user__name', 'user__email', 'user__mobile', 'location_coordinates',
+	list_display = ('user', 'latitude', 'longitude', 'address', 'id')
+	search_fields = ('user__name', 'user__email', 'user__mobile', 'latitude', 'longitude',
 		'address', 'id', 'user__id')
 
 
