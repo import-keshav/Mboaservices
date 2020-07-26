@@ -16,6 +16,7 @@ from twilio.rest import Client
 from . import models
 from . import serializers as user_serializer
 from Client import models as client_models
+from Client import serializers as client_serializers
 from Restaurant import models as restraurant_models
 from Restaurant import serializers as restraurant_serializer
 
@@ -210,7 +211,6 @@ class VerifyOTP(APIView):
 
         if obj.otp == otp:
             obj.delete()
-            print(mobile_numbero)
             user = models.User.objects.filter(mobile=mobile_number).first()
             if not user:
                 return Response({
@@ -219,7 +219,14 @@ class VerifyOTP(APIView):
             jwt_token = create_jwt(user)
             user.auth_token = jwt_token
             user.save()
-            return Response({"message": "Mobile Numbered Verified", "token":jwt_token}, status=status.HTTP_200_OK)
+            client = client_models.Client.objects.filter(user=user).first()
+            if not client:
+                return Response({"message": "Invalid Client"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({
+                "message": "Mobile Numbered Verified",
+                "token":jwt_token,
+                "client": client_serializers.ClientGetSerializer(client).data},
+            status=status.HTTP_200_OK)
         return Response({"message": "Invalid OTP"}, status=status.HTTP_400_BAD_REQUEST)
 
 
