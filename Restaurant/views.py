@@ -7,6 +7,7 @@ from rest_framework import generics, status, filters
 
 from . import serializers as restaurant_serializers
 from . import models as restaurant_models
+from . import authentication_and_permissions
 
 from User import models as user_models
 from Reviews import models as review_models
@@ -48,12 +49,14 @@ class UpdateRestaurant(generics.UpdateAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = restaurant_serializers.RestaurantUpdateSerializer
     queryset = restaurant_models.Restaurant.objects.all()
+    permission_classes = [authentication_and_permissions.RestaurantDataPermission]
 
 
 class DeleteRestaurant(generics.DestroyAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = restaurant_serializers.RestaurantPostSerializer
     queryset = restaurant_models.Restaurant.objects.all()
+    permission_classes = [authentication_and_permissions.RestaurantDataPermission]
 
 
 class CreateGetRestaurantEmployee(generics.ListCreateAPIView):
@@ -80,29 +83,33 @@ class DeleteRestaurantEmployee(generics.DestroyAPIView):
         return restaurant_models.RestaurantEmployee.objects.filter(user=user, restaurant=restaurant)
 
 
-class CreateGetRestaurantPromocode(generics.ListCreateAPIView):
+class GetRestaurantPromocode(generics.ListAPIView):
     renderer_classes = [JSONRenderer]
+    serializer_class = restaurant_serializers.RestaurantPromocodeGetSerializer
 
     def get_queryset(self):
         restaurant = restaurant_models.Restaurant.objects.filter(pk=self.kwargs['pk']).first()
         return restaurant_models.RestaurantPromocode.objects.filter(restaurant=restaurant)
 
-    def get_serializer_class(self):
-        if self.request.method == 'GET':
-            return restaurant_serializers.RestaurantPromocodeGetSerializer
-        return restaurant_serializers.RestaurantPromocodePostSerializer
+
+class CreateRestaurantPromocode(generics.CreateAPIView):
+    renderer_classes = [JSONRenderer]
+    serializer_class = restaurant_serializers.RestaurantPromocodePostSerializer
+    permission_classes = [authentication_and_permissions.CreateOperationsOnRestaurantPermission]
 
 
 class UpdateRestaurantPromocode(generics.UpdateAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = restaurant_serializers.RestaurantPromocodeUpdateSerializer
     queryset = restaurant_models.RestaurantPromocode.objects.all()
+    permission_classes = [authentication_and_permissions.RestaurantDataPermission]
 
 
 class DeleteRestaurantPromocode(generics.DestroyAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = restaurant_serializers.RestaurantPromocodePostSerializer
     queryset = restaurant_models.RestaurantPromocode.objects.all()
+    permission_classes = [authentication_and_permissions.RestaurantDataPermission]
 
 
 class CreateGetRestaurantDriver(generics.ListCreateAPIView):
@@ -122,12 +129,14 @@ class UpdateRestaurantDriver(generics.UpdateAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = restaurant_serializers.RestaurantDriverUpdateSerializer
     queryset = restaurant_models.RestaurantDriver.objects.all()
+    permission_classes = [authentication_and_permissions.RestaurantDataPermission]
 
 
 class DeleteRestaurantDriver(generics.DestroyAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = restaurant_serializers.RestaurantDriverPostSerializer
     queryset = restaurant_models.RestaurantDriver.objects.all()
+    permission_classes = [authentication_and_permissions.RestaurantDataPermission]
 
 
 class GetRestaurantSpecifiDriver(generics.ListAPIView):
@@ -139,12 +148,11 @@ class GetRestaurantSpecifiDriver(generics.ListAPIView):
 
 
 class OpenCloseRestaurant(APIView):
-    def post(self, request):
-        if not 'restaurant' in self.request.data:
-            return Response({"message": "Not Included restaurant in data"}, status=status.HTTP_400_BAD_REQUEST)
+    permission_classes = [authentication_and_permissions.RestaurantDataPermission]
+    def post(self, request, pk):
         if not 'is_open' in self.request.data:
             return Response({"message": "not included is_open in data"}, status=status.HTTP_400_BAD_REQUEST)
-        restaurant = restaurant_models.Restaurant.objects.filter(pk=self.request.data['restaurant']).first()
+        restaurant = restaurant_models.Restaurant.objects.filter(pk=pk).first()
         restaurant.is_open = self.request.data['is_open']
         restaurant.save()
         return Response({"message": "Operation Done succesfully"}, status=status.HTTP_200_OK)

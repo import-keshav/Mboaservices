@@ -9,10 +9,10 @@ urlpatterns = [
 	path('list-restaurant-dishes/<int:pk>', views.ListRestaurantDishes.as_view()),
 	path('update-dish/<int:pk>', views.UpdateDish.as_view()),
 	path('delete-dish/<int:pk>', views.DeleteDish.as_view()),
-	path('is-available-or-not-dish', views.IsAvailableOrNotDish.as_view()),
+	path('is-available-or-not-dish/<int:pk>', views.IsAvailableOrNotDish.as_view()),
 
-	path('get-dish-add-on/<int:pk>', views.AddGetDishAddOn.as_view()),
-	path('add-dish-add-on', views.AddGetDishAddOn.as_view()),
+	path('get-dish-add-on/<int:pk>', views.GetDishAddOn.as_view()),
+	path('add-dish-add-on', views.CreateDishAddOn.as_view()),
 	path('update-dish-add-on/<int:pk>', views.UpdateDishAddOn.as_view()),
 	path('delete-dish-add-on/<int:pk>', views.DeleteDishAddOn.as_view()),
 ]

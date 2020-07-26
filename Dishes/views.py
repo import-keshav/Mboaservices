@@ -6,6 +6,7 @@ from rest_framework import generics, status, filters
 
 from . import serializers as dish_serializers
 from . import models as dish_models
+from . import authentication_and_permissions
 
 from Restaurant import models as restaurant_models
 
@@ -26,12 +27,14 @@ class UpdateDish(generics.UpdateAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = dish_serializers.DishUpdateSerializer
     queryset = dish_models.Dish.objects.all()
+    permission_classes = [authentication_and_permissions.OperationOnDishByRestaurantDataPermission]
 
 
 class DeleteDish(generics.DestroyAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = dish_serializers.DishUpdateSerializer
     queryset = dish_models.Dish.objects.all()
+    permission_classes = [authentication_and_permissions.OperationOnDishByRestaurantDataPermission]
 
 
 class ListRestaurantDishes(generics.ListAPIView):
@@ -52,6 +55,7 @@ class ListRestaurantDishes(generics.ListAPIView):
 
 
 class IsAvailableOrNotDish(APIView):
+    permission_classes = [authentication_and_permissions.OperationOnDishByRestaurantDataPermission]
     def post(self, request):
         if not 'dish' in self.request.data:
             return Response({"message": "Not Included dish if in data"}, status=status.HTTP_400_BAD_REQUEST)
@@ -72,26 +76,30 @@ class GetDishOnFilter(generics.ListAPIView):
     search_fields = ['categories__name', 'name']
 
 
-class AddGetDishAddOn(generics.ListCreateAPIView):
+class GetDishAddOn(generics.ListAPIView):
     renderer_classes = [JSONRenderer]
+    serializer_class = dish_serializers.DishAddOnsGetSerializer
 
     def get_queryset(self):
         dish = dish_models.Dish.objects.filter(pk=self.kwargs['pk']).first()
         return dish_models.DishAddOns.objects.filter(dish=dish)
 
-    def get_serializer_class(self):
-        if self.request.method == 'GET':
-            return dish_serializers.DishAddOnsGetSerializer
-        return dish_serializers.DishAddOnsPostSerializer
+
+class CreateDishAddOn(generics.CreateAPIView):
+    renderer_classes = [JSONRenderer]
+    serializer_class = dish_serializers.DishAddOnsPostSerializer
+    permission_classes = [authentication_and_permissions.CreateDishAddOnByRestaurantDataPermission]
 
 
 class DeleteDishAddOn(generics.DestroyAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = dish_serializers.DishAddOnsGetSerializer
     queryset = dish_models.DishAddOns.objects.all()
+    permission_classes = [authentication_and_permissions.OperationOnDishAddOnByRestaurantDataPermission]
 
 
 class UpdateDishAddOn(generics.UpdateAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = dish_serializers.DishAddOnsGetSerializer
     queryset = dish_models.DishAddOns.objects.all()
+    permission_classes = [authentication_and_permissions.OperationOnDishAddOnByRestaurantDataPermission]
