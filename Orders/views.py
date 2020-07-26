@@ -9,14 +9,18 @@ from asgiref.sync import async_to_sync
 
 from . import serializers as orders_serializers
 from . import models as orders_models
+from . import authentication_and_permissions
 
 from Invigilator import models as invigilator_models
 from Restaurant import models as restaurant_models
+from Restaurant import authentication_and_permissions as restaurant_authentication_and_permissions
 from Dishes import models as dish_models
 from Client import models as client_models
+from Client import authentication_and_permissions as client_authentication_and_permissions
 
 
 class CreateOrder(APIView):
+    permission_classes = [authentication_and_permissions.CreateOrderPermission]
     def post(self, request):
         if 'order' not in self.request.data:
             return Response({'message': 'Include Order in Data'})
@@ -72,6 +76,7 @@ class CreateOrder(APIView):
 class UpdateOrder(generics.UpdateAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = orders_serializers.UpdateOrderSerializer
+    permission_classes = [authentication_and_permissions.UpdateDeleteOrderPermission]
     def get_queryset(self):
         if self.request.data['status'] == 'delivered':
             self.delete_ongoing_order()
@@ -96,6 +101,7 @@ class GetClientPastOrders(generics.ListAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = orders_serializers.GetClientRestaurantPastOrdersSerializer
     pagination_class = GetClientPastOrdersPagination
+    permission_classes = [client_authentication_and_permissions.ClientDataAccessPermission]
 
     def get_queryset(self):
         client = client_models.Client.objects.filter(pk=self.kwargs['pk']).first()
@@ -111,6 +117,7 @@ class GetRestaurantPastOrders(generics.ListAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = orders_serializers.GetClientRestaurantPastOrdersSerializer
     pagination_class = GetRestaurantPastOrdersPagination
+    permission_classes = [restaurant_authentication_and_permissions.RestaurantDataPermission]
 
     def get_queryset(self):
         restaurant = restaurant_models.Restaurant.objects.filter(pk=self.kwargs['pk']).first()
@@ -118,11 +125,9 @@ class GetRestaurantPastOrders(generics.ListAPIView):
 
 
 class AcceptOrder(APIView):
-    def post(self, request):
-        if 'order' not in self.request.data:
-            return Response({'message': 'Include Order in Data'}, status=status.HTTP_400_BAD_REQUEST)
-
-        order = orders_models.Order.objects.filter(pk=self.request.data['order']).first()
+    permission_classes = [authentication_and_permissions.RestaurantOperationsOnOrders]
+    def post(self, request, pk):
+        order = orders_models.Order.objects.filter(pk=pk).first()
         if not order:
             return Response({'message': 'Invalid Order ID'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -159,12 +164,9 @@ class AcceptOrder(APIView):
 
 
 class RejectOrder(APIView):
-    def post(self, request):
-        renderer_classes = [JSONRenderer]
-        if 'order' not in self.request.data:
-            return Response({'message': 'Include Order in Data'}, status=status.HTTP_400_BAD_REQUEST)
-
-        order = orders_models.Order.objects.filter(pk=self.request.data['order']).first()
+    permission_classes = [authentication_and_permissions.RestaurantOperationsOnOrders]
+    def post(self, request, pk):
+        order = orders_models.Order.objects.filter(pk=pk).first()
         if not order:
             return Response({'message': 'Invalid Order ID'}, status=status.HTTP_400_BAD_REQUEST)
         order.is_accepted = False
@@ -178,6 +180,7 @@ class RejectOrder(APIView):
 
 
 class OrderCompleted(APIView):
+    permission_classes = [authentication_and_permissions.RestaurantOperationsOnOrders]
     def post(self, request):
         renderer_classes = [JSONRenderer]
         if 'order' not in self.request.data:
@@ -202,6 +205,7 @@ class GetIncomingOrders(generics.ListAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = orders_serializers.GetClientRestaurantPastOrdersSerializer
     pagination_class = GetIncomingOrdersPagination
+    permission_classes = [restaurant_authentication_and_permissions.RestaurantDataPermission]
 
     def get_queryset(self):
         restaurant = restaurant_models.Restaurant.objects.filter(pk=self.kwargs['pk']).first()
@@ -221,6 +225,7 @@ class GetOngoingOrders(generics.ListAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = orders_serializers.GetClientRestaurantPastOrdersSerializer
     pagination_class = GetOngoingOrdersPagination
+    permission_classes = [restaurant_authentication_and_permissions.RestaurantDataPermission]
 
     def get_queryset(self):
         restaurant = restaurant_models.Restaurant.objects.filter(pk=self.kwargs['pk']).first()

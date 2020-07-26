@@ -5,8 +5,8 @@ from . import views
 urlpatterns = [
 	path('create-order', views.CreateOrder.as_view()),
 	path('update-order/<int:pk>', views.UpdateOrder.as_view()),
-	path('accept-order', views.AcceptOrder.as_view()),
-	path('reject-order', views.RejectOrder.as_view()),
+	path('accept-order/<int:pk>', views.AcceptOrder.as_view()),
+	path('reject-order/<int:pk>', views.RejectOrder.as_view()),
 	path('order-completed', views.OrderCompleted.as_view()),
 
 	path('get-incoming-orders/<int:pk>', views.GetIncomingOrders.as_view()),

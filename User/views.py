@@ -133,7 +133,10 @@ class RestraurantLogin(APIView):
                 return Response({"message": "Invalid Restraurant unique Id",}, status=status.HTTP_400_BAD_REQUEST)
             if verify_password( restraurant.owner.password, self.request.data['password']):
                 restrau_obj = restraurant_serializer.RestaurantGetSerializer(restraurant)
-                return Response({'message': 'Login Succesfully', "restaurant": restrau_obj.data}, status=status.HTTP_200_OK)
+                jwt_token = create_jwt(restrau_obj.data)
+                restraurant.owner.auth_token = jwt_token
+                restraurant.owner.save()
+                return Response({'message': 'Login Succesfully', "restaurant": restrau_obj.data, "token":jwt_token}, status=status.HTTP_200_OK)
             return Response({'message': 'Invalid password'}, status=status.HTTP_400_BAD_REQUEST)
         except:
             return Response({"message": "restraurant_unique_id is missing"}, status=status.HTTP_400_BAD_REQUEST)
