@@ -178,14 +178,14 @@ class SendOTP(APIView):
             obj = models.MobileNumberOTP(mobile=mobile_number, otp=otp)
         obj.save()
 
-        account_sid = 'ACdb82fcbb9eabb02b0b3133cbab23943a'
-        auth_token = '3897c742069ec3c7da110a73b1af17ee'
-        client = Client(account_sid, auth_token)
-        message = client.messages.create(
-            body=str(otp),
-            from_='+12067373409',
-            to=mobile_number
-        )
+        # account_sid = 'ACdb82fcbb9eabb02b0b3133cbab23943a'
+        # auth_token = '3897c742069ec3c7da110a73b1af17ee'
+        # client = Client(account_sid, auth_token)
+        # message = client.messages.create(
+        #     body=str(otp),
+        #     from_='+12067373409',
+        #     to=mobile_number
+        # )
         return Response({
             "message": 'OTP Sent Succesfully',
             'otp': str(otp)},
@@ -210,6 +210,7 @@ class VerifyOTP(APIView):
 
         if obj.otp == otp:
             obj.delete()
+            print(mobile_numbero)
             user = models.User.objects.filter(mobile=mobile_number).first()
             if not user:
                 return Response({
