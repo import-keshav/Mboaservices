@@ -9,9 +9,9 @@ urlpatterns = [
 	path('create-client-notification', views.CreateGetClientNotification.as_view()),
 	path('get-client-notification/<int:pk>', views.CreateGetClientNotification.as_view()),
 
-	path('get-client-cart/<int:pk>', views.CreateGetClientCart.as_view()),
+	path('get-client-cart/<int:pk>', views.GetClientCart.as_view()),
 	path('get-client-cart-item-price/<int:pk>', views.GetPriceOfCartItem.as_view()),
-	path('add-item-in-client-cart', views.CreateGetClientCart.as_view()),
+	path('add-item-in-client-cart', views.CreateClientCart.as_view()),
 	path('update-item-in-client-cart/<int:pk>', views.UpdateClientCart.as_view()),
 	path('delete-item-in-client-cart/<int:pk>', views.DeleteClientCart.as_view()),
 	path('verify-restraurant-with-client-cart', views.CheckDishRestraurantInCart.as_view()),
