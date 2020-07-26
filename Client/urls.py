@@ -11,6 +11,7 @@ urlpatterns = [
 
 	path('get-client-cart/<int:pk>', views.GetClientCart.as_view()),
 	path('get-client-cart-item-price/<int:pk>', views.GetPriceOfCartItem.as_view()),
+	path('get-client-total-cart-price/<int:pk>', views.GetClientCartTotalPrice.as_view()),
 	path('add-item-in-client-cart', views.CreateClientCart.as_view()),
 	path('update-item-in-client-cart/<int:pk>', views.UpdateClientCart.as_view()),
 	path('delete-item-in-client-cart/<int:pk>', views.DeleteClientCart.as_view()),

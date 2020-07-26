@@ -104,3 +104,19 @@ class GetPriceOfCartItem(APIView):
         cart_item.price = price
         cart_item.save()
         return Response({'price': price}, status=status.HTTP_200_OK)
+
+
+class GetClientCartTotalPrice(APIView):
+    def get(self, request, pk):
+        client = client_models.Client.objects.filter(pk=pk).first()
+        cart_items =  client_models.ClientCart.objects.filter(client=client)
+        total_price = 0
+        for cart_item in cart_items:
+            price = cart_item.dish.price * cart_item.num_of_items
+            for add_on in cart_item.add_ons.all():
+                if not add_on.is_free:
+                    price += (add_on.price * cart_item.num_of_items)
+            total_price +=price        
+            cart_item.price = price
+            cart_item.save()
+        return Response({'total_price': total_price}, status=status.HTTP_200_OK)
