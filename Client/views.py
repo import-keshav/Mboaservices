@@ -13,9 +13,10 @@ from Restaurant import models as restaurant_models
 
 class GetClient(generics.ListAPIView):
     renderer_classes = [JSONRenderer]
-    queryset = client_models.Client.objects.all()
     serializer_class = client_serializers.ClientGetSerializer
     permission_classes = [authentication_and_permissions.ClientDataAccessPermission]
+    def get_queryset(self):
+        return client_models.Client.objects.filter(pk=self.kwargs['pk'])
 
 
 class UpdateClient(generics.UpdateAPIView):
