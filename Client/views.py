@@ -81,7 +81,7 @@ class DeleteClientCart(generics.DestroyAPIView):
 
 
 class CheckDishRestraurantInCart(APIView):
-    permission_classes = [authentication_and_permissions.ClientDataAccessPermission]
+    permission_classes = [authentication_and_permissions.ClientCartPermission]
 
     def post(self, request):
         client = client_models.Client.objects.filter(pk=self.request.data['client']).first()
