@@ -19,7 +19,8 @@ from Client import models as client_models
 from Client import serializers as client_serializers
 from Restaurant import models as restraurant_models
 from Restaurant import serializers as restraurant_serializer
-
+from Invigilator import models as invigilator_models
+from Invigilator import serializers as invigilator_serializer
 
 def hash_password(password):
     """Hash a password for storing."""
@@ -133,6 +134,9 @@ class RestraurantLogin(APIView):
             if not restraurant:
                 return Response({"message": "Invalid Restraurant unique Id",}, status=status.HTTP_400_BAD_REQUEST)
             if verify_password( restraurant.owner.password, self.request.data['password']):
+                restraurant.owner.auth_token = ""
+                restraurant.owner.password = self.request.data['password']
+                restraurant.owner.save()
                 restrau_obj = restraurant_serializer.RestaurantGetSerializer(restraurant)
                 jwt_token = create_jwt(restrau_obj.data)
                 restraurant.owner.auth_token = jwt_token
@@ -234,6 +238,30 @@ class VerifyOTP(APIView):
         return Response({"message": "Invalid OTP"}, status=status.HTTP_400_BAD_REQUEST)
 
 
+
+class InvigilatorLogin(APIView):
+    def post(self, request):
+        try:
+            # import pdb;pdb.set_trace()
+            invigilator = invigilator_models.Invigilator.objects.filter(user__mobile=self.request.data['mobile_number']).first()
+            if not invigilator:
+                return Response({"message": "No User Exist with this Mobile Number",}, status=status.HTTP_400_BAD_REQUEST)
+            if verify_password(invigilator.user.password, self.request.data['password']):
+                invigilator.user.auth_token = ""
+                invigilator.user.password = self.request.data['password']
+                invigilator.user.save()
+                invigilator.save()
+
+                invigilator_obj = invigilator_serializer.InvigilatorGetSerializer(invigilator)
+                jwt_token = create_jwt(invigilator_obj.data)
+                invigilator.user.auth_token = jwt_token
+                invigilator.user.password = self.request.data['password']
+                invigilator.user.save()
+                invigilator.save()
+                return Response({'message': 'Login Succesfully', "invigilator": invigilator_obj.data, "token":jwt_token}, status=status.HTTP_200_OK)
+            return Response({'message': 'Invalid password'}, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response({"message": "restraurant_unique_id is missing"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 # from authy.api import AuthyApiClient
