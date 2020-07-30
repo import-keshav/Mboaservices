@@ -57,7 +57,7 @@ class RegisterView(APIView):
                     name=data['name'],
                     email=data['email'],
                     mobile=data['mobile'],
-                    password=hash_password(data['password'])
+                    password=data['password']
                 )
                 new_user.save()
                 try:
@@ -110,7 +110,7 @@ class ChangePassword(APIView):
             if not restaurant:
                 return Response({"message": "No Restaurant exists with this id"})
             if verify_password(restaurant.owner.password, self.request.data['old_password']):
-                restaurant.owner.password = hash_password(self.request.data['new_password'])
+                restaurant.owner.password = self.request.data['new_password']
                 restaurant.owner.save()
                 restaurant.save()
                 return Response({"message": "Password changed Succesfully"})
@@ -136,6 +136,8 @@ class RestraurantLogin(APIView):
                 restrau_obj = restraurant_serializer.RestaurantGetSerializer(restraurant)
                 jwt_token = create_jwt(restrau_obj.data)
                 restraurant.owner.auth_token = jwt_token
+                restraurant.owner.save()
+                restraurant.owner.password = self.request.data['password']
                 restraurant.owner.save()
                 return Response({'message': 'Login Succesfully', "restaurant": restrau_obj.data, "token":jwt_token}, status=status.HTTP_200_OK)
             return Response({'message': 'Invalid password'}, status=status.HTTP_400_BAD_REQUEST)
