@@ -5,6 +5,7 @@ from rest_framework import serializers
 from . import models
 from Invigilator import models as invigilator_models
 from Invigilator import serializers as invigilator_serializer
+from Dishes import models as dish_models
 from Dishes import serializers as dish_serializer
 from Restaurant import serializers as restaurant_serializer
 
@@ -75,7 +76,10 @@ class UpdateOrderSerializer(serializers.ModelSerializer):
 
 class GetOrderDishSerializer(serializers.ModelSerializer):
     dish = dish_serializer.DishGetSerializer()
-    add_ons = dish_serializer.DishAddOnsGetSerializer()
+    add_ons = serializers.SerializerMethodField()
+
+    def get_add_ons(self, obj):
+        return [dish_serializer.DishAddOnsGetSerializer(add_on).data for add_on in obj.add_ons.all()]
     class Meta:
         model = models.OrderDish
         fields = '__all__'
