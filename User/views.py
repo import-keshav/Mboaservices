@@ -104,7 +104,7 @@ class LoginView(APIView):
                     {'message': '(mobile, password) any of params missing'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ChangePassword(APIView):
+class ChangeRestaurantPassword(APIView):
     def post(self, request):
         try:
             restaurant = restraurant_models.Restaurant.objects.filter(pk=self.request.data['restaurant_id']).first()
@@ -242,7 +242,6 @@ class VerifyOTP(APIView):
 class InvigilatorLogin(APIView):
     def post(self, request):
         try:
-            # import pdb;pdb.set_trace()
             invigilator = invigilator_models.Invigilator.objects.filter(user__mobile=self.request.data['mobile_number']).first()
             if not invigilator:
                 return Response({"message": "No User Exist with this Mobile Number",}, status=status.HTTP_400_BAD_REQUEST)
@@ -263,11 +262,18 @@ class InvigilatorLogin(APIView):
         except:
             return Response({"message": "restraurant_unique_id is missing"}, status=status.HTTP_400_BAD_REQUEST)
 
+class ChangeInvigilatorPassword(APIView):
+    def post(self, request):
+        try:
+            invigilator = invigilator_models.Invigilator.objects.filter(user__mobile=self.request.data['mobile_number']).first()
+            if not invigilator:
+                return Response({"message": "No User Exist with this Mobile Number",}, status=status.HTTP_400_BAD_REQUEST)
+            if verify_password(invigilator.user.password, self.request.data['old_password']):
+                invigilator.user.password = self.request.data['new_password']
+                invigilator.user.save()
+                invigilator.save()
+                return Response({"message": "Password changed Succesfully"})
+            return Response({"message": "Invalid Old Password"})
+        except:
+            return Response({"message": "(mobile_number, old_password or new_password) is missing"})
 
-# from authy.api import AuthyApiClient
-# authy_api = AuthyApiClient(settings.ACCOUNT_SECURITY_API_KEY)
-# authy_api.phones.verification_start(
-#     mobile_number,
-#     self.request.data['country_code'],
-#     via="sms"
-# )
