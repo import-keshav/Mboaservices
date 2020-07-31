@@ -265,7 +265,7 @@ class InvigilatorLogin(APIView):
 class ChangeInvigilatorPassword(APIView):
     def post(self, request):
         try:
-            invigilator = invigilator_models.Invigilator.objects.filter(user__mobile=self.request.data['mobile_number']).first()
+            invigilator = invigilator_models.Invigilator.objects.filter(pk=self.request.data['pk']).first()
             if not invigilator:
                 return Response({"message": "No User Exist with this Mobile Number",}, status=status.HTTP_400_BAD_REQUEST)
             if verify_password(invigilator.user.password, self.request.data['old_password']):
