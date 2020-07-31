@@ -37,3 +37,10 @@ class GetInvigilatorOrderAssigned(generics.ListAPIView):
         invigilator_orders = invigilator_models.InvigilatorOrderAssignment.objects.filter(invigilator=invigilator).order_by('-created')
         return [invigilator_order.order for invigilator_order in invigilator_orders]
 
+
+class GetInvigilatorData(generics.ListAPIView):
+    renderer_classes = [JSONRenderer]
+    serializer_class = invigilator_serializer.InvigilatorGetSerializer
+
+    def get_queryset(self):
+        return invigilator_models.Invigilator.objects.filter(pk=self.kwargs['pk'])
