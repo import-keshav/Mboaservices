@@ -33,7 +33,7 @@ class GetAllRestaurant(generics.ListAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = restaurant_serializers.RestaurantGetSerializer
     queryset = restaurant_models.Restaurant.objects.all().order_by('-rating')
-    pagination_class = GetAllRestaurantPagination
+    # pagination_class = GetAllRestaurantPagination
 
 
 class GetRestaurantOnFilter(generics.ListCreateAPIView):

@@ -100,12 +100,11 @@ class GetClientPastOrdersPagination(PageNumberPagination):
 class GetClientPastOrders(generics.ListAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = orders_serializers.GetClientRestaurantPastOrdersSerializer
-    pagination_class = GetClientPastOrdersPagination
+    # pagination_class = GetClientPastOrdersPagination
     permission_classes = [client_authentication_and_permissions.ClientDataAccessPermission]
 
     def get_queryset(self):
-        client = client_models.Client.objects.filter(pk=self.kwargs['pk']).first()
-        return orders_models.Order.objects.filter(client=client).order_by('-created')
+        return orders_models.Order.objects.filter(client__pk=self.kwargs['pk']).order_by('-created')
 
 
 class GetRestaurantPastOrdersPagination(PageNumberPagination):
@@ -208,8 +207,7 @@ class GetIncomingOrders(generics.ListAPIView):
     permission_classes = [restaurant_authentication_and_permissions.RestaurantDataPermission]
 
     def get_queryset(self):
-        restaurant = restaurant_models.Restaurant.objects.filter(pk=self.kwargs['pk']).first()
-        incoming_orders = orders_models.IncomingOrder.objects.filter(restaurant=restaurant)
+        incoming_orders = orders_models.IncomingOrder.objects.filter(restaurant__pk=self.kwargs['pk'])
         orders = []
         for incoming_order in incoming_orders:
             orders.append(incoming_order.order)
