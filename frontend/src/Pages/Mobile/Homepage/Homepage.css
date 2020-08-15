@@ -1,0 +1,37 @@
+.homepagemob {
+  margin-bottom: 120px;
+}
+
+.homepagemob .detailshome {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.homepagemob .heading {
+  font-weight: 400;
+  font-size: 18px;
+  display: inline;
+  margin-left: 15px;
+}
+
+.homepagemob .detailshome .sort {
+  position: absolute;
+  right: 15px;
+}
+
+.homepagemob .filter-head {
+  color: #52be80;
+  margin-left: 10px;
+}
+
+.homepagemob .item {
+  color: #212121;
+  font-size: 17px;
+  font-weight: 500;
+  list-style: none;
+}
+
+.homepagemob .item:active {
+  color: #52be80;
+}

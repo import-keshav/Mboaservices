@@ -1,0 +1,178 @@
+.restaurant-view {
+}
+
+.restaurant-view .restaurant-info {
+  padding-top: 30px;
+}
+
+.restaurant-view .restaurant-info .image {
+  width: 10%;
+  height: 10%;
+  margin-left: 45%;
+}
+
+.restaurant-view .restaurant-info .name {
+  text-align: center;
+  font-size: 22px;
+}
+
+.restaurant-view .unservicable {
+  background-color: #b63c4c;
+  padding: 5px;
+  color: white;
+  font-weight: bold;
+  width: 60%;
+  border-radius: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.restaurant-view .restaurant-info .types {
+  font-size: 15px;
+  width: 80%;
+  margin-left: 10%;
+  color: grey;
+  text-align: center;
+  padding-bottom: 20px;
+  border-bottom: 1.5px dotted grey;
+}
+
+.restaurant-view .rating {
+  width: 48px;
+  padding: 0px 5px;
+  font-weight: 400;
+  height: 22px;
+  display: inline-block;
+  border-bottom: 1px solid #e9e9eb;
+  border-radius: 20px;
+}
+
+.restaurant-view .rating .star-icon {
+  height: 15px;
+  width: 15px;
+  display: inline-block;
+  position: relative;
+  bottom: 4px;
+}
+
+.restaurant-view .rating .rating-value {
+  color: white;
+  display: inline-block;
+  position: relative;
+  bottom: 2px;
+  left: 2px;
+}
+
+.restaurant-view .distance {
+  font-size: 15px;
+}
+
+.restaurant-view .offers {
+  position: absolute;
+  right: 10px;
+  width: 100%;
+  text-align: center;
+  margin-left: 5px;
+}
+
+.restaurant-view .offers .discount {
+  height: 20px;
+  width: 20px;
+  display: inline-block;
+}
+
+.restaurant-view .offers .offer-content {
+  display: inline-block;
+  position: "relative";
+  top: 10px;
+  margin: 0px 11px;
+  font-size: 14px;
+}
+
+.restaurant-view .dishes-view {
+  margin-top: 70px;
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 100%;
+}
+
+.restaurant-view .dishes-view .dishes-category {
+  margin-bottom: 20px;
+  border-bottom: 0.8px solid grey;
+  display: flex;
+  flex-direction: row;
+}
+
+.restaurant-view .dishes-view .dishes-cat2 {
+  position: absolute;
+  right: 10px;
+}
+
+.restaurant-view .dishes-view .dishes {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  margin-bottom: 30px;
+}
+
+.restaurant-view .dishes-view .category-name {
+  font-weight: 500;
+  text-align: center;
+  padding-bottom: 10px;
+  border-bottom: 1px double grey;
+  width: 30%;
+  margin-left: 35%;
+}
+
+.restaurant-view .categories {
+  list-style: none;
+}
+
+.restaurant-view .filter-head {
+  color: #52be80;
+}
+
+.restaurant-view .item {
+  color: #212121;
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.restaurant-view .item:active {
+  color: #52be80;
+}
+
+.bottomtogglebar {
+  height: 60px;
+  width: 100%;
+  background-color: #52bc80;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  position: fixed;
+  bottom: 0;
+  color: #fff;
+  z-index: 2;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: row;
+}
+
+.bottomtogglebar .details {
+  margin-top: 10px;
+}
+
+.bottomtogglebar .details .text {
+  font-size: 20px;
+  font-weight: 600;
+  margin-left: 15px;
+}
+
+.bottomtogglebar .cartadd {
+  position: absolute;
+  right: 20px;
+  margin-top: 10px;
+  font-size: 20px;
+  font-weight: bold;
+}

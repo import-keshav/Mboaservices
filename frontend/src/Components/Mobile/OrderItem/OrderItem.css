@@ -1,0 +1,57 @@
+.order-item-mob {
+  width: 97%;
+  margin-top: 5px;
+  margin-left: 2px;
+  border: 1px solid grey;
+  padding: 20px;
+  box-shadow: 5px 1px grey;
+}
+
+.order-item-mob h6 {
+  font-size: 12px;
+}
+
+.order-item-mob .essential-info {
+  /* display: flex;
+  flex-direction: row; */
+}
+
+.order-item-mob .essential-info .restaurant-info {
+  display: flex;
+  flex-direction: row;
+}
+
+.order-item-mob .essential-info .restaurant-info img {
+  width: 100px;
+  height: 100px;
+  margin-right: 10px;
+}
+
+.order-item-mob .essential-info .restaurant-info .name {
+  color: #212121;
+}
+
+.order-item-mob .essential-info .restaurant-info .address,
+.order {
+  color: grey;
+  font-size: 15px;
+}
+
+.order-item-mob .essential-info .restaurant-info .view-details {
+  color: #52be80;
+  cursor: pointer;
+}
+
+.order-item-mob .essential-info .status {
+  margin-left: 30px;
+}
+
+.order-item-mob .items-info {
+  /* display: flex;
+  flex-direction: row; */
+}
+
+.order-item-mob .items-info .paid {
+  position: relative;
+  top: -2px;
+}

@@ -1,0 +1,32 @@
+.cartnavbar {
+  padding-bottom: 10px;
+  position: fixed;
+  border-color: rgba(40, 44, 63, 0.1);
+  z-index: 8;
+  width: 100%;
+  top: 0;
+  height: 60px;
+  background-color: white;
+}
+
+.cartnavbar .backButton {
+  background-color: transparent;
+  border: none;
+  display: inline-block;
+}
+
+.cartnavbar svg {
+  height: 1.8em;
+  width: 2.5em;
+}
+
+.cartnavbar .heading {
+  margin-top: 15px;
+  width: 100%;
+  margin-bottom: 0px;
+  font-size: 18px;
+}
+
+.cartnavbar .icons {
+  margin-top: 5px;
+}

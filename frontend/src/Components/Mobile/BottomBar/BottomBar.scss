@@ -1,0 +1,66 @@
+.bottom-navigation {
+  bottom: 0;
+  background: white;
+  width: 100%;
+  height: 60px;
+  background-color: #52be80;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+
+  .holder {
+    .nav-option {
+      text-align: center;
+      height: 60px;
+      cursor: pointer;
+      p {
+        font-size: 0.9em;
+      }
+
+      svg {
+        margin-top: 5px;
+        color: white;
+        height: 1.3rem;
+        width: 1.3rem;
+      }
+
+      .search-icon {
+        margin-top: 10px;
+        color: #52be80;
+        height: 1.8rem;
+        width: 1.8rem;
+      }
+    }
+
+    .nav-name {
+      color: #fff;
+    }
+
+    .nav-name-search {
+      margin-top: -5px;
+      color: #52be80;
+    }
+
+    .center {
+      background: white;
+      border: 2px solid #52be80;
+      color: white;
+      height: 67px;
+      width: 67px;
+      padding: 0.9rem;
+      transform: scale(1.1) translate(0, -0.6rem);
+      border-radius: 50%;
+
+      p {
+        font-size: 1rem !important;
+      }
+      div {
+        svg {
+          color: white;
+        }
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -45%);
+      }
+    }
+  }
+}
