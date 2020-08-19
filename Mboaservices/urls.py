@@ -17,17 +17,11 @@ from django.contrib import admin
 from django.urls import (
 	path, include)
 from django.conf.urls.static import static
-from django.shortcuts import render
 
 from . import settings
 
 
-def render_home_page(request, id=None):
-    return render(request, 'build/index.html')
-
-
 urlpatterns = [
-    path('', render_home_page),
     path('admin/', admin.site.urls),
     path('client/', include('Client.urls')),
     path('dish/', include('Dishes.urls')),

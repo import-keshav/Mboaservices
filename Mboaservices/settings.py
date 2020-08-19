@@ -76,7 +76,7 @@ ASGI_APPLICATION = "Mboaservices.routing.application"
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'frontend')],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -97,8 +97,12 @@ WSGI_APPLICATION = 'Mboaservices.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'Mboaservices',
+        'USER': 'admin',
+        'PASSWORD': 'XbU9Q7n3RxbXRYTZ',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
@@ -150,9 +154,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'frontend', 'build', 'static'),
-)
+
 
 CORS_ORIGIN_ALLOW_ALL = True
 
