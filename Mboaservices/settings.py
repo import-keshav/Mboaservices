@@ -98,7 +98,7 @@ WSGI_APPLICATION = 'Mboaservices.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'Mboaservices',
+        'NAME': 'mboaservices',
         'USER': 'admin',
         'PASSWORD': 'XbU9Q7n3RxbXRYTZ',
         'HOST': 'localhost',
