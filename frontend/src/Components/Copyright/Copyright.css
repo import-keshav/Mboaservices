@@ -1,0 +1,14 @@
+.copyright {
+  width: 100%;
+  height: 60px;
+  background-color: #52be80;
+  position: absolute;
+}
+
+.copyright .content {
+  color: white;
+  position: relative;
+  top: 15px;
+  width: 100%;
+  text-align: center;
+}

@@ -1,0 +1,17 @@
+.ordersmob .detailshome {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.ordersmob .heading {
+  font-weight: 400;
+  font-size: 18px;
+  display: inline;
+  margin-left: 15px;
+  color: #52be80;
+}
+
+.ordersmob .orders {
+  margin-bottom: 65px;
+}

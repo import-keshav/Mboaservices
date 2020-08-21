@@ -1,0 +1,46 @@
+.dishmob {
+  padding-bottom: 32px;
+  max-width: 40%;
+  margin: 10px;
+}
+
+.dishmob .image {
+  width: 150px;
+  height: 120px;
+  border-radius: 5px;
+}
+
+.dishmob .name {
+  font-size: 18px;
+}
+
+.dishmob .description {
+  font-size: 15px;
+  color: grey;
+}
+
+.dishmob .button {
+  background-color: #52be80;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+}
+
+.dishmob .buttonRemove {
+  background-color: #d9534f;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+}
+
+.dishmob .buttonCustomize {
+  background-color: #52be80;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+  margin-top: 5px;
+}
+
+.dishmob .btncon {
+  color: #fff;
+}

@@ -1,0 +1,43 @@
+.coupon-modal .essential {
+  padding-top: 15px;
+  padding-bottom: 10px;
+}
+
+.coupon-modal .position {
+  display: flex;
+  flex-direction: row;
+}
+
+.coupon-modal svg {
+  color: #52be80;
+  display: inline-block;
+  height: 25px;
+  width: 25px;
+}
+
+.coupon-modal .number {
+  color: #52be80;
+  display: inline-block;
+  font-size: 22px;
+  position: relative;
+  top: 4px;
+  margin-left: 10px;
+}
+
+.coupon-modal .cross {
+  font-size: 25px;
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+}
+
+.coupon-modal .close {
+  font-size: 22px;
+  position: relative;
+  top: 5px;
+  cursor: pointer;
+}
+
+.coupon-slider .checkout .checkoutxt {
+  color: #fff;
+}

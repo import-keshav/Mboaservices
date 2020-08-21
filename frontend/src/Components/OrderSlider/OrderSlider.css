@@ -1,0 +1,151 @@
+.order-slider {
+  width: 25%;
+  height: 100%;
+  background-color: white;
+  position: fixed;
+  top: 0;
+  right: 0;
+  transition: transform 0.3s
+    cubic-bezier(
+      calc(1 - var(--x2)),
+      calc(1 - var(--y2)),
+      calc(1 - var(--x1)),
+      calc(1 - var(--y1))
+    );
+  z-index: 200;
+  cursor: default;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 21px 36px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.order-slider .hide {
+  transform: translate3d(-100vw, 0, 0);
+}
+
+.order-slider .main-status {
+  border: 1px solid green;
+  padding: 10px;
+  font-size: 20px;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+.order-slider .show {
+  transform: translate3d(0vw, 0, 0);
+  overflow: hidden;
+}
+
+.order-slider .essential {
+  padding-top: 15px;
+  padding-bottom: 10px;
+}
+
+.order-slider svg {
+  color: #52be80;
+  display: inline-block;
+  height: 25px;
+  width: 25px;
+}
+
+.order-slider .number {
+  color: #52be80;
+  display: inline-block;
+  font-size: 22px;
+  position: relative;
+  top: 4px;
+}
+
+.order-slider .close {
+  font-size: 22px;
+  position: relative;
+  top: 5px;
+}
+
+.order-slider .restaurant-info {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.order-slider .restaurant-info svg {
+  margin-top: 12px;
+}
+
+.order-slider .restaurant-info .info {
+  margin-top: 7px;
+}
+
+.order-slider .restaurant-info .name {
+  color: #212121;
+  font-size: 15px;
+  margin-bottom: 0px;
+  margin-left: 10px;
+}
+
+.order-slider .restaurant-info .address {
+  color: gray;
+  font-size: 15px;
+  margin-bottom: 0px;
+  margin-left: 10px;
+}
+
+.order-slider .address-info {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.order-slider .address-info svg {
+  margin-top: 12px;
+}
+
+.order-slider .address-info .info {
+  margin-top: 7px;
+}
+
+.order-slider .address-info .name {
+  color: #212121;
+  font-size: 15px;
+  margin-bottom: 0px;
+  margin-left: 10px;
+}
+
+.order-slider .address-info .address {
+  color: gray;
+  font-size: 15px;
+  margin-bottom: 0px;
+  margin-left: 10px;
+}
+
+.order-slider .items ul {
+  list-style: none;
+  margin-top: 10px;
+}
+
+.order-slider .items ul li {
+  display: flex;
+  flex-direction: row;
+}
+
+.order-slider .items ul li .price {
+  margin-left: 30px;
+}
+
+.order-slider .item-total {
+  display: flex;
+  flex-direction: row;
+  margin-left: 20px;
+}
+
+.order-slider .item-total .heading {
+  margin-left: 20px;
+  text-align: center;
+}
+
+.order-slider .item-total .price {
+  position: absolute;
+  right: 40px;
+}

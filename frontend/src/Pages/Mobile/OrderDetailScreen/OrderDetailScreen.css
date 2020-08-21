@@ -1,0 +1,144 @@
+.order-detail-screen {
+  height: 100%;
+  background-color: white;
+  cursor: default;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 60px;
+}
+
+.order-detail-screen .hide {
+  transform: translate3d(-100vw, 0, 0);
+}
+
+.order-detail-screen .show {
+  transform: translate3d(0vw, 0, 0);
+  overflow: hidden;
+}
+
+.order-detail-screen .essential {
+  padding-top: 15px;
+  padding-bottom: 10px;
+}
+
+.order-detail-screen svg {
+  color: #52be80;
+  display: inline-block;
+  height: 25px;
+  width: 25px;
+}
+
+.order-detail-screen .number {
+  color: #52be80;
+  display: inline-block;
+  font-size: 22px;
+  position: relative;
+  top: 4px;
+}
+
+.order-detail-screen .close {
+  font-size: 22px;
+  position: relative;
+  top: 5px;
+}
+
+.order-detail-screen .restaurant-info {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.order-detail-screen .restaurant-info svg {
+  margin-top: 12px;
+}
+
+.order-detail-screen .restaurant-info .info {
+  margin-top: 7px;
+}
+
+.order-detail-screen .restaurant-info .name {
+  color: #212121;
+  font-size: 15px;
+  margin-bottom: 0px;
+  margin-left: 10px;
+}
+
+.order-detail-screen .main-status {
+  border: 1px solid green;
+  padding: 10px;
+  font-size: 20px;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+.order-detail-screen .restaurant-info .address {
+  color: gray;
+  font-size: 15px;
+  margin-bottom: 0px;
+  margin-left: 10px;
+}
+
+.order-detail-screen .address-info {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.order-detail-screen .address-info .icon {
+  margin-top: 12px;
+}
+
+.order-detail-screen .address-info .info {
+  margin-top: 7px;
+}
+
+.order-detail-screen .address-info .name {
+  color: #212121;
+  font-size: 15px;
+  margin-bottom: 0px;
+  margin-left: 10px;
+}
+
+.order-detail-screen .address-info .address {
+  color: gray;
+  font-size: 15px;
+  margin-bottom: 0px;
+  margin-left: 10px;
+}
+
+.order-detail-screen .items ul {
+  list-style: none;
+  margin-top: 10px;
+}
+
+.order-detail-screen .items ul li {
+  display: flex;
+  flex-direction: row;
+}
+
+.order-detail-screen .items ul li .price {
+  margin-left: 30px;
+}
+
+.order-detail-screen .item-total {
+  display: flex;
+  flex-direction: row;
+  margin-left: 20px;
+}
+
+.order-detail-screen .total-price {
+  display: flex;
+  flex-direction: row;
+}
+
+.order-detail-screen .item-total .heading {
+  margin-left: 20px;
+  text-align: center;
+}
+
+.order-detail-screen .item-total .price {
+  position: absolute;
+  right: 40px;
+}
