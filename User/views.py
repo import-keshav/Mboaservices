@@ -166,7 +166,7 @@ class CheckMobileNumber(APIView):
         return Response({
             "message": "User didn't Exists",
             'is_valid' : False},
-            status=status.HTTP_400_BAD_REQUEST)
+            status=status.HTTP_200_OK)
 
 
 class SendOTP(APIView):
