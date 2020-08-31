@@ -14,5 +14,5 @@ urlpatterns = [
 
 	path('check-mobile-number', views.CheckMobileNumber.as_view()),
 	path('send-otp', views.SendOTP.as_view()),
-	path('verify-otp', views.VerifyOTP.as_view()),
+	path('get-auth-token', views.GetAuthToken.as_view()),
 ]

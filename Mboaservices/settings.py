@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'channels',
+    'django_cron',
     'Client',
     'Dishes',
     'Invigilator',
@@ -112,6 +113,10 @@ DATABASES = {
 #         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #     }
 # }
+
+CRON_CLASSES = [
+    "Restaurant.cron.RestaurantCloseJob",
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators

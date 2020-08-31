@@ -199,44 +199,31 @@ class SendOTP(APIView):
             status=status.HTTP_200_OK)
 
 
-class VerifyOTP(APIView):
+class GetAuthToken(APIView):
     def post(self, request):
-        for key in ['mobile_number', 'otp']:
-            if not key in self.request.data:
-                return Response(
-                    {"message": "(mobile_number, otp) any of params missing"},
-                    status=status.HTTP_400_BAD_REQUEST)
+        if not 'mobile_number' in self.request.data:
+            return Response(
+                {"message": "Mobile Number is missing"},
+                status=status.HTTP_400_BAD_REQUEST)
         mobile_number = self.request.data['mobile_number']
-        otp = self.request.data['otp']
 
-        obj = models.MobileNumberOTP.objects.filter(mobile=mobile_number).first()
-        if not obj:
+        user = models.User.objects.filter(mobile=mobile_number).first()
+        if not user:
             return Response({
-                "message": "Mobile Number is not Verified"
+                "message": "No User exist with this Mobile Number"
             }, status=status.HTTP_400_BAD_REQUEST)
-
-        if obj.otp == otp:
-            obj.delete()
-            user = models.User.objects.filter(mobile=mobile_number).first()
-            if not user:
-                return Response({
-                    "message": "No User exist with this Mobile Number"
-                }, status=status.HTTP_400_BAD_REQUEST)
-            user.auth_token = ""
-            user.save()
-            jwt_token = create_jwt(user)
-            user.auth_token = jwt_token
-            user.save()
-            client = client_models.Client.objects.filter(user=user).first()
-            if not client:
-                return Response({"message": "Invalid Client"}, status=status.HTTP_400_BAD_REQUEST)
-            return Response({
-                "message": "Mobile Numbered Verified",
-                "token":jwt_token,
-                "client": client_serializers.ClientGetSerializer(client).data},
-            status=status.HTTP_200_OK)
-        return Response({"message": "Invalid OTP"}, status=status.HTTP_400_BAD_REQUEST)
-
+        user.auth_token = ""
+        user.save()
+        jwt_token = create_jwt(user)
+        user.auth_token = jwt_token
+        user.save()
+        client = client_models.Client.objects.filter(user=user).first()
+        if not client:
+            return Response({"message": "Invalid Client"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({
+            "token":jwt_token,
+            "client": client_serializers.ClientGetSerializer(client).data
+            }, status=status.HTTP_200_OK)
 
 
 class InvigilatorLogin(APIView):
