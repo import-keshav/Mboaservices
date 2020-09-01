@@ -51,33 +51,23 @@ class RegisterView(APIView):
     def post(self, request):
         try:
             data = self.request.data
-            new_user_1 = models.User.objects.filter(email=data['email']).first()
-            new_user_2 = models.User.objects.filter(mobile=data['mobile']).first()
-            if not (new_user_1 and new_user_2):
+            new_user = models.User.objects.filter(mobile=data['mobile']).first()
+            if not new_user:
                 new_user = models.User(
                     name=data['name'],
-                    email=data['email'],
                     mobile=data['mobile'],
-                    password=data['password']
                 )
                 new_user.save()
-                try:
-                    user = models.User.objects.filter(mobile=data['mobile']).first()
-                    new_user = client_models.Client(user=user)
-                    new_user.save()
-                except:
-                    user = models.User.objects.filter(mobile=data['mobile']).first()
-                    user.delete()
-                    return Response({
-                        "message": "(location_coordinates, address) any of params missing"
-                    }, status=status.HTTP_400_BAD_REQUEST)
+                user = models.User.objects.filter(mobile=data['mobile']).first()
+                new_user = client_models.Client(user=user)
+                new_user.save()
             else:
                 return Response({
                     "message": "User with this credentials already exist!"
                 }, status=status.HTTP_400_BAD_REQUEST)
         except:
             return Response({
-                "message": "(name, email, password, mobile,) any of params missing"
+                "message": "(name, mobile,) any of params missing"
             }, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(
