@@ -50,7 +50,6 @@ def verify_password(stored_password, provided_password):
 class RegisterView(APIView):
     def post(self, request):
         try:
-            import pdb;pdb.set_trace()
             data = self.request.data
             new_user = models.User.objects.filter(mobile=data['mobile']).first()
             if not new_user:
