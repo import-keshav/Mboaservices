@@ -30,10 +30,6 @@ class User(models.Model):
     def __str__(self):
         return self.name
 
-    def save(self):
-        self.password = hash_password(self.password)
-        super(User, self).save()
-
 
 class MobileNumberOTP(models.Model):
     mobile = models.CharField(max_length=15, null=True, blank=True)

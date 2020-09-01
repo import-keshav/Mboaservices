@@ -50,17 +50,18 @@ def verify_password(stored_password, provided_password):
 class RegisterView(APIView):
     def post(self, request):
         try:
+            import pdb;pdb.set_trace()
             data = self.request.data
             new_user = models.User.objects.filter(mobile=data['mobile']).first()
             if not new_user:
-                new_user = models.User(
+                user = models.User(
                     name=data['name'],
                     mobile=data['mobile'],
                 )
-                new_user.save()
+                user.save()
                 user = models.User.objects.filter(mobile=data['mobile']).first()
-                new_user = client_models.Client(user=user)
-                new_user.save()
+                client_user = client_models.Client(user=user)
+                client_user.save()
             else:
                 return Response({
                     "message": "User with this credentials already exist!"
@@ -71,7 +72,7 @@ class RegisterView(APIView):
             }, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(
-            {'message': 'Register Succesfully', 'user_id': new_user.pk}, status=status.HTTP_200_OK)
+            {'message': 'Register Succesfully', 'user_id': client_user.pk}, status=status.HTTP_200_OK)
 
 
 class LoginView(APIView):
@@ -254,3 +255,4 @@ class ChangeInvigilatorPassword(APIView):
         except:
             return Response({"message": "(mobile_number, old_password or new_password) is missing"})
 
+{"name": "Keshav", "mobile": "+919643906878"}
