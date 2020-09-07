@@ -70,7 +70,7 @@ class UpdateClientCart(generics.UpdateAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = client_serializers.ClientCartUpdateSerializer
     queryset = client_models.ClientCart.objects.all()
-    # permission_classes = [authentication_and_permissions.ClientCartPermission]
+    permission_classes = [authentication_and_permissions.ClientCartPermission]
 
 
 class DeleteClientCart(generics.DestroyAPIView):
@@ -78,6 +78,28 @@ class DeleteClientCart(generics.DestroyAPIView):
     serializer_class = client_serializers.ClientCartUpdateSerializer
     queryset = client_models.ClientCart.objects.all()
     permission_classes = [authentication_and_permissions.ClientCartPermission]
+
+    def delete(self, request, pk):
+        cart_item = client_models.ClientCart.objects.filter(pk=pk).first()
+        if not cart_item:
+            return Response({
+                'message': 'No Cart Item Exist'
+        }, status=status.HTTP_400_BAD_REQUEST)
+
+        client = cart_item.client
+        cart_item.delete()
+        cart_items =  client_models.ClientCart.objects.filter(client=client)
+        total_price = 0
+        for cart_item in cart_items:
+            price = cart_item.dish.price * cart_item.num_of_items
+            for add_on in cart_item.add_ons.all():
+                if not add_on.is_free:
+                    price += (add_on.price * cart_item.num_of_items)
+            total_price +=price
+        return Response({
+            'message': 'Item Deleted Successfully',
+            'total_price': total_price
+        }, status=status.HTTP_200_OK)
 
 
 class CheckDishRestraurantInCart(APIView):
