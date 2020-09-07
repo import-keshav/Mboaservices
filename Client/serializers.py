@@ -83,6 +83,18 @@ class ClientCartGetSerializer(serializers.ModelSerializer):
 
 
 class ClientCartUpdateSerializer(serializers.ModelSerializer):
+    total_price = serializers.SerializerMethodField()
+
+    def get_total_price(self, obj):
+        cart_items =  models.ClientCart.objects.filter(client=obj.client)
+        total_price = 0
+        for cart_item in cart_items:
+            price = cart_item.dish.price * cart_item.num_of_items
+            for add_on in cart_item.add_ons.all():
+                if not add_on.is_free:
+                    price += (add_on.price * cart_item.num_of_items)
+            total_price +=price
+        return total_price
     class Meta:
         model = models.ClientCart
         fields = '__all__'

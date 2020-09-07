@@ -70,7 +70,7 @@ class UpdateClientCart(generics.UpdateAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = client_serializers.ClientCartUpdateSerializer
     queryset = client_models.ClientCart.objects.all()
-    permission_classes = [authentication_and_permissions.ClientCartPermission]
+    # permission_classes = [authentication_and_permissions.ClientCartPermission]
 
 
 class DeleteClientCart(generics.DestroyAPIView):
