@@ -32,6 +32,7 @@ class CreateOrder(APIView):
             self.validate_dishes(self.request.data['dishes'], self.request.data['order']['restaurant'])
             order_serializer.save()
             self.create_order(self.request.data['dishes'], order_serializer.data['id'])
+
             order_ = orders_models.Order.objects.filter(pk=order_serializer.data['id']).first()
             incoming_order_obj = orders_models.IncomingOrder(order=order_, restaurant=order_.restaurant)
             incoming_order_obj.save()
@@ -43,6 +44,9 @@ class CreateOrder(APIView):
                     "order": orders_serializers.GetClientRestaurantPastOrdersSerializer(order_).data,
                 }
             })
+
+            client_models.ClientCart.objects.filter(client=order_.client).delete()
+
             return Response({'message': 'Orders Created Successfully', 'id': order_serializer.data['id']})
         return Response(order_serializer.errors)
 
