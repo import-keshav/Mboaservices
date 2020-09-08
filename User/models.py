@@ -29,6 +29,9 @@ class User(models.Model):
         verbose_name_plural = 'Users'
     def __str__(self):
         return self.name
+    def save(self):
+        self.password = hash_password(self.password)
+        super(User, self).save()
 
 
 class MobileNumberOTP(models.Model):
