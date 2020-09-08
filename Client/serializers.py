@@ -108,6 +108,7 @@ class ClientCartGetSerializer(serializers.ModelSerializer):
 class ClientCartUpdateSerializer(serializers.ModelSerializer):
     total_price = serializers.SerializerMethodField()
     price = serializers.SerializerMethodField()
+    add_ons = serializers.SerializerMethodField()
 
     def get_total_price(self, obj):
         cart_items =  models.ClientCart.objects.filter(client=obj.client)
@@ -128,6 +129,9 @@ class ClientCartUpdateSerializer(serializers.ModelSerializer):
         obj.price = price
         obj.save()
         return price
+
+    def get_add_ons(self, obj):
+        return[dish_serializer.DishAddOnsGetSerializer(add_on).data for add_on in obj.add_ons.all()]
 
     class Meta:
         model = models.ClientCart
