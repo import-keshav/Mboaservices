@@ -130,9 +130,6 @@ class ClientCartUpdateSerializer(serializers.ModelSerializer):
         obj.save()
         return price
 
-    def get_add_ons(self, obj):
-        return[dish_serializer.DishAddOnsGetSerializer(add_on).data for add_on in obj.add_ons.all()]
-
     class Meta:
         model = models.ClientCart
         fields = '__all__'
