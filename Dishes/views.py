@@ -41,7 +41,7 @@ class ListRestaurantDishes(generics.ListAPIView):
     renderer_classes = [JSONRenderer]
     def list(self, request, pk):
         restaurant = restaurant_models.Restaurant.objects.filter(pk=pk).first()
-        dishes = dish_models.Dish.objects.filter(restaurant=restaurant, is_available=True)
+        dishes = dish_models.Dish.objects.filter(restaurant=restaurant)
         data = {}
         for dish in dishes:
             categories = dish.categories.all()
