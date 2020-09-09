@@ -4,7 +4,6 @@ from .models import (
 	Restaurant,
 	RestaurantEmployee,
 	RestaurantPromocode,
-	RestaurantDriver,
 	RestraurantDishesCategory
 )
 
@@ -38,9 +37,3 @@ class RestaurantPromocodeAdmin(admin.ModelAdmin):
 	def get_category(self, obj):
 		return [cat.name for cat in obj.category.all()]
 	get_category.short_description = 'Categories'
-
-
-@admin.register(RestaurantDriver)
-class RestaurantDriverAdmin(admin.ModelAdmin):
-	list_display = ('name', 'mobile', 'restaurant','image', 'id')
-	search_fields = ('name', 'mobile', 'restaurant__name', 'restaurant__id', 'id')

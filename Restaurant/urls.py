@@ -19,11 +19,4 @@ urlpatterns = [
 	path('get-promocode/<int:pk>', views.GetRestaurantPromocode.as_view()),
 	path('update-promocode/<int:pk>', views.UpdateRestaurantPromocode.as_view()),
 	path('delete-promocode/<int:pk>', views.DeleteRestaurantPromocode.as_view()),
-
-	path('create-restaurant-driver', views.CreateGetRestaurantDriver.as_view()),
-	path('get-restaurant-driver/<int:pk>', views.CreateGetRestaurantDriver.as_view()),
-	path('update-restaurant-driver/<int:pk>', views.UpdateRestaurantDriver.as_view()),
-	path('delete-restaurant-driver/<int:pk>', views.DeleteRestaurantDriver.as_view()),
-	path('get-restaurant-specific-driver/<int:pk>', views.GetRestaurantSpecifiDriver.as_view()),
-
 ]

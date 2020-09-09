@@ -97,28 +97,3 @@ class RestaurantPromocodeGetSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.RestaurantPromocode
         fields = '__all__'
-
-
-class RestaurantDriverUpdateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.RestaurantDriver
-        fields = '__all__'
-
-
-class RestaurantDriverPostSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.RestaurantDriver
-        fields = '__all__'
-
-    def validate(self, data):
-        if not 'name' in data:
-            raise forms.ValidationError('Include Name in Driver Data')
-        if not 'restaurant' in data:
-            raise forms.ValidationError('Include Restaurant ID In Data')
-        return data
-
-
-class RestaurantDriverGetSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.RestaurantDriver
-        fields = '__all__'

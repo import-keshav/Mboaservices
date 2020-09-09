@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django_cron',
     'Client',
     'Dishes',
+    'Driver',
     'Invigilator',
     'Orders',
     'Restaurant',
