@@ -18,7 +18,7 @@ class CreateDishByRestaurantDataPermission(permissions.BasePermission):
             return False
         access_token = authorization_header.split(' ')[1]
         restaurant = restaurant_models.Restaurant.objects.filter(pk=int(request.data['restaurant'])).first()
-        return restaurant.owner.auth_token == access_token
+        return restaurant.auth_token == access_token
 
 
 class OperationOnDishByRestaurantDataPermission(permissions.BasePermission):
@@ -28,7 +28,7 @@ class OperationOnDishByRestaurantDataPermission(permissions.BasePermission):
             return False
         access_token = authorization_header.split(' ')[1]
         dish = models.Dish.objects.filter(pk=int(request.META['PATH_INFO'].split('/')[-1])).first()
-        return dish.restaurant.owner.auth_token == access_token
+        return dish.restaurant.auth_token == access_token
 
 
 class CreateDishAddOnByRestaurantDataPermission(permissions.BasePermission):
@@ -38,7 +38,7 @@ class CreateDishAddOnByRestaurantDataPermission(permissions.BasePermission):
             return False
         access_token = authorization_header.split(' ')[1]
         dish = models.Dish.objects.filter(pk=int(request.data['dish'])).first()
-        return dish.restaurant.owner.auth_token == access_token
+        return dish.restaurant.auth_token == access_token
 
 
 class OperationOnDishAddOnByRestaurantDataPermission(permissions.BasePermission):
@@ -48,4 +48,4 @@ class OperationOnDishAddOnByRestaurantDataPermission(permissions.BasePermission)
             return False
         access_token = authorization_header.split(' ')[1]
         add_on = models.Dish.objects.filter(pk=int(request.META['PATH_INFO'].split('/')[-1])).first()
-        return add_on.dish.restaurant.owner.auth_token == access_token
+        return add_on.dish.restaurant.auth_token == access_token

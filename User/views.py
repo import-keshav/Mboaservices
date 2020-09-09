@@ -100,9 +100,9 @@ class ChangeRestaurantPassword(APIView):
             restaurant = restraurant_models.Restaurant.objects.filter(pk=self.request.data['restaurant_id']).first()
             if not restaurant:
                 return Response({"message": "No Restaurant exists with this id"})
-            if verify_password(restaurant.owner.password, self.request.data['old_password']):
-                restaurant.owner.password = self.request.data['new_password']
-                restaurant.owner.save()
+            if verify_password(restaurant.password, self.request.data['old_password']):
+                restaurant.password = self.request.data['new_password']
+                restaurant.save()
                 restaurant.save()
                 return Response({"message": "Password changed Succesfully"})
             return Response({"message": "Invalid Old Password"})
@@ -118,25 +118,26 @@ class UserUpdateProfile(generics.UpdateAPIView):
 
 class RestraurantLogin(APIView):
     def post(self, request):
-        try:
-            restraurant = restraurant_models.Restaurant.objects.filter(
-                unique_id=self.request.data['restraurant_unique_id']).first()
-            if not restraurant:
-                return Response({"message": "Invalid Restraurant unique Id",}, status=status.HTTP_400_BAD_REQUEST)
-            if verify_password( restraurant.owner.password, self.request.data['password']):
-                restraurant.owner.auth_token = ""
-                restraurant.owner.password = self.request.data['password']
-                restraurant.owner.save()
-                restrau_obj = restraurant_serializer.RestaurantGetSerializer(restraurant)
-                jwt_token = create_jwt(restrau_obj.data)
-                restraurant.owner.auth_token = jwt_token
-                restraurant.owner.save()
-                restraurant.owner.password = self.request.data['password']
-                restraurant.owner.save()
-                return Response({'message': 'Login Succesfully', "restaurant": restrau_obj.data, "token":jwt_token}, status=status.HTTP_200_OK)
-            return Response({'message': 'Invalid password'}, status=status.HTTP_400_BAD_REQUEST)
-        except:
+        if not 'restraurant_unique_id' in self.request.data:
             return Response({"message": "restraurant_unique_id is missing"}, status=status.HTTP_400_BAD_REQUEST)
+
+        restraurant = restraurant_models.Restaurant.objects.filter(
+            unique_id=self.request.data['restraurant_unique_id']).first()
+
+        if not restraurant:
+            return Response({"message": "Invalid Restraurant unique Id",}, status=status.HTTP_400_BAD_REQUEST)
+
+        if verify_password( restraurant.password, self.request.data['password']):
+            restraurant.auth_token = ""
+            restraurant.password = self.request.data['password']
+            restraurant.save()
+            restrau_obj = restraurant_serializer.RestaurantGetSerializer(restraurant)
+            jwt_token = create_jwt(restrau_obj.data)
+            restraurant.auth_token = jwt_token
+            restraurant.password = self.request.data['password']
+            restraurant.save()
+            return Response({'message': 'Login Succesfully', "restaurant": restrau_obj.data, "token":jwt_token}, status=status.HTTP_200_OK)
+        return Response({'message': 'Invalid password'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CheckMobileNumber(APIView):

@@ -1,7 +1,18 @@
+import hashlib, binascii, os
+
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 from User import models as user_models
+
+
+def hash_password(password):
+    """Hash a password for storing."""
+    salt = hashlib.sha256(os.urandom(60)).hexdigest().encode('ascii')
+    pwdhash = hashlib.pbkdf2_hmac('sha512', password.encode('utf-8'), 
+                                salt, 100000)
+    pwdhash = binascii.hexlify(pwdhash)
+    return (salt + pwdhash).decode('ascii')
 
 
 class RestraurantDishesCategory(models.Model):
@@ -19,7 +30,6 @@ class RestraurantDishesCategory(models.Model):
 class Restaurant(models.Model):
     unique_id = models.CharField(max_length=100, null=True, blank=True, unique=True)
     name = models.CharField(max_length=200, null=True, blank=True)
-    owner = models.ForeignKey(user_models.User, on_delete=models.CASCADE, related_name="restaurant_restaurant_client", null=True, blank=True)
     latitude = models.CharField(max_length=30, null=True, blank=True)
     longitude = models.CharField(max_length=30, null=True, blank=True)
     rating = models.FloatField(null=True, blank=True, validators=[MinValueValidator(0), MaxValueValidator(5)])
@@ -27,6 +37,8 @@ class Restaurant(models.Model):
     address = models.TextField(null=True, blank=True)
     category = models.ManyToManyField(RestraurantDishesCategory, null=True, blank=True)
     image = models.FileField(null=True, blank=True, upload_to="")
+    password = models.TextField(null=True, blank=True)
+    auth_token = models.TextField(null=True, blank=True)
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
     last_updated = models.DateTimeField(auto_now=True, editable=False)
@@ -35,6 +47,9 @@ class Restaurant(models.Model):
         verbose_name_plural = 'Restaurants'
     def __str__(self):
         return self.name
+    def save(self):
+        self.password = hash_password(self.password)
+        super(Restaurant, self).save()
 
 
 class RestaurantEmployee(models.Model):

@@ -16,7 +16,7 @@ class RestaurantDataPermission(permissions.BasePermission):
             return False
         access_token = authorization_header.split(' ')[1]
         restaurant = models.Restaurant.objects.filter(pk=int(request.META['PATH_INFO'].split('/')[-1])).first()
-        return restaurant.owner.auth_token == access_token
+        return restaurant.auth_token == access_token
 
 
 class CreateOperationsOnRestaurantPermission(permissions.BasePermission):
@@ -26,4 +26,4 @@ class CreateOperationsOnRestaurantPermission(permissions.BasePermission):
             return False
         access_token = authorization_header.split(' ')[1]
         restaurant = models.Restaurant.objects.filter(pk=int(request.data["restaurant"])).first()
-        return restaurant.owner.auth_token == access_token
+        return restaurant.auth_token == access_token

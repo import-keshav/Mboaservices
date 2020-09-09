@@ -13,10 +13,6 @@ class RestaurantPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Restaurant
         fields = '__all__'
-    def validate(self, data):
-        if not 'owner' in data:
-            raise forms.ValidationError('Include owner id in data')
-        return data
 
 
 class RestaurantUpdateSerializer(serializers.ModelSerializer):
@@ -26,7 +22,6 @@ class RestaurantUpdateSerializer(serializers.ModelSerializer):
 
 
 class RestaurantGetSerializer(serializers.ModelSerializer):
-    owner = user_serializer.UserSerializer()
     category = serializers.SerializerMethodField()
     num_of_incoming_orders = serializers.SerializerMethodField()
     num_of_outgoing_orders = serializers.SerializerMethodField()
@@ -41,7 +36,9 @@ class RestaurantGetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Restaurant
-        fields = '__all__'
+        fields = ['name', 'latitude', 'longitude', 'rating',
+            'is_open', 'address', 'category', 'image', 'num_of_incoming_orders',
+            'num_of_outgoing_orders']
 
 
 class RestaurantEmployeePostSerializer(serializers.ModelSerializer):
