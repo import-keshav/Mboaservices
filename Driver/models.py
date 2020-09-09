@@ -9,7 +9,7 @@ class Driver(models.Model):
     created = models.DateTimeField(auto_now_add=True, editable=False)
     last_updated = models.DateTimeField(auto_now=True, editable=False)
     class Meta:
-        verbose_name = 'Restaurant Driver'
-        verbose_name_plural = 'Restaurant Drivers'
+        verbose_name = 'Driver'
+        verbose_name_plural = 'Drivers'
     def __str__(self):
         return self.name
