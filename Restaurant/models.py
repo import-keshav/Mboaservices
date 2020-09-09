@@ -30,14 +30,16 @@ class RestraurantDishesCategory(models.Model):
 class Restaurant(models.Model):
     unique_id = models.CharField(max_length=100, null=True, blank=True, unique=True)
     name = models.CharField(max_length=200, null=True, blank=True)
+    mobile = models.CharField(max_length=15, null=True, blank=True)
+    password = models.TextField(null=True, blank=True)
+    image = models.FileField(null=True, blank=True, upload_to="")
+    address = models.TextField(null=True, blank=True) 
     latitude = models.CharField(max_length=30, null=True, blank=True)
     longitude = models.CharField(max_length=30, null=True, blank=True)
+    category = models.ManyToManyField(RestraurantDishesCategory, null=True, blank=True)
     rating = models.FloatField(null=True, blank=True, validators=[MinValueValidator(0), MaxValueValidator(5)])
     is_open = models.BooleanField(default=False, null=True, blank=True)
-    address = models.TextField(null=True, blank=True)
-    category = models.ManyToManyField(RestraurantDishesCategory, null=True, blank=True)
-    image = models.FileField(null=True, blank=True, upload_to="")
-    password = models.TextField(null=True, blank=True)
+
     auth_token = models.TextField(null=True, blank=True)
 
     created = models.DateTimeField(auto_now_add=True, editable=False)

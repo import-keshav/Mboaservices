@@ -9,8 +9,8 @@ from .models import (
 
 @admin.register(Restaurant)
 class RestaurantAdmin(admin.ModelAdmin):
-	list_display = ('name', 'latitude', 'longitude', 'is_open', 'address', 'get_category', 'rating', 'image', 'id')
-	search_fields = ('name', 'latitude', 'longitude', 'address', 'id',)
+	list_display = ('name', 'mobile', 'latitude', 'longitude', 'is_open', 'address', 'get_category', 'rating', 'image', 'id')
+	search_fields = ('name', 'mobile', 'latitude', 'longitude', 'address', 'id',)
 	def get_category(self, obj):
 		return [cat.name for cat in obj.category.all()]
 	get_category.short_description = 'Categories'

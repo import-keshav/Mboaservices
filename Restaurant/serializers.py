@@ -36,7 +36,7 @@ class RestaurantGetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Restaurant
-        fields = ['name', 'latitude', 'longitude', 'rating',
+        fields = ['name', 'latitude', 'longitude', 'rating', 'mobile',
             'is_open', 'address', 'category', 'image', 'num_of_incoming_orders',
             'num_of_outgoing_orders']
 
