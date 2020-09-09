@@ -83,7 +83,7 @@ class UpdateOrder(generics.UpdateAPIView):
     permission_classes = [authentication_and_permissions.UpdateDeleteOrderPermission]
     def get_queryset(self):
         if 'status' in self.request.data:
-            self.send_order_status(status, self.kwargs['pk'])
+            self.send_order_status(self.request.data['status'], self.kwargs['pk'])
         if self.request.data['status'] == 'delivered':
             self.delete_ongoing_order()
         return orders_models.Order.objects.all()
@@ -103,11 +103,9 @@ class UpdateOrder(generics.UpdateAPIView):
         order.save()
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
-            "restaurant_order_status_"  + str(order.restaurant.id), {
+            "restaurant_order_status_"  + str(order.id), {
             "type": "send_order_status",
-            "data": {
-                "order": orders_serializers.GetClientRestaurantPastOrdersSerializer(order).data,
-            }
+            "status": status
         })
 
 

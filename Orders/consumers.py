@@ -101,6 +101,5 @@ class UpdateGetOrderStatus(WebsocketConsumer):
     # Receive message from room group
     def send_order_status(self, event):
         # Send message to WebSocket
-        self.send(text_data=json.dumps({
-            'order_status_info': event['order_status_info'],
-        }))
+
+        self.send(text_data=json.dumps(event))
