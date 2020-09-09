@@ -82,6 +82,8 @@ class UpdateOrder(generics.UpdateAPIView):
     serializer_class = orders_serializers.UpdateOrderSerializer
     permission_classes = [authentication_and_permissions.UpdateDeleteOrderPermission]
     def get_queryset(self):
+        if 'status' in self.request.data:
+            self.send_order_status(status, self.kwargs['pk'])
         if self.request.data['status'] == 'delivered':
             self.delete_ongoing_order()
         return orders_models.Order.objects.all()
@@ -94,6 +96,19 @@ class UpdateOrder(generics.UpdateAPIView):
         if not ongoing_order:
             raise forms.ValidationError("No Ongoing Order exists with this order id")
         ongoing_order.delete()
+
+    def send_order_status(self, status, order_id):
+        order = orders_models.Order.objects.filter(pk=order_id).first()
+        order.status = status
+        order.save()
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            "restaurant_order_status_"  + str(order.restaurant.id), {
+            "type": "send_order_status",
+            "data": {
+                "order": orders_serializers.GetClientRestaurantPastOrdersSerializer(order).data,
+            }
+        })
 
 
 class GetClientPastOrdersPagination(PageNumberPagination):
