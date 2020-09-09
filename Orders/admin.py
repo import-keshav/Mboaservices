@@ -23,9 +23,24 @@ class OrderAdmin(admin.ModelAdmin):
 
 @admin.register(IncomingOrder)
 class IncomingOrderAdmin(admin.ModelAdmin):
-	list_display = [field.name for field in IncomingOrder._meta.fields]
+	list_display = ['id', 'order', 'get_order_id', 'restaurant', 'get_restaurant_id']
+	def get_order_id(self, obj):
+		return obj.order.id
+	get_order_id.short_description = 'Order ID'
+
+	def get_restaurant_id(self, obj):
+		return obj.restaurant.id
+	get_restaurant_id.short_description = 'Restaurant ID'
+
 
 
 @admin.register(OngoingOrder)
 class OngoingOrderAdmin(admin.ModelAdmin):
-	list_display = [field.name for field in OngoingOrder._meta.fields]
+	list_display = ['id', 'order', 'get_order_id', 'restaurant', 'get_restaurant_id']
+	def get_order_id(self, obj):
+		return obj.order.id
+	get_order_id.short_description = 'Order ID'
+
+	def get_restaurant_id(self, obj):
+		return obj.restaurant.id
+	get_restaurant_id.short_description = 'Restaurant ID'
