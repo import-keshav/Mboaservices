@@ -38,7 +38,7 @@ class RestaurantGetSerializer(serializers.ModelSerializer):
         model = models.Restaurant
         fields = ['name', 'latitude', 'longitude', 'rating', 'mobile',
             'is_open', 'address', 'category', 'image', 'num_of_incoming_orders',
-            'num_of_outgoing_orders']
+            'num_of_outgoing_orders', 'id']
 
 
 class RestaurantEmployeePostSerializer(serializers.ModelSerializer):
