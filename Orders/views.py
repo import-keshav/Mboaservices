@@ -133,6 +133,8 @@ class AcceptOrder(APIView):
         order = orders_models.Order.objects.filter(pk=pk).first()
         if not order:
             return Response({'message': 'Invalid Order ID'}, status=status.HTTP_400_BAD_REQUEST)
+        if order.status == "Accepted":
+            return Response({'message': 'Order Accepted Already'}, status=status.HTTP_200_OK)
 
         incoming_order = orders_models.IncomingOrder.objects.filter(order=order).first()
         if not incoming_order:
@@ -172,6 +174,9 @@ class RejectOrder(APIView):
         order = orders_models.Order.objects.filter(pk=pk).first()
         if not order:
             return Response({'message': 'Invalid Order ID'}, status=status.HTTP_400_BAD_REQUEST)
+        if order.status == "Rejected":
+            return Response({'message': 'Order Rejected Already'}, status=status.HTTP_200_OK)
+
         order.is_accepted = False
         order.status = "Rejected"
         order.save()
