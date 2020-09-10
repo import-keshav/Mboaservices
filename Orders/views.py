@@ -160,7 +160,7 @@ class AcceptOrder(APIView):
         order.is_accepted = True
         order.status = "Accepted"
         order.save()
-        invigilator = self.assign_invigilator_to_order(order)
+        invigilator = self.get_invigilator_for_order(order.restaurant)
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
             "incoming_order_for_invigilator_"  + str(invigilator.id), {
@@ -170,15 +170,9 @@ class AcceptOrder(APIView):
         })
         return Response({'message': 'Order Accepted Successfully'}, status=status.HTTP_200_OK)
 
-    def assign_invigilator_to_order(self, order):
-        invigilator = self.get_invigilator_for_order()
-        obj = invigilator_models.InvigilatorOrderAssignment(
-        order=order, invigilator=invigilator)
-        obj.save()
-        return invigilator
-
     def get_invigilator_for_order(self):
-        return invigilator_models.Invigilator.objects.all()[0]
+        invigilator = invigilator_models.InvigilatorRestaurant.objects.filter(restaurant=obj.restaurant).first()
+        return invigilator.invigilator
 
 
 class RejectOrder(APIView):

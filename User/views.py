@@ -240,6 +240,7 @@ class InvigilatorLogin(APIView):
         except:
             return Response({"message": "restraurant_unique_id is missing"}, status=status.HTTP_400_BAD_REQUEST)
 
+
 class ChangeInvigilatorPassword(APIView):
     def post(self, request):
         try:
@@ -254,5 +255,3 @@ class ChangeInvigilatorPassword(APIView):
             return Response({"message": "Invalid Old Password"})
         except:
             return Response({"message": "(mobile_number, old_password or new_password) is missing"})
-
-{"name": "Keshav", "mobile": "+919643906878"}

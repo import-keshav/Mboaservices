@@ -8,6 +8,7 @@ from rest_framework.pagination import PageNumberPagination
 from . import models as invigilator_models
 from . import serializers as invigilator_serializer
 from Client import models as client_models
+from Orders import models as order_models
 from Orders import serializers as order_serializer
 
 
@@ -33,9 +34,11 @@ class GetInvigilatorOrderAssigned(generics.ListAPIView):
     pagination_class = GetInvigilatorClientChatPagination
 
     def get_queryset(self):
-        invigilator = invigilator_models.Invigilator.objects.filter(pk=self.kwargs['invigilator']).first()
-        invigilator_orders = invigilator_models.InvigilatorOrderAssignment.objects.filter(invigilator=invigilator).order_by('-created')
-        return [invigilator_order.order for invigilator_order in invigilator_orders]
+        invigilator_restaurants = invigilator_models.InvigilatorRestaurant.objects.filter(invigilator__pk=self.kwargs['invigilator'])
+        orders = order_models.Order.objects.none()
+        for invigilator_restaurant in invigilator_restaurants:
+            orders |= order_models.Order.objects.filter(restaurant=invigilator_restaurant).exclude(status="delivered")
+        return orders
 
 
 class GetInvigilatorData(generics.ListAPIView):
