@@ -28,6 +28,9 @@ class Order(models.Model):
     is_delivered = models.BooleanField(default=False, null=True, blank=True)
     is_accepted = models.BooleanField(default=False, null=True, blank=True)
     total_amount = models.FloatField(null=True, blank=True, validators=[MinValueValidator(0)])
+    delivery_amount = models.FloatField(null=True, blank=True, validators=[MinValueValidator(0)])
+    discount_amount = models.FloatField(null=True, blank=True, validators=[MinValueValidator(0)])
+
     # transaction_id
     status = models.TextField(choices=order_status, null=True, blank=True)
     promocode_used = models.ForeignKey(restaurant_models.RestaurantPromocode, on_delete=models.CASCADE, related_name="orders_order_promocode_used", null=True, blank=True)
