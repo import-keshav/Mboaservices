@@ -37,7 +37,7 @@ class GetInvigilatorOrderAssigned(generics.ListAPIView):
         invigilator_restaurants = invigilator_models.InvigilatorRestaurant.objects.filter(invigilator__pk=self.kwargs['invigilator'])
         orders = order_models.Order.objects.none()
         for invigilator_restaurant in invigilator_restaurants:
-            orders |= order_models.Order.objects.filter(restaurant=invigilator_restaurant.restaurant).exclude(status="delivered")
+            orders |= order_models.Order.objects.filter(restaurant=invigilator_restaurant.restaurant).exclude(status="delivered").order_by('-created')
         return orders
 
 
