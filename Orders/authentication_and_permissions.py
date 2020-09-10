@@ -27,7 +27,7 @@ class UpdateDeleteOrderPermission(permissions.BasePermission):
             return False
         access_token = authorization_header.split(' ')[1]
         order = models.Order.objects.filter(pk=int(request.META['PATH_INFO'].split('/')[-1])).first()
-        return order.client.user.auth_token == access_token
+        return order.restaurant.auth_token == access_token
 
 
 class RestaurantOperationsOnOrders(permissions.BasePermission):
