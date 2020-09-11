@@ -29,7 +29,8 @@ class User(models.Model):
     def __str__(self):
         return self.name
     def save(self):
-        self.password = hash_password(self.password)
+        if self.password and len(self.password) <192:
+            self.password = hash_password(self.password)
         super(User, self).save()
 
 
