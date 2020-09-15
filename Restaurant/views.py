@@ -102,14 +102,14 @@ class UpdateRestaurantPromocode(generics.UpdateAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = restaurant_serializers.RestaurantPromocodeUpdateSerializer
     queryset = restaurant_models.RestaurantPromocode.objects.all()
-    permission_classes = [authentication_and_permissions.RestaurantDataPermission]
+    permission_classes = [authentication_and_permissions.RestaurantPromocodeDataPermission]
 
 
 class DeleteRestaurantPromocode(generics.DestroyAPIView):
     renderer_classes = [JSONRenderer]
     serializer_class = restaurant_serializers.RestaurantPromocodePostSerializer
     queryset = restaurant_models.RestaurantPromocode.objects.all()
-    permission_classes = [authentication_and_permissions.RestaurantDataPermission]
+    permission_classes = [authentication_and_permissions.RestaurantPromocodeDataPermission]
 
 
 class OpenCloseRestaurant(APIView):
