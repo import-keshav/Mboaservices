@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from .models import (
+	GeneralDish,
 	Dish,
 	DishAddOns
 )
@@ -26,3 +27,13 @@ class DishAddOnsAdmin(admin.ModelAdmin):
 	search_fields = ('name', 'dish__name')
 	raw_id_fields = ('dish',)
 	list_filter = ('name', 'dish', 'is_free')
+
+
+@admin.register(GeneralDish)
+class GeneralDishAdmin(admin.ModelAdmin):
+	list_display = ('name', 'get_category', 'image', 'id')
+	search_fields = ('name', 'categories')
+	list_filter = ('name', 'categories')
+	def get_category(self, obj):
+		return [cat.name for cat in obj.categories.all()]
+	get_category.short_description = 'Categories'
