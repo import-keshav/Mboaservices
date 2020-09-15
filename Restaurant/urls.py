@@ -19,4 +19,6 @@ urlpatterns = [
 	path('get-promocode/<int:pk>', views.GetRestaurantPromocode.as_view()),
 	path('update-promocode/<int:pk>', views.UpdateRestaurantPromocode.as_view()),
 	path('delete-promocode/<int:pk>', views.DeleteRestaurantPromocode.as_view()),
+
+	path('get-global-promocode', views.GetGlobalPromocode.as_view()),
 ]

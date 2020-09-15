@@ -94,3 +94,9 @@ class RestaurantPromocodeGetSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.RestaurantPromocode
         fields = '__all__'
+
+
+class GlobalPromocodeGetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.GlobalPromocode
+        fields = '__all__'

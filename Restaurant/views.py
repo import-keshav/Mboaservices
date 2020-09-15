@@ -123,3 +123,9 @@ class OpenCloseRestaurant(APIView):
         restaurant.is_open = self.request.data['is_open']
         restaurant.save()
         return Response({"message": "Operation Done succesfully"}, status=status.HTTP_200_OK)
+
+
+class GetGlobalPromocode(generics.ListAPIView):
+    renderer_classes = [JSONRenderer]
+    serializer_class = restaurant_serializers.GlobalPromocodeGetSerializer
+    queryset = restaurant_models.GlobalPromocode.objects.all()
