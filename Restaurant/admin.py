@@ -4,7 +4,8 @@ from .models import (
 	Restaurant,
 	RestaurantEmployee,
 	RestaurantPromocode,
-	RestraurantDishesCategory
+	RestraurantDishesCategory,
+	GlobalPromocode
 )
 
 @admin.register(Restaurant)
@@ -36,3 +37,10 @@ class RestaurantPromocodeAdmin(admin.ModelAdmin):
 	def get_category(self, obj):
 		return [cat.name for cat in obj.category.all()]
 	get_category.short_description = 'Categories'
+
+
+@admin.register(GlobalPromocode)
+class GlobalPromocodeAdmin(admin.ModelAdmin):
+	list_display = ('promocode', 'discount_percentage', 'valid_date', 'id')
+	search_fields = ('promocode', 'discount_percentage', 'valid_date', 'id')
+	list_filter = ('discount_percentage',)

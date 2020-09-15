@@ -81,3 +81,17 @@ class RestaurantPromocode(models.Model):
         verbose_name_plural = 'Restaurant Promocodes'
     def __str__(self):
         return self.promocode
+
+
+class GlobalPromocode(models.Model):
+    promocode = models.CharField(max_length=10, null=True, blank=True)
+    discount_percentage = models.FloatField(null=True, blank=True, validators=[MinValueValidator(0)])
+    valid_date = models.DateField(null=True, blank=True)
+
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+    last_updated = models.DateTimeField(auto_now=True, editable=False)
+    class Meta:
+        verbose_name = 'Global Promocode'
+        verbose_name_plural = 'Global Promocodes'
+    def __str__(self):
+        return self.promocode
