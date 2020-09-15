@@ -11,6 +11,12 @@ from . import authentication_and_permissions
 from Restaurant import models as restaurant_models
 
 
+class GetHomePageDishes(generics.ListAPIView):
+    renderer_classes = [JSONRenderer]
+    queryset = dish_models.GeneralDish.objects.all()
+    serializer_class = dish_serializers.GeneralDishGetSerializer
+
+
 class CreateGetDish(generics.ListCreateAPIView):
     renderer_classes = [JSONRenderer]
 

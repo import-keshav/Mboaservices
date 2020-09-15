@@ -6,6 +6,12 @@ from . import models
 
 from Restaurant import serializers as restaurant_serializers
 
+class GeneralDishGetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.GeneralDish
+        fields = '__all__'
+
+
 class DishPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Dish

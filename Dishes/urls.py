@@ -3,6 +3,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+	path('get-homepage-dish', views.GetHomePageDishes.as_view()),
+
 	path('create-dish', views.CreateGetDish.as_view()),
 	path('get-specific-dish/<int:pk>', views.CreateGetDish.as_view()),
 	path('get-dish-on-filter', views.GetDishOnFilter.as_view()),
