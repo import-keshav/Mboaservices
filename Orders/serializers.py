@@ -3,6 +3,7 @@ from django import forms
 from rest_framework import serializers
 
 from . import models
+from Client import serializers as client_serializer
 from Invigilator import models as invigilator_models
 from Invigilator import serializers as invigilator_serializer
 from Dishes import models as dish_models
@@ -22,6 +23,7 @@ class GetOrderOnlySerializer(serializers.ModelSerializer):
 
 
 class GetOrderSerializer(serializers.ModelSerializer):
+    client = client_serializer.ClientGetSerializer()
     dishes = serializers.SerializerMethodField()
     restaurant = restaurant_serializer.RestaurantGetSerializer()
     invigilator = serializers.SerializerMethodField()
@@ -86,6 +88,7 @@ class GetOrderDishSerializer(serializers.ModelSerializer):
 
 
 class GetClientRestaurantPastOrdersSerializer(serializers.ModelSerializer):
+    client = client_serializer.ClientGetSerializer()
     dishes = serializers.SerializerMethodField()
     restaurant = restaurant_serializer.RestaurantGetSerializer()
     invigilator = serializers.SerializerMethodField()
