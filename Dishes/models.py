@@ -34,6 +34,11 @@ class Dish(models.Model):
         verbose_name_plural = 'Dishes'
     def __str__(self):
         return self.name
+    def save(self):
+        if self.name:
+            self.name = self.name.lower()
+        super(Dish, self).save()
+
 
 
 class DishAddOns(models.Model):
