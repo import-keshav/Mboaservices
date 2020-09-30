@@ -50,7 +50,12 @@ class Restaurant(models.Model):
     def __str__(self):
         return self.name
     def save(self):
-        self.password = hash_password(self.password)
+        if not self.pk:
+            self.password = hash_password(self.password)
+        else:
+            obj = Restaurant.objects.get(pk=self.pk)
+            if obj.password != self.password:
+                self.password = hash_password(self.password)
         super(Restaurant, self).save()
 
 
