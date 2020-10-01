@@ -129,12 +129,10 @@ class RestraurantLogin(APIView):
 
         if verify_password( restraurant.password, self.request.data['password']):
             restraurant.auth_token = ""
-            restraurant.password = self.request.data['password']
             restraurant.save()
             restrau_obj = restraurant_serializer.RestaurantGetSerializer(restraurant)
             jwt_token = create_jwt(restrau_obj.data)
             restraurant.auth_token = jwt_token
-            restraurant.password = self.request.data['password']
             restraurant.save()
             return Response({'message': 'Login Succesfully', "restaurant": restrau_obj.data, "token":jwt_token}, status=status.HTTP_200_OK)
         return Response({'message': 'Invalid password'}, status=status.HTTP_400_BAD_REQUEST)
@@ -225,14 +223,12 @@ class InvigilatorLogin(APIView):
                 return Response({"message": "No User Exist with this Mobile Number",}, status=status.HTTP_400_BAD_REQUEST)
             if verify_password(invigilator.user.password, self.request.data['password']):
                 invigilator.user.auth_token = ""
-                invigilator.user.password = self.request.data['password']
                 invigilator.user.save()
                 invigilator.save()
 
                 invigilator_obj = invigilator_serializer.InvigilatorGetSerializer(invigilator)
                 jwt_token = create_jwt(invigilator_obj.data)
                 invigilator.user.auth_token = jwt_token
-                invigilator.user.password = self.request.data['password']
                 invigilator.user.save()
                 invigilator.save()
                 return Response({'message': 'Login Succesfully', "invigilator": invigilator_obj.data, "token":jwt_token}, status=status.HTTP_200_OK)
