@@ -49,49 +49,56 @@ def verify_password(stored_password, provided_password):
 
 class RegisterView(APIView):
     def post(self, request):
-        try:
-            data = self.request.data
-            new_user = models.User.objects.filter(mobile=data['mobile']).first()
-            if not new_user:
-                user = models.User(
-                    name=data['name'],
-                    mobile=data['mobile'],
-                )
-                user.save()
-                user = models.User.objects.filter(mobile=data['mobile']).first()
-                client_user = client_models.Client(user=user)
-                client_user.save()
-            else:
+        data = self.request.data    
+        valid_keys = ['name','mobile','password','email']
+        for key in valid_keys:
+            if not key in data:
                 return Response({
-                    "message": "User with this credentials already exist!"
+                    "message": key + " is missing"
                 }, status=status.HTTP_400_BAD_REQUEST)
-        except:
-            return Response({
-                "message": "(name, mobile,) any of params missing"
-            }, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(
-            {'message': 'Register Succesfully', 'user_id': client_user.pk}, status=status.HTTP_200_OK)
+        new_user = models.User.objects.filter(mobile=data['mobile']).first()
+        if not new_user:
+            user = models.User(
+                name=data['name'],
+                mobile=data['mobile'],
+            )
+            user.save()
+            user = models.User.objects.filter(mobile=data['mobile']).first()
+            client_user = client_models.Client(user=user)
+            client_user.save()
+            return Response({
+                'message': 'Register Succesfully',
+                'user_id': client_user.pk
+            }, status=status.HTTP_200_OK)
+
+        return Response({
+            "message": "User with this credentials already exist!"
+        }, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LoginView(APIView):
     def post(self, request):
-        try:
-            data = self.request.data
-            user = models.User.objects.filter(mobile=data['mobile']).first()
-            if user:
-                if verify_password(user.password, data['password']):
-                    return Response(
-                        {'message': 'Login Succesfully'}, status=status.HTTP_200_OK)
-                else:
-                    return Response(
-                        {'message': 'Invalid password'}, status=status.HTTP_400_BAD_REQUEST)
-            else:
-                return Response(
-                        {'message': 'User not exist with this mobile number'}, status=status.HTTP_400_BAD_REQUEST)
-        except:
-            return Response(
-                    {'message': '(mobile, password) any of params missing'}, status=status.HTTP_400_BAD_REQUEST)
+        data = self.request.data    
+        valid_keys = ['name','mobile','password','email']
+        for key in valid_keys:
+            if not key in data:
+                return Response({
+                    "message": key + " is missing"
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+        user = models.User.objects.filter(mobile=data['mobile']).first()
+        if user:
+            if verify_password(user.password, data['password']):
+                return Response({
+                    'message': 'Login Succesfully'
+                }, status=status.HTTP_200_OK)
+            return Response({
+                'message': 'Invalid password'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        return Response({
+            'message': 'User not exist with this mobile number'
+        }, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ChangeRestaurantPassword(APIView):
