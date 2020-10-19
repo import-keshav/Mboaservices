@@ -50,7 +50,7 @@ def verify_password(stored_password, provided_password):
 class RegisterView(APIView):
     def post(self, request):
         data = self.request.data    
-        valid_keys = ['name','mobile','password','email']
+        valid_keys = ['name', 'mobile']
         for key in valid_keys:
             if not key in data:
                 return Response({
@@ -80,7 +80,7 @@ class RegisterView(APIView):
 class LoginView(APIView):
     def post(self, request):
         data = self.request.data    
-        valid_keys = ['name','mobile','password','email']
+        valid_keys = ['mobile', 'password']
         for key in valid_keys:
             if not key in data:
                 return Response({
