@@ -30,11 +30,13 @@ class User(models.Model):
         return self.name
     def save(self):
         if not self.pk:
-            self.password = hash_password(self.password)
+            if self.password:
+                self.password = hash_password(self.password)
         else:
             obj = User.objects.get(pk=self.pk)
             if obj.password != self.password:
-                self.password = hash_password(self.password)
+                if self.password:
+                    self.password = hash_password(self.password)
         super(User, self).save()
 
 
