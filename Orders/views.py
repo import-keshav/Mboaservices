@@ -170,8 +170,8 @@ class AcceptOrder(APIView):
         })
         return Response({'message': 'Order Accepted Successfully'}, status=status.HTTP_200_OK)
 
-    def get_invigilator_for_order(self):
-        invigilator = invigilator_models.InvigilatorRestaurant.objects.filter(restaurant=obj.restaurant).first()
+    def get_invigilator_for_order(self, restaurant):
+        invigilator = invigilator_models.InvigilatorRestaurant.objects.filter(restaurant=restaurant).first()
         return invigilator.invigilator
 
 
