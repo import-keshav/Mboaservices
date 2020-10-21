@@ -47,4 +47,6 @@ class InvigilatorClientMessage(models.Model):
         verbose_name = 'Invigilator Client Message'
         verbose_name_plural = 'Invigilator Client Message'
     def __str__(self):
-        return self.invigilator
+        if self.invigilator:
+            return self.invigilator.name
+        return ''
